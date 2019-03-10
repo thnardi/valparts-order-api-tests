@@ -1,0 +1,14 @@
+/.sass-cache/
+/assembly/
+/cache/
+/docs/
+/logs/
+/node_modules/
+/public_html/images
+/public_html/upload
+/vendor/
+.env
+.sass-cache
+phpcs.xml
+phpunit.xml
+composer.lock

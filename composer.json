@@ -1,0 +1,28 @@
+{
+    "name": "farol360/ancora",
+    "type": "project",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "Farol360\\Ancora\\": "app/src/"
+        }
+    },
+    "require": {
+        "php": "^7.0",
+        "ext-zip": "*",
+        "slim/slim": "^3.8",
+        "slim/twig-view": "^2.2",
+        "slim/flash": "^0.2.0",
+        "monolog/monolog": "^1.23",
+        "vlucas/phpdotenv": "^2.4",
+        "slim/csrf": "^0.8.1",
+        "slim/http-cache": "^0.3.0",
+        "robmorgan/phinx": "^0.8.1",
+        "erusev/parsedown": "^1.6",
+        "fusonic/spreadsheet-export": "^1.0",
+        "phpmailer/phpmailer": "^5.2",
+        "mpratt/embera": "^1.9",
+        "akrabat/rka-slim-session-middleware": "^2.0"
+    }
+
+}

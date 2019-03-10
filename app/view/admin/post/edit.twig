@@ -1,0 +1,125 @@
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+{% endblock %}
+{% extends "admin/layout.twig" %}
+{% block html_title %}Postagens - Administração - {{ parent() }}{% endblock %}
+{% set nav_active = 'posts' %}
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+  <li><a href="{{ base_url() }}/admin">Início</a></li>
+  <li><a href="{{ base_url() }}/admin/posts">Postagens</a></li>
+  <li><a href="{{ base_url() }}/admin/posts/{{ post.id }}">{{ post.name }}</a></li>
+</ol>
+{% endblock %}
+{% block content %}
+
+<div class="card">
+  <div class="card-header" data-background-color="blue">
+    <h3>Editar Postagem</h3>
+  </div>
+
+  <div class="card-content">
+    <div class="row">
+      <div class="col-xs-12">
+        <form role="form" data-toggle="validator" action="{{ base_url() }}/admin/posts/update" method="POST"  enctype="multipart/form-data">
+
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label for="inputName">Nome</label>
+                <input type="text" class="form-control" id="inputName" name="name" placeholder="Nome" value="{{ post.name }}" required>
+                <input type="hidden" name="id" value="{{ post.id }}">
+              </div>
+              <div class="form-group">
+                <label for="selectRole">Categoria</label>
+                <select class="form-control" id="selectRole" name="id_post_type">
+                  {% for postType in postTypes %}
+                  <option value="{{ postType.id }}" {% if postType.id == post.post_types_id %}selected {% endif %}>{{ postType.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <!-- RIGHT SIDE !-->
+            <div class="col-sm-6">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                  <!-- img_featured !-->
+                  <div class="panel panel-default">
+                    <div class="panel-heading text-center">
+                      Imagem de detaque
+                    </div>
+                    <div class="panel-body">
+
+                      <img id="img_featured_show" src="{{ base_url() }}/{{ post.img_featured }}" alt="Imagem de destaque" class="img-responsive" style="max-height: 300px; width: auto; margin: 0 auto;">
+
+                    </div>
+                    <div class="panel-footer">
+                      <p class="text-center" >Tamanho Máximo: 300kb</p>
+                      <input id="img_featured" type="file" class="btn btn-default btn-lg" style="display: block; margin: 0 auto; position:relative; max-width: 100%;" name="img_featured" value="{{ post.img_featured }}"></input>
+
+                      <input id="img_featured_old" type="hidden" class="btn btn-default btn-lg" style="display: block; margin: 0 auto; position:relative; max-width: 100%;" name="img_featured_old" value="{{ post.img_featured }}"></input>
+
+                    </div>
+                  </div>
+                  <!-- img_featured END !-->
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="col-xs-12 col-sm-8">
+              <div class="form-group">
+                <label for="inputName">Descrição</label>
+                <textarea class="form-control" id="inputName" name="description">{{ post.description }}</textarea>
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-success">Editar</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+
+<script type="text/javascript">
+
+   var description = new SimpleMDE({
+    element: $("#description")[0],
+    spellChecker: false,
+    status: false,
+    toolbar: ["bold","|","italic","|","heading-1", "|", "heading-2", "|", "heading-3"],
+
+  });
+
+  var imagem = $("#img_featured_show");
+  var arquivo = $("#img_featured");
+  arquivo.on("change", function (){
+      if (arquivo[0].files.length == 0)
+      return false;
+      var file = arquivo[0].files[0];
+      var url = URL.createObjectURL(file);
+      imagem.attr("src", url);
+      imagem.attr("title", file.name);
+      console.log(arquivo[0].files[0]);
+   });
+
+</script>
+
+{% endblock %}

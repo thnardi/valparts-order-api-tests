@@ -1,0 +1,14 @@
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "variables";
+
+body {
+}
+
+.close {
+  top:    0px;
+  right:  0px;
+}
+
+.main-panel>.content  {
+  margin-top:10px;
+}
