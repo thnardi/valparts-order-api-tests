@@ -194,11 +194,15 @@ class AuthMiddleware
         // Authentication Flow: 
 
         // 1 - if $route do not exist, then 404.
-
-        if (isset($permissions[$route])) {
-            
-        } else {
+        if (!isset($permissions[$route])) {
             return $this->view->render($response->withStatus(404), '404.twig');
+        }
+
+        // 2 - if $route exist but not allowed ($permission[$route] == false)
+        if ($permissions[$route] === false) {
+            return $this->view->render($response->withStatus(403), '403.twig', ['is_auth' => User::isAuth()]);
+        } else {
+        
         }
 
         if (isset($permissions[$route])) {

@@ -159,7 +159,7 @@ class UserController extends Controller
             User::setSessionId(null);
         }
         User::logout();
-        return $this->httpRedirect($request, $response);
+        return $this->view->render($response, 'user/logout.twig');
     }
 
     public function signUp(Request $request, Response $response): Response

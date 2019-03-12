@@ -1,0 +1,42 @@
+{% extends "layout.twig" %}
+{% block html_title %}Página não encontrada - Erro 403 - {{ parent() }}{% endblock %}
+{% block content -%}
+
+<div class="container">
+    <div class="col-xs-12 col-sm-6">
+        <div class="col-xs-12">
+            <h1 class="">Página Bloqueada!</h1>
+            <h1 class="">:(</h1>
+        </div>
+        <div class="col-xs-12">
+            <h2 class="">Você não tem acesso a este conteúdo.</h2>
+        </div>
+        <div class="col-xs-12">
+            
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6">
+        <div class="col-xs-12">
+            
+        </div>
+        <div class="col-xs-12">
+            {% if is_auth %}
+                <h3 class="">Infelizmente o seu usuário não tem permissão de acesso para esta página.</h3>
+
+                <h4 class="">Você pode entrar em contato com o administrador do sistema, ou fazer <a href="{{ base_url }}/users/signout">logout</a> Para trocar de conta.</h4>
+
+                <h4 class=""><a class="btn btn-info" href="{{ base_url }}/users/signout">logout</a> </h4>
+
+               
+            {% endif %}
+        </div>
+        <div class="col-xs-12">
+           
+        </div>
+    </div>
+    
+ 
+</div>
+
+{%- endblock %}
