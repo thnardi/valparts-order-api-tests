@@ -35,6 +35,12 @@ class PermissionController extends Controller
         $roles = $this->roleModel->getAll();
         $permissions = $this->permissionModel->getAll();
 
+        foreach($permissions as $permission) {
+
+            $permission->role_list = json_decode($permission->role_list);
+            
+        }
+
         return $this->view->render($response, 'admin/permission/index.twig', [
             'roles' => $roles,
             'permissions' => $permissions
@@ -76,6 +82,10 @@ class PermissionController extends Controller
 
         $roles = $this->roleModel->getAll();
 
+        $permission->role_list = json_decode($permission->role_list);
+        
+
+
         return $this->view->render($response, 'admin/permission/edit.twig', [
             'roles' => $roles,
             'permission' => $permission
@@ -84,7 +94,23 @@ class PermissionController extends Controller
 
     public function update(Request $request, Response $response): Response
     {
-        $permission = $this->entityFactory->createPermission($request->getParsedBody());
+        $parsed_body = $request->getParsedBody();
+        
+        $role_list = [];
+        foreach($parsed_body as $key => $value) {
+            
+            if (strpos($key, 'role_list') !== false){
+
+                $id =  $value;
+                $role_list[] = $id;
+            }
+        }
+
+        $parsed_body['role_list'] = json_encode($role_list);
+
+        $permission = $this->entityFactory->createPermission($parsed_body);
+
+
         $this->permissionModel->update($permission);
 
         $this->flash->addMessage('success', 'Permissão atualizada com sucesso.');

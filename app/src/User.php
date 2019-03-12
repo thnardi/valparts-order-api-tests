@@ -37,6 +37,30 @@ class User
         return $return;
     }
 
+    public static function getPermissionsValueByRoleList()
+    {
+        $return = [];
+        $permissionClass = new Permission(self::$db);
+        $permissions = $permissionClass->getAllRoleList();
+        foreach ($permissions as $permission) {
+            $return[
+                'p_' .
+                str_replace('/', '', substr($permission->resource, 0, 1)) .
+                str_replace('/', '_', substr(
+                    $permission->resource,
+                    1,
+                    strlen($permission->resource) - 2
+                )) .
+                str_replace('/', '', substr(
+                    $permission->resource,
+                    strlen($permission->resource) - 1,
+                    1
+                ))] = self::hasPermissionByRoleList($permission->resource);
+        }
+
+        return $return;
+    }
+
     public static function getEmail()
     {
         if (self::isAuth()) {
@@ -88,6 +112,17 @@ class User
         }
         $role = new Role(self::$db);
         return $role->hasPermission($permission, self::getUserRole());
+    }
+
+    public static function hasPermissionByRoleList($permission)
+    {
+        if (!$permission) {
+            return false;
+        }
+
+        
+        $permissionClass = new Permission(self::$db);
+        return $permissionClass->hasPermission($permission, self::getUserRole());
     }
 
     public static function isAuth()

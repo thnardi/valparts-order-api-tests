@@ -17,6 +17,7 @@ class BaseMigration extends AbstractMigration
         $permissions->addColumn('resource', 'string');
         $permissions->addColumn('description', 'string');
         $permissions->addColumn('role_id', 'integer', ['null' => true]);
+        $permissions->addColumn('role_list', 'text', ['null' => true]);
         $permissions->addTimestamps();
         $permissions->addForeignKey('role_id', 'roles', 'id', [
             'delete' => 'SET_NULL',

@@ -82,7 +82,8 @@ class PermissionModel extends Model
             SET
                 resource = :resource,
                 description = :description,
-                role_id = :role_id
+                role_id = :role_id,
+                role_list = :role_list
             WHERE
                 id = :id
         ";
@@ -91,6 +92,7 @@ class PermissionModel extends Model
             ':resource'     => $permission->resource,
             ':description'  => $permission->description,
             ':role_id'      => $permission->role_id,
+            ':role_list'    => $permission->role_list,
             ':id'           => $permission->id
         ];
         return $query->execute($parameters);

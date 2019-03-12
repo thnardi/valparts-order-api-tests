@@ -23,11 +23,32 @@
           <input type="hidden" name="id" value="{{ permission.id }}">
           <input class="form-control form-group" type="text" name="resource" value="{{ permission.resource }}" autofocus>
           <input class="form-control form-group" type="text" name="description" value="{{ permission.description }}">
+          
+          {#
           <select class="form-control form-group" name="role_id">
             {% for role in roles %}
             <option {% if role.id == permission.role_id %} selected {% endif %} value="{{ role.id }}">{{ role.description }}</option>
             {% endfor %}
           </select>
+
+          #}
+
+          <h3>Permissões da rota</h3>
+          {% for role in roles %}
+            {% set i = 0 %}
+            {% for role_id in permission.role_list %}
+                {% if role_id == role.id %}
+                    {% set i = 1 %}
+                {% endif  %}
+            {% endfor %}
+            <div class="checkbox">
+              <label>
+                <input name="role_list_{{ role.id }}" type="checkbox" value="{{ role.id }}" {% if i == 1 %} checked {% endif  %}>
+                {{ role.name }}
+              </label>
+            </div>
+          {% endfor %}
+          
           <button type="submit" class="btn btn-primary">Atualizar</button>
         </form>
       </div>

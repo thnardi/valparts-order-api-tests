@@ -18,7 +18,7 @@ $app->add(function ($request, $response, $next) {
 
 $app->add(new Farol360\Ancora\Middleware\PermissionMiddleware($app->getContainer()->view));
 
-$app->add(new Farol360\Ancora\Middleware\AuthMiddleware(
+$app->add(new Farol360\Ancora\Middleware\AuthMiddleware($app->getContainer()->view,
     $app->getContainer()->flash,
     new Farol360\Ancora\Model\UserModel(
         $app->getContainer()->db

@@ -38,187 +38,224 @@ class BaseDataMigration extends AbstractMigration
             [
                 'resource' => '/',
                 'description' => 'Página inicial',
-                'role_id' => 1
+                'role_id' => 1,
+                'role_list' => '["1","2","3","4"]'
             ],
             [
                 'resource' => '/users/signin',
                 'description' => 'Sign in',
-                'role_id' => 1
+                'role_id' => 1,
+                'role_list' => '["1","2","3","4"]'
             ],
             [
                 'resource' => '/users/signout',
                 'description' => 'Sign out',
-                'role_id' => 1
+                'role_id' => 1,
+                'role_list' => '["1","2","3","4"]'
             ],
             [
                 'resource' => '/users/signup',
                 'description' => 'Sign up',
-                'role_id' => 1
+                'role_id' => 1,
+                'role_list' => '["1","2","3","4"]'
             ],
             [
                 'resource' => '/admin',
                 'description' => 'Página administrativa',
                 'role_id' => 2,
+                'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/sobre',
                 'description' => 'Página Sobre',
                 'role_id' => 2,
+                'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/permission',
                 'description' => 'Ver permissões',
                 'role_id' => 3,
+                'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/permission/add',
                 'description' => 'Adicionar permissão',
                 'role_id' => 3,
+                'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/permission/delete/:id',
                 'description' => 'Apagar permissão',
                 'role_id' => 3,
+                'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/permission/edit/:id',
                 'description' => 'Editar permissão',
                 'role_id' => 3,
+                'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/permission/update',
                 'description' => 'Atualizar permissão',
                 'role_id' => 3,
+                'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/posts',
                 'description' => 'Lista de postagens',
                 'role_id' => 2,
+                'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/posts/:id',
                 'description' => 'Postagem Especifica',
                 'role_id' => 2,
+                'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/posts/add',
                 'description' => 'Adicionar um novo post',
                 'role_id' => 2,
+                'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/posts/delete/:id',
                 'description' => 'Remover post',
                 'role_id' => 2,
+                'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/posts/edit/:id',
                 'description' => 'Remover post',
                 'role_id' => 2,
+                'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/posts/update',
                 'description' => 'Remover post',
                 'role_id' => 2,
+                'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/role',
                 'description' => 'Ver cargos',
                 'role_id' => 3,
+                'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/role/add',
                 'description' => 'Adicionar cargo',
                 'role_id' => 3,
+                'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/role/delete/:id',
                 'description' => 'Apagar cargo',
                 'role_id' => 3,
+                'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/role/edit/:id',
                 'description' => 'Editar cargo',
                 'role_id' => 3,
+                'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/role/update',
                 'description' => 'Atualizar cargo',
                 'role_id' => 3,
+                'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/user',
                 'description' => 'Ver usuários',
                 'role_id' => 2,
+                'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/user/all',
                 'description' => 'Ver todos os usuários',
                 'role_id' => 2,
+                'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/user/:id',
                 'description' => 'Ver usuário',
                 'role_id' => 2,
+                'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/user/add',
                 'description' => 'Adicionar usuário',
                 'role_id' => 2,
+                'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/user/delete/:id',
                 'description' => 'Apagar usuário',
                 'role_id' => 2,
+                'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/user/edit/:id',
                 'description' => 'Editar usuário',
                 'role_id' => 2,
+                'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/user/update',
                 'description' => 'Atualizar usuário',
                 'role_id' => 2,
+                'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/user/export',
                 'description' => 'Exportar usuários',
                 'role_id' => 2,
+                'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/posts',
                 'description' => 'postagens',
                 'role_id' => 1,
+                'role_list' => '["1","2","3","4"]'
             ],
             [
                 'resource' => '/posts/:id',
                 'description' => 'postagem',
                 'role_id' => 1,
+                'role_list' => '["1","2","3","4"]'
             ],
             [
                 'resource' => '/users/profile',
                 'description' => 'Ver perfil',
                 'role_id' => 4,
+                'role_list' => '["2","3","4"]'
             ],
             [
                 'resource' => '/users/dashboard',
                 'description' => 'Painel do usuário',
                 'role_id' => 4,
+                'role_list' => '["2","3","4"]'
             ],
             [
                 'resource' => '/users/recover',
                 'description' => 'Recuperar conta',
                 'role_id' => 1,
+                'role_list' => '["2","3","4"]'
             ],
             [
                 'resource' => '/users/recover/token/:token',
                 'description' => 'Recuperar conta',
                 'role_id' => 1,
+                'role_list' => '["2","3","4"]'
             ],
             [
                 'resource' => '/users/verify/:token',
                 'description' => 'Verificar conta',
                 'role_id' => 1,
+                'role_list' => '["2","3","4"]'
             ]
         ];
         $this->insert('permissions', $permissions);
