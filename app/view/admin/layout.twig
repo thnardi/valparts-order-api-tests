@@ -83,6 +83,36 @@
             </div>
             <div class="collapse navbar-collapse">
               <ul class="nav navbar-nav navbar-right">
+                <li> 
+                  <p style="  color: inherit; 
+                              padding-top: 15px; 
+                              padding-bottom: 15px; 
+                              font-weight: 400;
+                              font-size: 12px; 
+                              text-transform: uppercase; 
+                              border-radius: 3px;
+                                      ">Olá, 
+                      <span style="font-weight:bold;">{% if admin_ancora_loged %}{{ admin_ancora_loged.name }}{% endif %}</span> </p>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    {#<img src="{{ gravatar_url(get_email(), 16) }}">#}
+
+                    <p class=""><i class="material-icons" style="font-size:x-large">settings</i> Opções</p>
+                  </a>
+                  <ul class="dropdown-menu">
+                    {% if permissions_admin_ancora.p_admin_user %}<li><a href="{{ base_url() }}/admin/user/all">Usuários</a></li>{% endif %}
+                    {#
+                    {% if p_admin_role %}<li><a href="{{ base_url() }}/admin/role">Cargos</a></li>{% endif %}
+                    {% if p_admin_permission %}<li><a href="{{ base_url() }}/admin/permission">Permissões</a></li>{% endif %}
+                    #}
+                    <li role="separator" class="divider"></li>
+
+                    <li><a href="{{ base_url() }}">Voltar ao site</a></li>
+
+
+                  </ul>
+                </li>
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     {#<img src="{{ gravatar_url(get_email(), 16) }}">#}

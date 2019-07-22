@@ -18,7 +18,8 @@ $app->get('[/]', Page::class . ':index');
 
 $app->group('/admin', function () {
     $this->get('[/]', IndexAdmin::class . ':index');
-
+    $this->map(['GET', 'POST'], '/login', IndexAdmin::class . ':login');
+    $this->map(['GET', 'POST'], '/logout', IndexAdmin::class . ':logout');
     $this->group('/permission', function () {
         $this->get('[/]', PermissionAdmin::class . ':index');
         $this->map(['GET', 'POST'], '/add', PermissionAdmin::class . ':add');
@@ -57,6 +58,7 @@ $app->group('/admin', function () {
     });
 });
 
+$app->get('/create_captcha', Page::class .':create_captcha');
 
 $app->group('/posts', function() {
     $this->get('[/]', Page::class . ':posts');

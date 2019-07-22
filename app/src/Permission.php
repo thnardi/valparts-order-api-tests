@@ -39,6 +39,22 @@ class Permission
         return $query->fetchAll();
     }
 
+    public function getAllAdminAncora()
+    {
+        $sql = "
+            SELECT
+                resource,
+                id_admin_ancora_type
+            FROM
+                permissions
+            WHERE 
+                id_admin_ancora_type > 0
+        ";
+        $query = $this->db->prepare($sql);
+        $query->execute();
+        return $query->fetchAll();
+    }
+
     public function hasPermission($permission, $roleId)
     {
         $sql = "
@@ -61,4 +77,28 @@ class Permission
         }
         return false;
     }
+
+    public function hasAdminAncoraPermission($permission, $type)
+    {
+        $sql = "
+            SELECT
+                permissions.id
+            FROM
+                permissions
+            WHERE
+                permissions.resource = :permission_resource AND
+                permissions.id_admin_ancora_type >= :type
+        ";
+        $query = $this->db->prepare($sql);
+        $params = [
+            ":permission_resource" => $permission,
+            ":type" => '"'.$type.'"'
+        ];
+        $query->execute($params);
+        if ($query->fetch()) {
+            return true;
+        }
+        return false;
+    }
+
 }

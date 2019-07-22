@@ -53,5 +53,7 @@ return [
         'branch' => getenv('BRANCH'),
         'repository' => getenv('REPOSITORY'),
         'repository_link' => getenv('REPOSITORY_LINK')
-    ]
+    ],
+
+    "ambiente_windows" => getenv('AMBIENTE_WINDOWS')
 ];

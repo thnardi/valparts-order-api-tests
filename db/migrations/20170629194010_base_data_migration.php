@@ -165,6 +165,12 @@ class BaseDataMigration extends AbstractMigration
                 'role_list' => '["1","2"]'
             ],
             [
+                'resource' => '/create_captcha',
+                'description' => 'criar captcha',
+                'id_admin_ancora_type' => 0,
+                'role_list' => '["1","2"]'
+            ],
+            [
                 'resource' => '/login',
                 'description' => 'Sign in',
                 'id_admin_ancora_type' => 0,
@@ -184,6 +190,18 @@ class BaseDataMigration extends AbstractMigration
             ],
             [
                 'resource' => '/admin',
+                'description' => 'Página administrativa',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["1","2"]'
+            ],
+            [
+                'resource' => '/admin/login',
+                'description' => 'Página administrativa',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["1","2"]'
+            ],
+            [
+                'resource' => '/admin/logout',
                 'description' => 'Página administrativa',
                 'id_admin_ancora_type' => 1,
                 // 'role_list' => '["1","2"]'
@@ -429,5 +447,7 @@ class BaseDataMigration extends AbstractMigration
         $this->execute('DELETE FROM users');
         $this->execute('DELETE FROM post_types');
         $this->execute('DELETE FROM posts');
+        $this->execute('DELETE FROM admin_ancora');
+        $this->execute('DELETE FROM enderecos_uf');
     }
 }
