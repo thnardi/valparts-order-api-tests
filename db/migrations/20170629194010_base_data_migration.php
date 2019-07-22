@@ -6,29 +6,152 @@ class BaseDataMigration extends AbstractMigration
 {
     public function up()
     {
+        $password_root = password_hash('aws934#$77', PASSWORD_DEFAULT);
+        $password_admin = password_hash('ancora123', PASSWORD_DEFAULT);
+
+        $admin_ancora = [
+            [
+                'name' => 'Super Usuário',
+                'email' => 'superadmin@farol360.com.br',
+                'slug' => 'superadmin',
+                'password' => $password_root,
+                'type' => 4
+            ],
+            [
+                'name' => 'Administrador Geral',
+                'email' => 'superadmin@farol360.com.br',
+                'slug' => 'admin',
+                'password' => $password_admin,
+                'type' => 3
+            ]
+        ];
+
+        $this->insert('admin_ancora', $admin_ancora);
+
+        $uf = [
+            [
+                'name' => 'Acre',
+                'uf' => 'AC'
+            ],
+            [
+                'name' => 'Alagoas',
+                'uf' => 'AL'
+            ],
+            [
+                'name' => 'Amapá',
+                'uf' => 'AP'
+            ],
+            [
+                'name' => 'Amazonas',
+                'uf' => 'AM'
+            ],
+            [
+                'name' => 'Bahia',
+                'uf' => 'BA'
+            ],
+            [
+                'name' => 'Ceará',
+                'uf' => 'CE'
+            ],
+            [
+                'name' => 'Distrito Federal',
+                'uf' => 'DF'
+            ],
+            [
+                'name' => 'Espírito Santo',
+                'uf' => 'ES'
+            ],
+            [
+                'name' => 'Goiás',
+                'uf' => 'GO'
+            ],
+            [
+                'name' => 'Maranhão',
+                'uf' => 'MA'
+            ],
+            [
+                'name' => 'Mato Grosso',
+                'uf' => 'MT'
+            ],
+            [
+                'name' => 'Mato Grosso do Sul',
+                'uf' => 'MS'
+            ],
+            [
+                'name' => 'Minas Gerais',
+                'uf' => 'MG'
+            ],
+            [
+                'name' => 'Pará',
+                'uf' => 'PA'
+            ],
+            [
+                'name' => 'Paraíba',
+                'uf' => 'PB'
+            ],
+            [
+                'name' => 'Paraná',
+                'uf' => 'PR'
+            ],
+            [
+                'name' => 'Pernambuco',
+                'uf' => 'PE'
+            ],
+            [
+                'name' => 'Piauí',
+                'uf' => 'PI'
+            ],
+            [
+                'name' => 'Rio de Janeiro',
+                'uf' => 'RJ'
+            ],
+            [
+                'name' => 'Rio Grande do Norte',
+                'uf' => 'RN'
+            ],
+            [
+                'name' => 'Rio Grande do Sul',
+                'uf' => 'RS'
+            ],
+            [
+                'name' => 'Rondonia',
+                'uf' => 'RO'
+            ],
+            [
+                'name' => 'Roraima',
+                'uf' => 'RR'
+            ],
+            [
+                'name' => 'Santa Catarina',
+                'uf' => 'SC'
+            ],
+            [
+                'name' => 'São Paulo',
+                'uf' => 'SP'
+            ],
+            [
+                'name' => 'Sergipe',
+                'uf' => 'SE'
+            ],
+            [
+                'name' => 'Tocantins',
+                'uf' => 'TO'
+            ]
+        ];
+
+        $this->insert('enderecos_uf', $uf);
+
         $roles = [
             [
                 'id' => 1,
                 'name' => 'guest',
-                'description' => 'Visitante',
+                'description' => 'Visitante Público.',
                 'access_level' => 0
             ],
             [
                 'id' => 2,
-                'name' => 'admin',
-                'description' => 'Administrador',
-                'access_level' => 900
-            ],
-            [
-                'id' => 3,
-                'name' => 'root',
-                'description' => 'Super Usuário',
-                'access_level' => 1000
-            ],
-            [
-                'id' => 4,
                 'name' => 'user',
-                'description' => 'Cliente',
+                'description' => 'Usuário da Plataforma.',
                 'access_level' => 500
             ]
         ];
@@ -38,248 +161,221 @@ class BaseDataMigration extends AbstractMigration
             [
                 'resource' => '/',
                 'description' => 'Página inicial',
-                'role_id' => 1,
-                'role_list' => '["1","2","3","4"]'
+                'id_admin_ancora_type' => 0,
+                'role_list' => '["1","2"]'
             ],
             [
-                'resource' => '/users/signin',
+                'resource' => '/login',
                 'description' => 'Sign in',
-                'role_id' => 1,
-                'role_list' => '["1","2","3","4"]'
+                'id_admin_ancora_type' => 0,
+                'role_list' => '["1"]'
             ],
             [
-                'resource' => '/users/signout',
+                'resource' => '/logout',
                 'description' => 'Sign out',
-                'role_id' => 1,
-                'role_list' => '["1","2","3","4"]'
+                'id_admin_ancora_type' => 0,
+                'role_list' => '["2"]'
             ],
             [
-                'resource' => '/users/signup',
+                'resource' => '/registrar',
                 'description' => 'Sign up',
-                'role_id' => 1,
-                'role_list' => '["1","2","3","4"]'
+                'id_admin_ancora_type' => 0,
+                'role_list' => '["1"]'
             ],
             [
                 'resource' => '/admin',
                 'description' => 'Página administrativa',
-                'role_id' => 2,
-                'role_list' => '["2","3"]'
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["1","2"]'
             ],
             [
                 'resource' => '/admin/sobre',
                 'description' => 'Página Sobre',
-                'role_id' => 2,
-                'role_list' => '["2","3"]'
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/permission',
                 'description' => 'Ver permissões',
-                'role_id' => 3,
-                'role_list' => '["3"]'
+                'id_admin_ancora_type' => 4,
+                // 'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/permission/add',
                 'description' => 'Adicionar permissão',
-                'role_id' => 3,
-                'role_list' => '["3"]'
+                'id_admin_ancora_type' => 4,
+                // 'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/permission/delete/:id',
                 'description' => 'Apagar permissão',
-                'role_id' => 3,
-                'role_list' => '["3"]'
+                'id_admin_ancora_type' => 4,
+                // 'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/permission/edit/:id',
                 'description' => 'Editar permissão',
-                'role_id' => 3,
-                'role_list' => '["3"]'
+                'id_admin_ancora_type' => 4,
+                // 'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/permission/update',
                 'description' => 'Atualizar permissão',
-                'role_id' => 3,
-                'role_list' => '["3"]'
+                'id_admin_ancora_type' => 4,
+                // 'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/posts',
                 'description' => 'Lista de postagens',
-                'role_id' => 2,
-                'role_list' => '["2","3"]'
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/posts/:id',
                 'description' => 'Postagem Especifica',
-                'role_id' => 2,
-                'role_list' => '["2","3"]'
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/posts/add',
                 'description' => 'Adicionar um novo post',
-                'role_id' => 2,
-                'role_list' => '["2","3"]'
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/posts/delete/:id',
                 'description' => 'Remover post',
-                'role_id' => 2,
-                'role_list' => '["2","3"]'
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/posts/edit/:id',
                 'description' => 'Remover post',
-                'role_id' => 2,
-                'role_list' => '["2","3"]'
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/posts/update',
                 'description' => 'Remover post',
-                'role_id' => 2,
-                'role_list' => '["2","3"]'
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/role',
                 'description' => 'Ver cargos',
-                'role_id' => 3,
-                'role_list' => '["3"]'
+                'id_admin_ancora_type' => 4,
+                // 'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/role/add',
                 'description' => 'Adicionar cargo',
-                'role_id' => 3,
-                'role_list' => '["3"]'
+                'id_admin_ancora_type' => 4,
+                // 'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/role/delete/:id',
                 'description' => 'Apagar cargo',
-                'role_id' => 3,
-                'role_list' => '["3"]'
+                'id_admin_ancora_type' => 4,
+                // 'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/role/edit/:id',
                 'description' => 'Editar cargo',
-                'role_id' => 3,
-                'role_list' => '["3"]'
+                'id_admin_ancora_type' => 4,
+                // 'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/role/update',
                 'description' => 'Atualizar cargo',
-                'role_id' => 3,
-                'role_list' => '["3"]'
+                'id_admin_ancora_type' => 4,
+                // 'role_list' => '["3"]'
             ],
             [
                 'resource' => '/admin/user',
                 'description' => 'Ver usuários',
-                'role_id' => 2,
-                'role_list' => '["2","3"]'
+                'id_admin_ancora_type' => 2,
+                // 'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/user/all',
                 'description' => 'Ver todos os usuários',
-                'role_id' => 2,
-                'role_list' => '["2","3"]'
+                'id_admin_ancora_type' => 2,
+                // 'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/user/:id',
                 'description' => 'Ver usuário',
-                'role_id' => 2,
-                'role_list' => '["2","3"]'
+                'id_admin_ancora_type' => 2,
+                // 'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/user/add',
                 'description' => 'Adicionar usuário',
-                'role_id' => 2,
-                'role_list' => '["2","3"]'
+                'id_admin_ancora_type' => 2,
+                // 'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/user/delete/:id',
                 'description' => 'Apagar usuário',
-                'role_id' => 2,
-                'role_list' => '["2","3"]'
+                'id_admin_ancora_type' => 2,
+                // 'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/user/edit/:id',
                 'description' => 'Editar usuário',
-                'role_id' => 2,
-                'role_list' => '["2","3"]'
+                'id_admin_ancora_type' => 2,
+                // 'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/user/update',
                 'description' => 'Atualizar usuário',
-                'role_id' => 2,
-                'role_list' => '["2","3"]'
+                'id_admin_ancora_type' => 2,
+                // 'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/admin/user/export',
                 'description' => 'Exportar usuários',
-                'role_id' => 2,
-                'role_list' => '["2","3"]'
+                'id_admin_ancora_type' => 2,
+                // 'role_list' => '["2","3"]'
             ],
             [
                 'resource' => '/posts',
                 'description' => 'postagens',
-                'role_id' => 1,
-                'role_list' => '["1","2","3","4"]'
+                'id_admin_ancora_type' => 0,
+                'role_list' => '["1","2"]'
             ],
             [
                 'resource' => '/posts/:id',
                 'description' => 'postagem',
-                'role_id' => 1,
-                'role_list' => '["1","2","3","4"]'
+                'id_admin_ancora_type' => 0,
+                'role_list' => '["1","2"]'
             ],
             [
-                'resource' => '/users/profile',
+                'resource' => '/perfil',
                 'description' => 'Ver perfil',
-                'role_id' => 4,
-                'role_list' => '["2","3","4"]'
+                'id_admin_ancora_type' => 0,
+                'role_list' => '["2"]'
             ],
             [
-                'resource' => '/users/dashboard',
-                'description' => 'Painel do usuário',
-                'role_id' => 4,
-                'role_list' => '["2","3","4"]'
-            ],
-            [
-                'resource' => '/users/recover',
+                'resource' => '/perfil/recuperar',
                 'description' => 'Recuperar conta',
-                'role_id' => 1,
-                'role_list' => '["2","3","4"]'
+                'id_admin_ancora_type' => 0,
+                'role_list' => '["2"]'
             ],
             [
-                'resource' => '/users/recover/token/:token',
+                'resource' => '/perfil/recuperar/token/:token',
                 'description' => 'Recuperar conta',
-                'role_id' => 1,
-                'role_list' => '["2","3","4"]'
+                'id_admin_ancora_type' => 0,
+                'role_list' => '["2"]'
             ],
             [
-                'resource' => '/users/verify/:token',
+                'resource' => '/perfil/verificar/:token',
                 'description' => 'Verificar conta',
-                'role_id' => 1,
-                'role_list' => '["2","3","4"]'
+                'id_admin_ancora_type' => 0,
+                'role_list' => '["2"]'
             ]
         ];
         $this->insert('permissions', $permissions);
-
-        $password = password_hash('1234', PASSWORD_DEFAULT);
-        $users = [
-            [
-                'id' => 1,
-                'email' => 'root@localhost',
-                'name' => 'Super Usuário',
-                'password' => $password,
-                'role_id' => 3,
-                'active' => 1,
-            ],
-            [
-                'id' => 2,
-                'email' => 'admin@localhost',
-                'name' => 'Administrador',
-                'password' => $password,
-                'role_id' => 2,
-                'active' => 1,
-            ]
-        ];
-        $this->insert('users', $users);
 
         $post_types = [
             [

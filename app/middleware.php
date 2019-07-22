@@ -22,6 +22,9 @@ $app->add(new Farol360\Ancora\Middleware\AuthMiddleware($app->getContainer()->vi
     $app->getContainer()->flash,
     new Farol360\Ancora\Model\UserModel(
         $app->getContainer()->db
+    ),
+    new Farol360\Ancora\Model\AdminAncoraModel(
+        $app->getContainer()->db
     )
 ));
 

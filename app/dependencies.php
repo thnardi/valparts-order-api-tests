@@ -115,6 +115,7 @@ $container['view'] = function ($c) {
 $container['version'] = $settings['version'];
 
 Farol360\Ancora\User::setupUser($container);
+Farol360\Ancora\AdminAncora::setupUser($container);
 
 // ------------------
 // ------------------
