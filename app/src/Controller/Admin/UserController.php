@@ -40,7 +40,7 @@ class UserController extends Controller
     {
       $pageTitle = 'Administradores';
       $users = $this->adminAncoraModel->getAllByTypePermission();
-      $admin_ancora = $_SESSION['admin_sisgesp'];
+      $admin_ancora = $_SESSION['admin_ancora'];
       foreach($users as $user) {
         $new_data = explode(" ", $user->created_at);
         $data_separado = explode("-", $new_data[0]);
@@ -103,7 +103,7 @@ class UserController extends Controller
     public function edit(Request $request, Response $response, array $args): Response
     {
         $userId = intval($args['id']);
-        $user = $this->userModel->get((int)$userId);
+        $user = $this->adminAncoraModel->get((int)$userId);
         if (!$user) {
             $this->flash->addMessage('danger', 'Usuário não encontrado.');
             return $this->httpRedirect($request, $response, '/admin/user');
@@ -173,8 +173,8 @@ class UserController extends Controller
     }
     public function update(Request $request, Response $response): Response
     {
-        $user = $this->entityFactory->createUser($request->getParsedBody());
-        $this->userModel->update($user);
+        $user = $this->entityFactory->createAdminAncora($request->getParsedBody());
+        $this->adminAncoraModel->update($user);
         $this->flash->addMessage('success', 'Usuário atualizado com sucesso.');
         return $this->httpRedirect($request, $response, '/admin/user/all');
     }
