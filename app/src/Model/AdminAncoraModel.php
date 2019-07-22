@@ -64,6 +64,9 @@ class AdminAncoraModel extends Model
 
   public function get(int $id = 0)
   {
+    if ( ($id == 0) && isset($_SESSION['admin_ancora']) ) {
+      $id = $_SESSION['admin_ancora']['id'];
+    }
     $sql = "SELECT
           *
       FROM
