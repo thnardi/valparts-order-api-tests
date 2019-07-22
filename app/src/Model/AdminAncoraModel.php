@@ -5,6 +5,7 @@ namespace Farol360\Ancora\Model;
 
 use Farol360\Ancora\Model;
 use Farol360\Ancora\Model\AdminAncora;
+use Farol360\Ancora\Model\ModelReturn;
 use RKA\Session;
 
 

@@ -179,6 +179,7 @@ $container['Farol360\Ancora\Controller\Admin\UserController'] = function ($c) {
         $c['flash'],
         new Farol360\Ancora\Model\UserModel($c['db']),
         new Farol360\Ancora\Model\RoleModel($c['db']),
+        new Farol360\Ancora\Model\AdminAncoraModel($c['db']),
         new Farol360\Ancora\Model\EntityFactory()
     );
 };

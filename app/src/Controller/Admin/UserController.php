@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 namespace Farol360\Ancora\Controller\Admin;
+use Farol360\Ancora\Model\ModelException;
+use Farol360\Ancora\CustomLogger;
 use Farol360\Ancora\Controller;
 use Farol360\Ancora\Model;
 use Farol360\Ancora\Model\EntityFactory;
@@ -19,45 +21,73 @@ class UserController extends Controller
     protected $entityFactory;
     protected $roleModel;
     protected $userModel;
+    protected $adminAncoraModel;
     public function __construct(
         View $view,
         FlashMessages $flash,
         Model $user,
         Model $role,
+        Model $adminAncoraModel,
         EntityFactory $entityFactory
     ) {
         parent::__construct($view, $flash);
         $this->userModel = $user;
         $this->roleModel = $role;
+        $this->adminAncoraModel = $adminAncoraModel;
         $this->entityFactory = $entityFactory;
     }
     public function index(Request $request, Response $response): Response
     {
-        if ($request->getUri()->getPath() == '/admin/user/all') {
-            $pageTitle = 'Todos os usuários';
-            $users = $this->userModel->getAll();
-        } else {
-            $pageTitle = 'Clientes';
-            $users = $this->userModel->getUsers();
-        }
-        return $this->view->render($response, 'admin/user/index.twig', [
-            'users' => $users,
-            'page_title' => $pageTitle,
-        ]);
+      $pageTitle = 'Administradores';
+      $users = $this->adminAncoraModel->getAllByTypePermission();
+      $admin_ancora = $_SESSION['admin_sisgesp'];
+      foreach($users as $user) {
+        $new_data = explode(" ", $user->created_at);
+        $data_separado = explode("-", $new_data[0]);
+        $user->created_at = "$data_separado[2]/$data_separado[1]/$data_separado[0] $new_data[1]";
+      }
+      return $this->view->render($response, 'admin/user/index.twig', [
+        'admin_ancora' => $admin_ancora,
+        'users' => $users,
+        'page_title' => $pageTitle,
+      ]);
     }
     public function add(Request $request, Response $response): Response
     {
+      $permissao_type_user = ($_SESSION['admin_ancora']['type'] > 1 ) ? true : false;
+
+      if ($permissao_type_user) {
         if (empty($request->getParsedBody())) {
-            $roles = $this->roleModel->getAll();
-            return $this->view->render($response, 'admin/user/add.twig', [
-                'roles' => $roles,
-            ]);
+          $admin_ancora = $_SESSION['admin_ancora'];
+          return $this->view->render($response, 'admin/user/add.twig', [
+              'admin_ancora' => $admin_ancora,
+          ]);
         }
-        $user = $this->entityFactory->createUser($request->getParsedBody());
-        $this->userModel->add($user);
-        $this->flash->addMessage('success', 'Usuário adicionado com sucesso.');
-        return $this->httpRedirect($request, $response, '/admin/user');
+        $body = $request->getParsedBody();
+        $body['type'] = (int)$body['type'];
+        $user = $this->entityFactory->createAdminAncora($body);
+        try {
+          $this->adminAncoraModel->beginTransaction();
+          $return_admin_ancora = $this->adminAncoraModel->add($user);
+          if ($return_admin_ancora->status == false) {
+            throw new ModelException($return_admin_sisgesp, "Erro no cadastro de Admin Ancora. COD:0001.");
+          }
+          $this->adminAncoraModel->commit();
+          $this->flash->addMessage('success', 'Usuário adicionado com sucesso.');
+          return $this->httpRedirect($request, $response, '/admin/user');
+        } catch(ModelException $e) {
+          $this->adminAncoraModel->rollback();
+          CustomLogger::ModelErrorLog($e->getMessage(), $e->getdata());
+          $this->flash->addMessage('danger', $e->getMessage() . ' Se o problema persistir contate um administrador.');
+          return $this->httpRedirect($request, $response, "/admin/user");
+        }
+      } else {
+        $this->flash->addMessage('danger', 'Rota não permitida para o usuário atual.');
+        return $this->httpRedirect($request, $response, '/admin/user/all');
+      }
+
     }
+
     public function delete(Request $request, Response $response, array $args): Response
     {
         $userId = intval($args['id']);
