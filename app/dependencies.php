@@ -113,6 +113,7 @@ $container['view'] = function ($c) {
 };
 
 $container['version'] = $settings['version'];
+$container['ambiente_windows'] = $settings['ambiente_windows'];
 
 Farol360\Ancora\User::setupUser($container);
 Farol360\Ancora\AdminAncora::setupUser($container);
@@ -127,6 +128,8 @@ $container['Farol360\Ancora\Controller\Admin\IndexController'] = function ($c) {
     return new Farol360\Ancora\Controller\Admin\IndexController(
         $c['view'],
         $c['flash'],
+        new Farol360\Ancora\Model\AdminAncoraModel($c['db']),
+        new Farol360\Ancora\Model\EntityFactory(),
         $c['version']
     );
 };
@@ -187,7 +190,8 @@ $container['Farol360\Ancora\Controller\PageController'] = function ($c) {
         $c['mailer'],
         new Farol360\Ancora\Model\PostModel($c['db']),
         new Farol360\Ancora\Model\PostTypeModel($c['db']),
-        new Farol360\Ancora\Model\EntityFactory()
+        new Farol360\Ancora\Model\EntityFactory(),
+        $c['ambiente_windows']
     );
 };
 

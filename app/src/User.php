@@ -119,7 +119,6 @@ class User
         if (!$permission) {
             return false;
         }
-
         
         $permissionClass = new Permission(self::$db);
         return $permissionClass->hasPermission($permission, self::getUserRole());

@@ -44,14 +44,11 @@ class BaseMigration extends AbstractMigration
 
         $event_logs = $this->table('event_logs');
         $event_logs->addColumn('id_event_log_type', 'integer');
-        $event_logs->addColumn('id_admin_sisgesp', 'integer', ['null' => true]);
-        $event_logs->addColumn('id_admin_sisgesp_novo', 'integer', ['null' => true]);
         $event_logs->addColumn('id_endereco_user', 'integer', ['null' => true]);
         $event_logs->addColumn('date', 'timestamp');
         $event_logs->addColumn('time', 'time', ['null' => true]);
         $event_logs->addColumn('description', 'string');
         $event_logs->create();
-
 
         $event_logs_type = $this->table('event_log_types');
         $event_logs_type->addColumn('slug', 'string');
@@ -69,7 +66,7 @@ class BaseMigration extends AbstractMigration
         $permissions = $this->table('permissions');
         $permissions->addColumn('resource', 'string');
         $permissions->addColumn('description', 'string');
-        // $permissions->addColumn('role_id', 'integer', ['null' => true]);
+        $permissions->addColumn('id_admin_ancora_type', 'integer', ['null' => true]);
         $permissions->addColumn('role_list', 'text', ['null' => true]);
         $permissions->addTimestamps();
         // $permissions->addForeignKey('role_id', 'roles', 'id', [
