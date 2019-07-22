@@ -114,21 +114,11 @@
                   </ul>
                 </li>
                 <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                    {#<img src="{{ gravatar_url(get_email(), 16) }}">#}
-                    <i class="material-icons">person</i>
-                    <p class="hidden-lg hidden-md">Profile</p>
+                  <a href="{{ base_url() }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    <p><i class="material-icons" style="font-size:x-large">power_settings_new</i> Sair</p>
                   </a>
                   <ul class="dropdown-menu">
-                    {% if p_admin_user %}<li><a href="{{ base_url() }}/admin/user/all">Usuários</a></li>{% endif %}
-                    {% if p_admin_role %}<li><a href="{{ base_url() }}/admin/role">Cargos</a></li>{% endif %}
-                    {% if p_admin_permission %}<li><a href="{{ base_url() }}/admin/permission">Permissões</a></li>
-                    <li role="separator" class="divider"></li>
-                    {% endif %}
-
-                    <li><a href="{{ base_url() }}">Voltar ao site</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="{{ base_url() }}/users/signout">Sair</a></li>
+                    <li><a href="{{ base_url() }}/admin/logout">Logout Admin</a></li>
                   </ul>
                 </li>
               </ul>
