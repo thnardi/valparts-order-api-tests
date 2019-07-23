@@ -10,5 +10,5 @@ indent_style = space
 indent_size = 2
 trim_trailing_whitespace = true
 
-[{*.{twig,scss,js},package.json}]
+[{*.{twig,scss,js,php},package.json}]
 indent_size = 2

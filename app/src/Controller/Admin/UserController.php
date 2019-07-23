@@ -38,34 +38,54 @@ class UserController extends Controller
     }
     public function index(Request $request, Response $response): Response
     {
-      $pageTitle = 'Administradores';
-      $users = $this->adminAncoraModel->getAllByTypePermission();
-      $admin_ancora = $_SESSION['admin_ancora'];
-      foreach($users as $user) {
-        $new_data = explode(" ", $user->created_at);
-        $data_separado = explode("-", $new_data[0]);
-        $user->created_at = "$data_separado[2]/$data_separado[1]/$data_separado[0] $new_data[1]";
+        $params = $request->getQueryParams();
+        if (!empty($params['page'])) {
+            $page = intval($params['page']);
+        } else {
+            $page = 1;
+        }
+        $limit = 20;
+        $offset = ($page - 1) * $limit;
+
+        $amountAdmin = $this->adminAncoraModel->getAmount();
+        $amountPages = ceil($amountAdmin->amount / $limit);
+
+        $pageTitle = 'Administradores';
+        $users = $this->adminAncoraModel->getAllByTypePermission($offset, $limit);
+        $admin_ancora = $_SESSION['admin_ancora'];
+        foreach($users as $user) {
+            $new_data = explode(" ", $user->created_at);
+            $data_separado = explode("-", $new_data[0]);
+            $user->created_at = "$data_separado[2]/$data_separado[1]/$data_separado[0] $new_data[1]";
       }//var_dump($admin_ancora);die;
       return $this->view->render($response, 'admin/user/index.twig', [
         'admin_ancora' => $admin_ancora,
         'users' => $users,
         'page_title' => $pageTitle,
+        'page' => $page,
+        'amountPages' => $amountPages
       ]);
     }
     public function add(Request $request, Response $response): Response
     {
       $permissao_type_user = ($_SESSION['admin_ancora']['type'] > 1 ) ? true : false;
-
-      if ($permissao_type_user) {
-        if (empty($request->getParsedBody())) {
-          $admin_ancora = $_SESSION['admin_ancora'];
-          return $this->view->render($response, 'admin/user/add.twig', [
+      //$return_all_users = $this->adminAncoraModel->getAllByTypePermission();//var_dump($return_all_users);die;
+        if ($permissao_type_user) {
+            if (empty($request->getParsedBody())) {
+            $admin_ancora = $_SESSION['admin_ancora'];
+            return $this->view->render($response, 'admin/user/add.twig', [
               'admin_ancora' => $admin_ancora,
           ]);
         }
         $body = $request->getParsedBody();
         $body['type'] = (int)$body['type'];
         $user = $this->entityFactory->createAdminAncora($body);
+        $user_slug = $this->adminAncoraModel->getSlug(null, $user->slug);
+        if ($user_slug != NULL) {
+            $this->flash->addMessage('danger', 'Não é permitido, cadastro de Login repetido.');
+            return $this->httpRedirect($request, $response, "/admin/user");
+        }
+
         try {
           $this->adminAncoraModel->beginTransaction();
           $return_admin_ancora = $this->adminAncoraModel->add($user);
@@ -104,15 +124,25 @@ class UserController extends Controller
     {
         $userId = intval($args['id']);
         $user = $this->adminAncoraModel->get((int)$userId);
-        if (!$user) {
+        if ($user !== false) {
+
+          $permissao_type_user = ($_SESSION['admin_ancora']['type'] >= $user->type ) ? true : false;
+        }
+        if ($user === false) {
+
             $this->flash->addMessage('danger', 'Usuário não encontrado.');
             return $this->httpRedirect($request, $response, '/admin/user');
         }
-        $roles = $this->roleModel->getAll();
-        return $this->view->render($response, 'admin/user/edit.twig', [
-            'user' => $user,
-            'roles' => $roles
-        ]);
+        if ($permissao_type_user) {
+          $roles = $this->roleModel->getAll();
+          return $this->view->render($response, 'admin/user/edit.twig', [
+              'user' => $user,
+              'roles' => $roles
+          ]);
+        } else {
+            $this->flash->addMessage('danger', 'Usuário não permissão.');
+            return $this->httpRedirect($request, $response, '/admin/user');
+        }
     }
     public function export(Request $request, Response $response)
     {
@@ -174,8 +204,26 @@ class UserController extends Controller
     public function update(Request $request, Response $response): Response
     {
         $user = $this->entityFactory->createAdminAncora($request->getParsedBody());
-        $this->adminAncoraModel->update($user);
-        $this->flash->addMessage('success', 'Usuário atualizado com sucesso.');
-        return $this->httpRedirect($request, $response, '/admin/user/all');
+        $old_user = $this->adminAncoraModel->get((int)$user->id);
+        $user_slug = $this->adminAncoraModel->getSlug(null, $user->slug);
+        if (($user_slug != NULL) && ($old_user->slug != $user->slug)) {
+            $this->flash->addMessage('danger', 'Não é permitido, cadastro de Login repetido.');
+            return $this->httpRedirect($request, $response, "/admin/user");
+        }
+        try {
+          $this->adminAncoraModel->beginTransaction();
+          $return_admin_ancora = $this->adminAncoraModel->update($user);
+          if ($return_admin_ancora->status == false) {
+            throw new ModelException($return_admin_sisgesp, "Erro no cadastro de Admin Ancora. COD:0002.");
+          }
+          $this->adminAncoraModel->commit();
+          $this->flash->addMessage('success', 'Usuário atualizado com sucesso.');
+          return $this->httpRedirect($request, $response, '/admin/user');
+        } catch(ModelException $e) {
+          $this->adminAncoraModel->rollback();
+          CustomLogger::ModelErrorLog($e->getMessage(), $e->getdata());
+          $this->flash->addMessage('danger', $e->getMessage() . ' Se o problema persistir contate um administrador.');
+          return $this->httpRedirect($request, $response, "/admin/user");
+        }
     }
 }
