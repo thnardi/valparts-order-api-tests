@@ -45,7 +45,7 @@ class UserController extends Controller
         $new_data = explode(" ", $user->created_at);
         $data_separado = explode("-", $new_data[0]);
         $user->created_at = "$data_separado[2]/$data_separado[1]/$data_separado[0] $new_data[1]";
-      }
+      }//var_dump($admin_ancora);die;
       return $this->view->render($response, 'admin/user/index.twig', [
         'admin_ancora' => $admin_ancora,
         'users' => $users,
