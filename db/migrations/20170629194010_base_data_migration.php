@@ -333,6 +333,12 @@ class BaseDataMigration extends AbstractMigration
                 // 'role_list' => '["2","3"]'
             ],
             [
+                'resource' => '/admin/user/add/verify_slug',
+                'description' => 'Verificar slug',
+                'id_admin_ancora_type' => 2,
+                // 'role_list' => '["2","3"]'
+            ],
+            [
                 'resource' => '/admin/user/delete/:id',
                 'description' => 'Apagar usuário',
                 'id_admin_ancora_type' => 2,
@@ -341,6 +347,12 @@ class BaseDataMigration extends AbstractMigration
             [
                 'resource' => '/admin/user/edit/:id',
                 'description' => 'Editar usuário',
+                'id_admin_ancora_type' => 2,
+                // 'role_list' => '["2","3"]'
+            ],
+            [
+                'resource' => '/admin/user/edit/verify_slug',
+                'description' => 'Verificar slug na hora de editar usuário',
                 'id_admin_ancora_type' => 2,
                 // 'role_list' => '["2","3"]'
             ],

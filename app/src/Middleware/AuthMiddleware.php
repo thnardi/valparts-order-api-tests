@@ -31,9 +31,9 @@ class AuthMiddleware
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-   
+
     /**
-     *  
+     *
      */
     public function __invoke($request, $response, $next)
     {
@@ -41,7 +41,7 @@ class AuthMiddleware
         // var_dump($_SESSION);
         // die;
 
-        /* 
+        /*
         *   vars
         */
 
@@ -50,7 +50,7 @@ class AuthMiddleware
 
         // get admin routes
         $admin_ancora_routes = AdminAncora::getAdminAncoraRoutes();
-        
+
         // a list of allowed routes to this user
         $permissions = User::getPermissionsValueByRoleList();
 
@@ -101,7 +101,7 @@ class AuthMiddleware
                 $route = str_replace($value, ':'.$key, $route);
             }
         }
-  
+
         if (isset($admin_ancora_routes[$route])) {
             // tratamento especial para a rota de login administrativo
             if ($route == 'p_admin_login') {
@@ -113,7 +113,7 @@ class AuthMiddleware
                   $request->getUri()->getBaseUrl() .'/admin'
                 );
               } else {
-      
+
               }
             }
             // se a rota for diferente de login
@@ -134,8 +134,8 @@ class AuthMiddleware
             $response = $next($request, $response);
             return $response;
           }
-          
-        // Authentication Flow: 
+
+        // Authentication Flow:
 
         // 1 - if $route do not exist, then 404.
         if (!isset($permissions[$route])) {
@@ -146,7 +146,7 @@ class AuthMiddleware
         if ($permissions[$route] === false) {
             return $this->view->render($response->withStatus(403), '403.twig', ['is_auth' => User::isAuth()]);
         } else {
-        
+
         }
 
         if (isset($permissions[$route])) {
@@ -178,7 +178,7 @@ class AuthMiddleware
             );
           }
         }
-        
+
         if ( strpos($route, "perfil") !== false) {
           if (!User::isAuth()) {
             $_SESSION['return'] = $route;
@@ -189,10 +189,10 @@ class AuthMiddleware
             );
           }
         }
-  
+
         return $this->view->render($response->withStatus(403), '403.twig', ['is_auth' => User::isAuth()]);
       } else {
-  
+
       }
       // var_dump($_SESSION);
       // var_dump($route);
@@ -200,14 +200,14 @@ class AuthMiddleware
       //var_dump($admin_prefeituras_routes);
       // var_dump($permissions);
       // die;
-  
+
       if (isset($permissions[$route])) {
         $allowed = $permissions[$route];
       } else {
         $allowed = false;
       }
-  
-  
+
+
       if (!User::isAuth()) {
         if (!$allowed) {
           $_SESSION['return'] = $route;

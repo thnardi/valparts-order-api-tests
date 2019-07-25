@@ -51,9 +51,16 @@ $app->group('/admin', function () {
         $this->get('/all', UserAdmin::class . ':index');
         $this->get('/export', UserAdmin::class . ':export');
         $this->get('/{id:[0-9]+}', UserAdmin::class . ':view');
-        $this->map(['GET', 'POST'], '/add', UserAdmin::class . ':add');
+        $this->group('/add', function () {
+            $this->map(['GET', 'POST'], '[/]', UserAdmin::class . ':add');
+            $this->post('/verify_slug', UserAdmin::class . ':verify_slug');
+
+        });
+        //$this->map(['GET', 'POST'], '/add', UserAdmin::class . ':add');
+        //$this->post('/verify_slug', UserAdmin::class . ':verify_slug');
         $this->get('/delete/{id:[0-9]+}', UserAdmin::class . ':delete');
         $this->get('/edit/{id:[0-9]+}', UserAdmin::class . ':edit');
+        $this->post('/edit/verify_slug', UserAdmin::class . ':verify_slug_edit');
         $this->post('/update', UserAdmin::class . ':update');
     });
 });

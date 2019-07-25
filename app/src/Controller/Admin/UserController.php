@@ -82,8 +82,12 @@ class UserController extends Controller
         $user = $this->entityFactory->createAdminAncora($body);
         $user_slug = $this->adminAncoraModel->getSlug(null, $user->slug);
         if ($user_slug != NULL) {
-            $this->flash->addMessage('danger', 'Não é permitido, cadastro de Login repetido.');
-            return $this->httpRedirect($request, $response, "/admin/user");
+          $this->flash->addMessage('danger', 'Não é permitido, cadastro de Login repetido.');
+          return $this->httpRedirect($request, $response, "/admin/user");
+        }
+        if (!preg_match("/^([a-zA-Z0-9]+)$/", $user->slug)) {
+          $this->flash->addMessage('danger', 'Não é permitido o uso de caracteres especiais ou espaços.');
+          return $this->httpRedirect($request, $response, "/admin/user");
         }
 
         try {
@@ -206,9 +210,14 @@ class UserController extends Controller
         $user = $this->entityFactory->createAdminAncora($request->getParsedBody());
         $old_user = $this->adminAncoraModel->get((int)$user->id);
         $user_slug = $this->adminAncoraModel->getSlug(null, $user->slug);
+
         if (($user_slug != NULL) && ($old_user->slug != $user->slug)) {
             $this->flash->addMessage('danger', 'Não é permitido, cadastro de Login repetido.');
             return $this->httpRedirect($request, $response, "/admin/user");
+        }
+        if (!preg_match("/^([a-zA-Z0-9]+)$/", $user->slug)) {
+          $this->flash->addMessage('danger', 'Não é permitido o uso de caracteres especiais ou espaços.');
+          return $this->httpRedirect($request, $response, "/admin/user");
         }
         try {
           $this->adminAncoraModel->beginTransaction();
@@ -226,4 +235,17 @@ class UserController extends Controller
           return $this->httpRedirect($request, $response, "/admin/user");
         }
     }
+
+    public function verify_slug(Request $request, Response $response): Response {
+    $body = $request->getParsedBody();
+    if (isset($body['slug'])) {
+      $body['slug'] = trim($body['slug']);
+      $user = $this->adminAncoraModel->getSlug(null, $body['slug']);
+      if ($user == false) {
+        return $response->withJson(true, 200);
+      }
+      return $response->withJson(false, 200);
+    }
+    return $response->withJson(false, 200);
+  }
 }

@@ -45,7 +45,7 @@
             <div class="col-xs-12 col-sm-6">
               <div class="form-group">
                 <label for="inputLogin">Login</label>
-                <input type="text" class="form-control" id="inputLogin" name="slug" required>
+                <input type="text" class="form-control" id="inputLogin" name="slug" onkeyup="return AlteraMinusculas(this);" required>
                 <div id="inputLogin-feedback"></div>
 
               </div>
@@ -85,7 +85,52 @@
 {% endblock %}
 {% block javascripts %}
 
-<script src="{{ base_url() }}/js/jquery.mask.js"></script>
+<script type="text/javascript">
+  function AlteraMinusculas(campo) {
+  campo.value=campo.value.toLowerCase();
+}
+</script>
+
+<script>
+  $('#inputLogin').on('blur', function(){
+    $('#inputLogin-feedback').removeAttr('ok');
+    $('#inputLogin').val($('#inputLogin').val().trim());
+    if ($('#inputLogin').val().trim() == '') {
+        $('#inputLogin-feedback').html('');
+    } else {
+      $.ajax({
+        method: "POST",
+        url: "{{ base_url }}/admin/user/add/verify_slug",
+        data: { slug: $('#inputLogin').val()},
+        beforeSend: function(jqXHR) {
+          $('#inputLogin-feedback').html('<p style="position:absolute;">Aguarde.</p>');
+          // lógica para verificar caracteres inválidos no link
+          var slug = $('#inputLogin').val();
+          var slug_filtered = slug.match(/[A-Za-z0-9_-]*/);
+          var dif = slug.localeCompare(slug_filtered);
+          if (dif) {
+            jqXHR.abort(event);
+            $('#inputLogin-feedback').html('<p style="color:red; position:absolute;">Padrão não permitido.</p>');
+            $('#inputLogin').parent('.form-group').addClass('has-error');
+          }
+        }
+      }).done(function(result)
+        {
+          if (result === true) {
+            $('#inputLogin-feedback').html('<p style="color:green; position:absolute;">Disponível para cadastro.</p>');
+            $('#inputLogin-feedback').attr('ok', 'ok');
+          }
+
+          if (result === false) {
+            $('#inputLogin-feedback').html('<p style="color:red; position:absolute;">Login já utilizado. Selecione outro.</p>');
+            $('#inputLogin').parent('.form-group').addClass('has-error');
+          }
+        }).fail(function(jqXHR, textStatus, msg){
+            console.log(textStatus);
+          });
+      }
+  });
+</script>
 
 <script>
   // tratamento do botão enter
@@ -114,7 +159,9 @@
 </script>
 
 <script type="text/javascript">
-
+  function AlteraMinusculas(campo) {
+  campo.value=campo.value.toLowerCase();
+}
 </script>
 
 <script type="text/javascript">
