@@ -44,14 +44,23 @@ class UserController extends Controller
         } else {
             $page = 1;
         }
+        if (!empty($params['order'])) {
+          $order = (int)$params['order'];
+        } else {
+          $order = 1;
+        }
+        if (!empty($params['filtro'])) {
+          $filtro = (int)$params['filtro'];
+        } else {
+          $filtro = 1;
+        }
         $limit = 20;
         $offset = ($page - 1) * $limit;
-
         $amountAdmin = $this->adminAncoraModel->getAmount();
         $amountPages = ceil($amountAdmin->amount / $limit);
 
         $pageTitle = 'Administradores';
-        $users = $this->adminAncoraModel->getAllByTypePermission($offset, $limit);
+        $users = $this->adminAncoraModel->getAllByTypePermission($order, $filtro, $offset, $limit);
         $admin_ancora = $_SESSION['admin_ancora'];
         foreach($users as $user) {
             $new_data = explode(" ", $user->created_at);
@@ -63,7 +72,9 @@ class UserController extends Controller
         'users' => $users,
         'page_title' => $pageTitle,
         'page' => $page,
-        'amountPages' => $amountPages
+        'amountPages' => $amountPages,
+        'order' => $order,
+        'filtro' => $filtro
       ]);
     }
     public function add(Request $request, Response $response): Response
@@ -85,7 +96,11 @@ class UserController extends Controller
           $this->flash->addMessage('danger', 'Não é permitido, cadastro de Login repetido.');
           return $this->httpRedirect($request, $response, "/admin/user");
         }
-        if (!preg_match("/^([a-zA-Z0-9]+)$/", $user->slug)) {
+        $deleted = "deleted";
+        $pos = strpos($user->slug, $deleted);
+        //var_dump($user->slug);
+        //var_dump($pos);die;
+        if (!preg_match("/^([a-zA-Z0-9]+)$/", $user->slug) || ($pos != false)) {
           $this->flash->addMessage('danger', 'Não é permitido o uso de caracteres especiais ou espaços.');
           return $this->httpRedirect($request, $response, "/admin/user");
         }
@@ -115,19 +130,25 @@ class UserController extends Controller
     public function delete(Request $request, Response $response, array $args): Response
     {
         $userId = intval($args['id']);
-        $currentUser = $this->userModel->get();
+        $currentUser = $this->adminAncoraModel->get();
         if ($userId == $currentUser->id) {
             $this->flash->addMessage('danger', 'Não é possível remover seu próprio usuário.');
             return $this->httpRedirect($request, $response, '/admin/user/all');
         }
-        $this->userModel->delete((int)$userId);
+        $usuario = $this->adminAncoraModel->get($userId);
+        //var_dump($usuario->deleted);die;
+        if ($usuario->deleted == 1) {
+          $this->flash->addMessage('danger', 'Não é possível realizar esta ação.');
+          return $this->httpRedirect($request, $response, '/admin/user/all');
+        }
+        $this->adminAncoraModel->delete($usuario);
         $this->flash->addMessage('success', 'Usuário removido com sucesso.');
         return $this->httpRedirect($request, $response, '/admin/user/all');
     }
     public function edit(Request $request, Response $response, array $args): Response
     {
         $userId = intval($args['id']);
-        $user = $this->adminAncoraModel->get((int)$userId);
+        $user = $this->adminAncoraModel->get((int)$userId);//var_dump($user);die;
         if ($user !== false) {
 
           $permissao_type_user = ($_SESSION['admin_ancora']['type'] >= $user->type ) ? true : false;
@@ -211,11 +232,14 @@ class UserController extends Controller
         $old_user = $this->adminAncoraModel->get((int)$user->id);
         $user_slug = $this->adminAncoraModel->getSlug(null, $user->slug);
 
+        $deleted = "deleted";
+        $pos = strpos($user->slug, $deleted);
+
         if (($user_slug != NULL) && ($old_user->slug != $user->slug)) {
             $this->flash->addMessage('danger', 'Não é permitido, cadastro de Login repetido.');
             return $this->httpRedirect($request, $response, "/admin/user");
         }
-        if (!preg_match("/^([a-zA-Z0-9]+)$/", $user->slug)) {
+        if (!preg_match("/^([a-zA-Z0-9]+)$/", $user->slug) || ($pos != false)) {
           $this->flash->addMessage('danger', 'Não é permitido o uso de caracteres especiais ou espaços.');
           return $this->httpRedirect($request, $response, "/admin/user");
         }
@@ -242,6 +266,26 @@ class UserController extends Controller
       $body['slug'] = trim($body['slug']);
       $user = $this->adminAncoraModel->getSlug(null, $body['slug']);
       if ($user == false) {
+        return $response->withJson(true, 200);
+      }
+      return $response->withJson(false, 200);
+    }
+    return $response->withJson(false, 200);
+  }
+
+  public function verify_slug_edit(Request $request, Response $response): Response {
+    $body = $request->getParsedBody();
+    $id_user = $request->getQueryParams()['user'];
+    if (isset($body['slug'])) {
+      $body['slug'] = trim($body['slug']);
+      $user = $this->adminAncoraModel->getSlug(null, trim($body['slug']));
+     //var_dump($user);die;
+      // verify if not exist
+      if ($user == null) {
+        return $response->withJson(true, 200);
+      }
+      // verify if is the same.
+      if ($user->id == $id_user) {
         return $response->withJson(true, 200);
       }
       return $response->withJson(false, 200);

@@ -14,6 +14,8 @@ class BaseMigration extends AbstractMigration
         $admin_ancora->addColumn('session', 'string', ["null" => true]);
         $admin_ancora->addColumn('password', 'string');
         $admin_ancora->addColumn('type', 'integer');
+        $admin_ancora->addColumn('ativo', 'boolean', ['null' => true]);
+        $admin_ancora->addColumn('deleted', 'boolean', ['null' => true]);
         $admin_ancora->addTimestamps();
         $admin_ancora->create();
 

@@ -18,14 +18,18 @@ class AdminAncoraModel extends Model
           telefone,
           slug,
           type,
-          password
+          password,
+          ativo,
+          deleted
       ) VALUES (
           :name,
           :email,
           :telefone,
           :slug,
           :type,
-          :password
+          :password,
+          :ativo,
+          :deleted
           )";
       $parameters = [
         ':name'             => $adminAncora->name,
@@ -33,7 +37,9 @@ class AdminAncoraModel extends Model
         ':telefone'             => $adminAncora->telefone,
         ':slug'     => $adminAncora->slug,
         ':type'     => $adminAncora->type,
-        ':password'     => $adminAncora->password
+        ':password'     => $adminAncora->password,
+        ':ativo'    => $adminAncora->ativo,
+        ':deleted'  => $adminAncora->deleted
       ];
       $stmt = $this->db->prepare($sql);
       $exec = $stmt->execute($parameters);
@@ -55,12 +61,31 @@ class AdminAncoraModel extends Model
       return $modelReturn;
   }
 
-  public function delete(int $id): bool
+  public function delete($adminAncora)
   {
-      $sql = "DELETE FROM admin_ancora WHERE id = :id";
+
+
+      $sql = "
+          UPDATE
+              admin_ancora
+          SET
+              slug            = :slug,
+              deleted         = true
+          WHERE
+              id = :id
+      ";
+      $parameters =
+      [
+
+       ':id'   => (int)$adminAncora->id,
+       ':slug' => $adminAncora->slug.'_deleted'
+      ];
       $stmt = $this->db->prepare($sql);
-      $parameters = [':id' => $id];
-      return $stmt->execute($parameters);
+      //var_dump($stmt);
+      //var_dump($sql);
+      //die;
+      $exec = $stmt->execute($parameters);
+      //var_dump($exec);die;
   }
 
   public function get(int $id = 0)
@@ -101,7 +126,7 @@ class AdminAncoraModel extends Model
       return $stmt->fetchAll();
   }
 
-  public function getAllByTypePermission(int $offset = 0, int $limit = PHP_INT_MAX, int $trash = 0 ): array
+  public function getAllByTypePermission(int $order, int $filtro, int $offset = 0, int $limit = PHP_INT_MAX, int $trash = 0 ): array
   {
     $type = isset($_SESSION['admin_ancora']['type']) ? (int) $_SESSION['admin_ancora']['type'] : 0;
     $sql =
@@ -110,9 +135,32 @@ class AdminAncoraModel extends Model
       FROM
         admin_ancora
       WHERE
-        admin_ancora.type <= ?
-      LIMIT ? , ?
-    ";
+        admin_ancora.type <= ?";
+      if ($filtro == 1) {
+        $sql .="
+          AND admin_ancora.ativo = 1
+        ";
+      }
+      if ($filtro == 2) {
+        $sql .="
+          AND admin_ancora.ativo = 0
+        ";
+      }
+      if ($filtro == 3) {
+
+      }
+      if ($order == 1) {
+
+      }
+      if ($order == 2) {
+        $sql .="
+          ORDER BY
+            admin_ancora.created_at DESC
+        ";
+      }
+      $sql .="
+        LIMIT ? , ?
+      ";
     $stmt = $this->db->prepare($sql);
     $stmt->bindValue(1, $type, \PDO::PARAM_INT);
     $stmt->bindValue(2, $offset, \PDO::PARAM_INT);
@@ -174,7 +222,9 @@ class AdminAncoraModel extends Model
               telefone           = :telefone,
               slug            = :slug,
               password        = :password,
-              type            = :type
+              type            = :type,
+              ativo           = :ativo,
+              deleted         = :deleted
 
           WHERE
               id = :id
@@ -187,7 +237,9 @@ class AdminAncoraModel extends Model
        ':telefone'         => $adminAncora->telefone,
        ':slug'         => $adminAncora->slug,
        ':password'      => $adminAncora->password,
-       ':type'      => $adminAncora->type
+       ':type'      => $adminAncora->type,
+       ':ativo'     => $adminAncora->ativo,
+       ':deleted'   => $adminAncora->deleted
       ];
       $stmt = $this->db->prepare($sql);
       $exec = $stmt->execute($parameters);

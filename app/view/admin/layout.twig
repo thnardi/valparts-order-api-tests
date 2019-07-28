@@ -202,8 +202,9 @@
             </nav>
             <p class="copyright pull-right">
                 &copy;
+                <span id="ano"></span>
                 <script>
-                    document.write(new Date().getFullYear())
+                  $("#ano").html(new Date().getFullYear());
                 </script>
                 Ancora. Criado com amor por <a href="https://farol360.com.br">Farol360</a>.
             </p>
@@ -214,9 +215,9 @@
 
     <!--   Core JS Files   -->
     <script src="{{ base_url() }}/js/material.min.js" type="text/javascript"></script>
-    <script src="{{ base_url() }}/assets/js/core/popper.min.js"></script>
+    {#<script src="{{ base_url() }}/assets/js/core/popper.min.js"></script>#}
 
-    <script src="{{ base_url() }}/assets/js/plugins/chartist.min.js"></script>
+    {#<script src="{{ base_url() }}/assets/js/plugins/chartist.min.js"></script>#}
     <!--  Dynamic Elements plugin -->
     <script src="{{ base_url() }}/js/arrive.min.js"></script>
     <!--  PerfectScrollbar Library -->
@@ -227,7 +228,7 @@
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
     !-->
     <!-- Material Dashboard javascript methods -->
-    <script src="{{ base_url() }}/js/material-dashboard.js?v=1.2.0"></script>
+    {#<script src="{{ base_url() }}/js/material-dashboard.js?v=1.2.0"></script>#}
 
 
     {% block javascripts %}{% endblock %}

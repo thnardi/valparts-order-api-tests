@@ -48,6 +48,7 @@
               <div class="form-group">
                 <label for="inputLogin">Login</label>
                 <input type="text" class="form-control" id="inputLogin" name="slug" value="{{ user.slug }}" onkeyup="return AlteraMinusculas(this);"  required>
+                <div id="inputLogin-feedback"></div>
 
               </div>
             </div>
@@ -70,6 +71,15 @@
                 </select>
               </div>
             </div>
+            <div class="col-xs-12 col-sm-6">
+              <div class="form-group">
+                <label for="ativo">Situação do Usuário</label>
+                <select class="form-control" id="ativo" name="ativo">
+                  <option value="1" {% if user.ativo == 1 %}selected{% endif %}>Ativo</option>
+                  <option value="0" {% if user.ativo == 0 %}selected{% endif %}>Inativo</option>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <button type="submit" class="btn btn-primary">Atualizar</button>
@@ -85,6 +95,56 @@
 
 {% endblock %}
 {% block javascripts %}
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    //console.log('teste console log');
+    $('#inputLogin').attr('ok', 'ok');
+  });
+</script>
+
+<script>
+  $('#inputLogin').on('blur', function(){
+    $('#inputLogin').removeAttr('ok');
+    $('#inputLogin').val($('#inputLogin').val().trim());
+    if ($('#inputLogin').val().trim() == '') {
+        $('#inputLogin-feedback').html('');
+    } else {
+      $.ajax({
+        method: "POST",
+        url: "{{ base_url }}/admin/user/edit/verify_slug?user={{ user.id }}",
+        data: { slug: $('#inputLogin').val()},
+        beforeSend: function(jqXHR) {
+          $('#inputLogin-feedback').html('<p style="position:absolute;">Aguarde.</p>');
+          // lógica para verificar caracteres inválidos no link
+          var slug = $('#inputLogin').val();
+          var slug_filtered = slug.match(/[A-Za-z0-9_-]*/);
+          var dif = slug.localeCompare(slug_filtered);
+          var n = slug.indexOf("deleted");
+          if ((dif) || (n !== -1)) {
+            jqXHR.abort(event);
+            $('#inputLogin-feedback').html('<p style="color:red; position:absolute;">Padrão não permitido.</p>');
+            $('#inputLogin').parent('.form-group').addClass('has-error');
+          }
+        }
+      }).done(function(result)
+        {
+          if (result === true) {
+            $('#inputLogin-feedback').html('<p style="color:green; position:absolute;">Disponível para cadastro.</p>');
+            $('#inputLogin').attr('ok', 'ok');
+          }
+
+          if (result === false) {
+            $('#inputLogin-feedback').html('<p style="color:red; position:absolute;">Login já utilizado. Selecione outro.</p>');
+            $('#inputLogin').parent('.form-group').addClass('has-error');
+          }
+        }).fail(function(jqXHR, textStatus, msg){
+            console.log(textStatus);
+          });
+      }
+  });
+</script>
+
 <script>
 
   $('body').on('keydown', 'input, select, textarea', function(e) {
@@ -117,5 +177,15 @@
   function AlteraMinusculas(campo) {
   campo.value=campo.value.toLowerCase();
 }
+</script>
+
+<script type="text/javascript">
+  $('#userform').submit(function(){
+    if ( $('#inputLogin').attr('ok') !== 'ok') {
+      $('#inputLogin').focus();
+      return false;
+    }
+    return true;
+  });
 </script>
 {% endblock %}
