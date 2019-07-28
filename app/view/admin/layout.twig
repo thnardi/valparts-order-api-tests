@@ -22,11 +22,11 @@
         <div class="sidebar-wrapper">
           <div style="color:white; background-color: #62707e;">
             <p style="padding: 15px 15px 10px 15px;
-margin-bottom: 0px;
-text-align:center;
-border-bottom-color: #b3cbdd;
-/* border-bottom-style: solid; */
-border-width: 1px;">MENU PRINCIPAL</p>
+              margin-bottom: 0px;
+              text-align:center;
+              border-bottom-color: #b3cbdd;
+              /* border-bottom-style: solid; */
+              border-width: 1px;">MENU PRINCIPAL</p>
           </div>
           <ul class="nav" >
             <li {% if nav_active == "dashboard" %} class="active" {% endif %}>
@@ -162,8 +162,9 @@ border-width: 1px;">MENU PRINCIPAL</p>
             </nav>
             <p class="copyright pull-right">
                 &copy;
+                <span id="ano"></span>
                 <script>
-                    document.write(new Date().getFullYear())
+                  $("#ano").html(new Date().getFullYear());
                 </script>
                 Ancora. Criado com amor por <a href="https://farol360.com.br">Farol360</a>.
             </p>

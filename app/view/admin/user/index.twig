@@ -25,16 +25,44 @@
   </div>
   <div class="card-content">
     <div class="row">
+      <div class="col-xs-12 col-sm-6">
+
+        <select name="order" id="order">
+          <option value="1" {% if order == '1' %} selected {% endif %}>Data Crescente</option>
+          <option value="2" {% if order == '2' %} selected {% endif %}>Data Decrescente</option>
+        </select>
+
+
+        <select name="filtro" id="filtro">
+          <option value="1" {% if filtro == '1' %} selected {% endif %}>Usuários Ativos</option>
+          <option value="2" {% if filtro == '2' %} selected {% endif %}>Usuários Inativos</option>
+          <option value="3" {% if filtro == '3' %} selected {% endif %}>Todos os Usuários</option>
+        </select>
+        <a class="btn btn-primary btn-sm controle_tabela" href="" id="order_btn">
+          <i class="material-icons" >search</i>
+        </a>
+      </div>
+      <div class="col-xs-12 col-sm-3">
+
+
+      </div>
+        <div class="col-xs-12 col-sm-2">
+
+      </div>
+    </div>
+    <div class="row">
       <div class="col-xs-12">
         {% if users %}
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
                 <tr>
+                  <th>ID</th>
                   <th>Email</th>
                   <th>Nome</th>
                   <th>Criado em</th>
                   <th>Nível</th>
+                  <th>Situação</th>
                   <th class="th-button" style="width:100px;"></th>
                   {# <th class="th-button" style="width:100px;"></th> #}
                 </tr>
@@ -80,10 +108,10 @@
         <div class="col-xs-12">
           <ul class="pager">
             <li{% if page == 1 %} class="disabled"{% endif %}>
-              <a{% if page > 1 %} href="{{ base_url() }}/admin/user?page={{ page - 1 }}"{% endif %}>Anterior</a>
+              <a{% if page > 1 %} href="{{ base_url() }}/admin/user?order={{ order }}&filtro={filtro}&page={{ page - 1 }}"{% endif %}>Anterior</a>
             </li>
             <li{% if page >= amountPages %} class="disabled"{% endif %}>
-              <a{% if page < amountPages %} href="{{ base_url() }}/admin/user?page={{ page + 1 }}"{% endif %}>Próximo</a>
+              <a{% if page < amountPages %} href="{{ base_url() }}/admin/user?order={{ order }}&filtro={filtro}&page={{ page + 1 }}"{% endif %}>Próximo</a>
             </li>
           </ul>
         </div>
@@ -94,3 +122,22 @@
 
 
 {% endblock %}
+{% block javascripts %}
+
+
+  <script type="text/javascript">
+      $('.controle_tabela').click(function(){
+      var order = $('#order').val();
+      var filtro = $('#filtro').val();
+      //console.log('.controle_tabela');
+      $("#order_btn").attr('href',   '{{ base_url() }}/admin/user?order=' + order + '&filtro=' + filtro + '&page={{ 1 }}');
+    });
+  </script>
+  <script type="text/javascript">
+      //$("#filtro_btn").click(function(){
+      //var filtro = $('#filtro').val();
+      //console.log($('#order_btn').attr('href'));
+     // $("#filtro_btn").attr('href',   '{{ base_url() }}/admin/user?filtro=' + filtro + '&page={{ 1 }}');
+    //});
+  </script>
+  {% endblock %}

@@ -15,14 +15,18 @@ class BaseDataMigration extends AbstractMigration
                 'email' => 'superadmin@farol360.com.br',
                 'slug' => 'superadmin',
                 'password' => $password_root,
-                'type' => 4
+                'type' => 4,
+                'ativo' => true,
+                'deleted' => false
             ],
             [
                 'name' => 'Administrador Geral',
                 'email' => 'superadmin@farol360.com.br',
                 'slug' => 'admin',
                 'password' => $password_admin,
-                'type' => 3
+                'type' => 3,
+                'ativo' => true,
+                'deleted' => false
             ]
         ];
 
