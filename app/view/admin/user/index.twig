@@ -1,6 +1,6 @@
 {% extends "admin/layout.twig" %}
 {% block html_title %}Usuários - Administração - {{ parent() }}{% endblock %}
-{% set nav_active = 'user' %}
+{% set nav_active = 'usuarios' %}
 {% block breadcrumbs %}
 <ol class="breadcrumb">
   <li><a href="{{ base_url() }}/admin">Início</a></li>
@@ -11,21 +11,21 @@
 <div class="row">
   <div class="col-xs-12 col-sm-3">
     <a class="btn btn-success" href="{{ base_url() }}/admin/user/add">
-      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Novo Administrador
+      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Cadastrar
     </a>
   </div>
 </div>
-<div class="card">
-  <div class="card-header" data-background-color="blue">
+<div class="panel panel-default">
+  <div class="panel-heading" >
     <div class="row">
       <div class="col-xs-8 col-sm-8">
-        <h3>{{ page_title }}</h3>
+        <p class="panel-title">Usuários Administradores</p>
       </div>
     </div>
   </div>
-  <div class="card-content">
+  <div class="panel-body">
     <div class="row">
-      <div class="col-xs-12 col-sm-6">
+      <div class="col-xs-12 col-sm-12">
 
         <select name="order" id="order">
           <option value="1" {% if order == '1' %} selected {% endif %}>Data Crescente</option>
@@ -63,13 +63,14 @@
                   <th>Criado em</th>
                   <th>Nível</th>
                   <th>Situação</th>
-                  <th class="th-button" style="width:100px;"></th>
+                  <th style="width:100px; text-align:center;"> Ações</th>
                   {# <th class="th-button" style="width:100px;"></th> #}
                 </tr>
               </thead>
               <tbody>
                 {% for user in users %}
                 <tr>
+                  <td>{{ user.id }}</td>
                   <td>
                     <a href="{{ base_url() }}/admin/user/{{ user.id }}">
                       {{ user.email }}
@@ -82,6 +83,10 @@
                     {% if user.type == 3 %}Alto{% endif %}
                     {% if user.type == 2 %}Médio{% endif %}
                     {% if user.type == 1 %}Baixo{% endif %}
+                  </td>
+                  <td>
+                    {% if user.ativo == 1 %}Ativo{% endif %}
+                    {% if user.ativo == 2 %}Inativo{% endif %}
                   </td>
                   <td>
                     {% if user.type >= admin_ancora.type and user.id != admin_ancora.id %}

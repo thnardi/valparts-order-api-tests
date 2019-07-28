@@ -16,8 +16,7 @@ class BaseDataMigration extends AbstractMigration
                 'slug' => 'superadmin',
                 'password' => $password_root,
                 'type' => 4,
-                'ativo' => true,
-                'deleted' => false
+                'ativo' => true
             ],
             [
                 'name' => 'Administrador Geral',
@@ -25,8 +24,7 @@ class BaseDataMigration extends AbstractMigration
                 'slug' => 'admin',
                 'password' => $password_admin,
                 'type' => 3,
-                'ativo' => true,
-                'deleted' => false
+                'ativo' => true
             ]
         ];
 
