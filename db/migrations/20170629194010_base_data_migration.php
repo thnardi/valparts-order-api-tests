@@ -285,6 +285,12 @@ class BaseDataMigration extends AbstractMigration
                 // 'role_list' => '["3"]'
             ],
             [
+                'resource' => '/admin/relatorios',
+                'description' => 'Ver cargos',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["3"]'
+            ],
+            [
                 'resource' => '/admin/role/add',
                 'description' => 'Adicionar cargo',
                 'id_admin_ancora_type' => 4,

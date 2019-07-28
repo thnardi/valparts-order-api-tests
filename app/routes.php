@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Farol360\Ancora\Controller\Admin\IndexController as IndexAdmin;
 use Farol360\Ancora\Controller\Admin\PermissionController as PermissionAdmin;
 use Farol360\Ancora\Controller\Admin\PostController as PostController;
+use Farol360\Ancora\Controller\Admin\RelatoriosController as RelatoriosAdmin;
 use Farol360\Ancora\Controller\Admin\RoleController as RoleAdmin;
 use Farol360\Ancora\Controller\Admin\UserController as UserAdmin;
 
@@ -34,6 +35,10 @@ $app->group('/admin', function () {
         $this->get('/delete/{id:[0-9]+}', PostController::class . ':delete');
         $this->get('/edit/{id:[0-9]+}', PostController::class . ':edit');
         $this->post('/update', PostController::class . ':update');
+    });
+
+    $this->group('/relatorios', function () {
+      $this->get('[/]', RelatoriosAdmin::class . ':index');
     });
 
     $this->group('/role', function () {

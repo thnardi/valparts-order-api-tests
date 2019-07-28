@@ -37,7 +37,7 @@ class AuthMiddleware
      */
     public function __invoke($request, $response, $next)
     {
-        // unset($_SESSION['user']);
+        // unset($_SESSION['admin_sisgesp']);
         // var_dump($_SESSION);
         // die;
 

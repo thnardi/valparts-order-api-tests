@@ -164,6 +164,14 @@ $container['Farol360\Ancora\Controller\Admin\PermissionController'] = function (
     );
 };
 
+$container['Farol360\Ancora\Controller\Admin\RelatoriosController'] = function ($c) {
+    return new Farol360\Ancora\Controller\Admin\RelatoriosController(
+        $c['view'],
+        $c['flash'],
+        new Farol360\Ancora\Model\EntityFactory()
+    );
+};
+
 $container['Farol360\Ancora\Controller\Admin\RoleController'] = function ($c) {
     return new Farol360\Ancora\Controller\Admin\RoleController(
         $c['view'],

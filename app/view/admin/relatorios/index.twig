@@ -1,0 +1,22 @@
+{% extends "admin/layout.twig" %}
+{% block html_title %}Relatórios - Administração - {{ parent() }}{% endblock %}
+{% set nav_active = 'user' %}
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+  <li><a href="{{ base_url() }}/admin">Início</a></li>
+  <li class="active">Usuários</li>
+</ol>
+{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-xs-12 col-sm-3">
+    <a class="btn btn-success" href="{{ base_url() }}/admin/user/add">
+      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Novo Administrador
+    </a>
+  </div>
+</div>
+
+
+
+
+{% endblock %}
