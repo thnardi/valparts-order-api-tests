@@ -37,15 +37,15 @@
               </a>
             </li>
             <li {% if nav_active == "clientes" %} class="active" {% endif %} >
-              <a href="#clientes-submenu" aria-controls="posts-submenu" data-toggle="collapse" class="parent collapsed" aria-expanded="true" href="{{ base_url }}/admin/clientes">
+              <a href="#clientes-submenu " aria-controls="posts-submenu" data-toggle="collapse" class="parent collapsed" aria-expanded="true" href="{{ base_url }}/admin/clientes">
                 <i class="material-icons">person</i>
                 <p>Clientes</p>
               </a>
             <ul id="clientes-submenu" style="" {% if nav_active == "clientes" %} class="collapse submenu in" {% else %} class="collapse submenu" {% endif %} aria-expanded="false">
           <li {% if subnav_active == "clientes" %} class="active submenu-item" {% else %} class="submenu-item" {% endif %} >
-                  <a href="{{ base_url() }}/admin/posts"> > Lista de clientes</a></li>
+                  <a href="{{ base_url() }}/admin/clientes"> > Lista de clientes</a></li>
                 <li {% if subnav_active == "cliente_tipos" %} class="active submenu-item" {% else %} class="submenu-item" {% endif %} >
-                  <a href="{{ base_url() }}/admin/post_types"> > Tipos de clientes</a>
+                  <a href="{{ base_url() }}/admin/clientes_types"> > Tipos de clientes</a>
                   </li>
               </ul>
             </li>

@@ -18,15 +18,8 @@ class UserModel extends Model
                 password,
                 nascimento,
                 cpf,
-                tel_area,
                 tel_numero,
-                end_rua,
-                end_numero,
-                end_complemento,
-                end_bairro,
-                end_cidade,
-                end_estado,
-                end_cep,
+
                 role_id,
                 active,
                 deleted,
@@ -39,15 +32,8 @@ class UserModel extends Model
                 :password,
                 :nascimento,
                 :cpf,
-                :tel_area,
                 :tel_numero,
-                :end_rua,
-                :end_numero,
-                :end_complemento,
-                :end_bairro,
-                :end_cidade,
-                :end_estado,
-                :end_cep,
+
                 :role_id,
                 :active,
                 :deleted,
@@ -63,15 +49,9 @@ class UserModel extends Model
             ':role_id' => $user->role_id,
             ':nascimento' => $user->nascimento,
             ':cpf' => $user->cpf,
-            ':tel_area' => $user->tel_area,
+            //':tel_area' => $user->tel_area,
             ':tel_numero' => $user->tel_numero,
-            ':end_rua' => $user->end_rua,
-            ':end_numero' => $user->end_numero,
-            ':end_complemento' => $user->endComplemento,
-            ':end_bairro' => $user->end_bairro,
-            ':end_cidade' => $user->end_cidade,
-            ':end_estado' => $user->end_estado,
-            ':end_cep' => $user->end_cep,
+
             ':active' => 1,
             ':deleted' => 0,
             ':created_at' => time(),
@@ -123,21 +103,103 @@ class UserModel extends Model
     {
         $sql = "
             SELECT
+               *
+            FROM
+                users
+            ORDER BY
+                users.name ASC
+                LIMIT ? , ?
+        ";
+        $query = $this->db->prepare($sql);
+        $query->bindValue(1, $offset, \PDO::PARAM_INT);
+        $query->bindValue(2, $limit, \PDO::PARAM_INT);
+        $query->execute();
+        $query->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, User::class);
+        return $query->fetchAll();
+    }
+
+    public function getAllOrder(int $order, int $filtro, int $offset = 0, int $limit = PHP_INT_MAX): array
+    {
+        $sql = "
+            SELECT
                 users.*,
                 roles.name AS role
             FROM
                 users
                 LEFT JOIN roles ON roles.id = users.role_id
             WHERE
-                deleted != 1
-            LIMIT ? , ?
+                deleted != 1";
+            if ($filtro == 1) {
+        $sql .="
+          AND users.active = 1
         ";
+      }
+      if ($filtro == 2) {
+        $sql .="
+          AND users.active = 0
+        ";
+      }
+      if ($filtro == 3) {
+
+      }
+      if ($order == 1) {
+
+      }
+      if ($order == 2) {
+        $sql .="
+          ORDER BY
+            users.created_at DESC
+        ";
+      }
+      $sql .="
+        LIMIT ? , ?
+      ";
         $query = $this->db->prepare($sql);
         $query->bindValue(1, $offset, \PDO::PARAM_INT);
         $query->bindValue(2, $limit, \PDO::PARAM_INT);
         $query->execute();
         return $query->fetchAll();
     }
+
+    public function getAmount()
+  {
+      $sql = "
+          SELECT
+              COUNT(id) AS amount
+          FROM
+            users
+      ";
+      $query = $this->db->prepare($sql);
+      $query->execute();
+      return $query->fetch();
+  }
+
+  public function getSlug(int $cliente_id = null, string $slug = "")
+  {
+      //$session = new Session();
+      //if (empty($admin_ancora_id) && empty($slug) && !empty($session->get('admin_ancora'))) {
+          //if (isset($session->admin_ancora['id'])) {
+             // $admin_ancora_id = (int)$session->admin_ancora['id'];
+          //}
+      //}
+      //if (!empty($admin_ancora_id) || !empty($slug)) {
+          $sql = "
+              SELECT
+                  *
+              FROM
+                users
+              WHERE
+                users.id = :id OR users.slug = :slug
+
+          ";
+          $stmt = $this->db->prepare($sql);
+          $parameters = [':id' => $cliente_id, ':slug' => $slug];
+          $stmt->execute($parameters);
+          $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, User::class);
+          return $stmt->fetch();
+      //}
+      //return new AdminAncora();
+  }
 
     public function getByEmail(string $email)
     {
@@ -235,7 +297,7 @@ class UserModel extends Model
                 name = :name,
                 nascimento = :nascimento,
                 cpf = :cpf,
-                tel_area = :tel_area,
+
                 tel_numero = :tel_numero,
                 end_rua = :end_rua,
                 end_numero = :end_numero,
@@ -258,7 +320,7 @@ class UserModel extends Model
             ':role_id' => $user->role_id,
             ':nascimento' => $user->nascimento,
             ':cpf' => $user->cpf,
-            ':tel_area' => $user->tel_area,
+           // ':tel_area' => $user->tel_area,
             ':tel_numero' => $user->tel_numero,
             ':end_rua' => $user->end_rua,
             ':end_numero' => $user->end_numero,

@@ -11,15 +11,9 @@ class User
     public $password;
     public $nascimento;
     public $cpf;
-    public $tel_area;
+    //public $tel_area;
     public $tel_numero;
-    public $end_rua;
-    public $end_numero;
-    public $end_complemento;
-    public $end_bairro;
-    public $end_cidade;
-    public $end_estado;
-    public $end_cep;
+
     public $role_id;
     public $recover_token;
     public $verification_token;
@@ -38,15 +32,9 @@ class User
         $this->password = !empty($data['password']) ? password_hash($data['password'], PASSWORD_DEFAULT) : null;
         $this->nascimento = !empty($data['nascimento']) ? date('Y-m-d', strtotime($data['nascimento'])) : null;
         $this->cpf = $data['cpf'] ?? null;
-        $this->tel_area = $data['tel_area'] ?? null;
+        //$this->tel_area = $data['tel_area'] ?? null;
         $this->tel_numero = $data['tel_numero'] ?? null;
-        $this->end_rua = $data['end_rua'] ?? null;
-        $this->end_numero = $data['end_numero'] ?? null;
-        $this->end_complemento = $data['end_complemento'] ?? null;
-        $this->end_bairro = $data['end_bairro'] ?? null;
-        $this->end_cidade = $data['end_cidade'] ?? null;
-        $this->end_estado = $data['end_estado'] ?? null;
-        $this->end_cep = $data['end_cep'] ?? null;
+
         $this->role_id = $data['role_id'] ?? null;
         $this->recover_token = $data['recover_token'] ?? null;
         $this->verification_token = $data['verification_token'] ?? null;

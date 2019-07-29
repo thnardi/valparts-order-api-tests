@@ -17,6 +17,10 @@ class EntityFactory
     {
         return new AdminAncora($data);
     }
+    public function createClientesAdmin(array $data = []) : ClientesAdmin
+    {
+        return new ClientesAdmin($data);
+    }
     public function createPost(array $data = []) : Post
     {
         return new Post($data);
