@@ -57,7 +57,7 @@
     .nav{
         li.active a{
             background-color: $color;
-            @include shadow-big-color($color);
+            // @include shadow-big-color($color);
         }
     }
 }

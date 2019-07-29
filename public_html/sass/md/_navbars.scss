@@ -54,9 +54,8 @@
   .navbar-nav {
     > li > a {
       color: inherit;
-      padding-top: 10px;
-      padding-bottom: 10px;
-
+      padding: 10px;
+      margin: 0px 2px;
       font-weight: $font-weight-default;
       font-size: $mdb-btn-font-size-base;
       text-transform: uppercase;

@@ -8,7 +8,7 @@
     .navbar-nav > li > .dropdown-menu,
     .dropdown .dropdown-menu,
     .dropdown-menu.bootstrap-datetimepicker-widget{
-        @include transition($fast-transition-time, $transition-linear);
+        // @include transition($fast-transition-time, $transition-linear);
         margin-top: -20px;
         visibility: hidden;
         display: block;
@@ -20,6 +20,14 @@
         @include opacity(1);
         visibility: visible;
         margin-top: 0px;
+        position: static;
+        float: none;
+        width: auto;
+        margin-top: 0;
+        background-color: transparent;
+        border: 0;
+        -webkit-box-shadow: none;
+        box-shadow: none;
 
     }
 

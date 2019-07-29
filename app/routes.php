@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 // includes
 use Farol360\Ancora\Controller\Admin\IndexController as IndexAdmin;
+use Farol360\Ancora\Controller\Admin\ClientesController as ClientesAdmin;
 use Farol360\Ancora\Controller\Admin\PermissionController as PermissionAdmin;
 use Farol360\Ancora\Controller\Admin\PostController as PostController;
 use Farol360\Ancora\Controller\Admin\RelatoriosController as RelatoriosAdmin;
@@ -21,6 +22,15 @@ $app->group('/admin', function () {
     $this->get('[/]', IndexAdmin::class . ':index');
     $this->map(['GET', 'POST'], '/login', IndexAdmin::class . ':login');
     $this->map(['GET', 'POST'], '/logout', IndexAdmin::class . ':logout');
+
+    $this->group('/clientes', function () {
+        $this->get('[/]', ClientesAdmin::class . ':index');
+        $this->map(['GET', 'POST'], '/add', ClientesAdmin::class . ':add');
+        $this->get('/delete/{id:[0-9]+}', ClientesAdmin::class . ':delete');
+        $this->get('/edit/{id:[0-9]+}', ClientesAdmin::class . ':edit');
+        $this->post('/update', ClientesAdmin::class . ':update');
+    });
+
     $this->group('/permission', function () {
         $this->get('[/]', PermissionAdmin::class . ':index');
         $this->map(['GET', 'POST'], '/add', PermissionAdmin::class . ':add');
@@ -28,6 +38,7 @@ $app->group('/admin', function () {
         $this->get('/edit/{id:[0-9]+}', PermissionAdmin::class . ':edit');
         $this->post('/update', PermissionAdmin::class . ':update');
     });
+
 
     $this->group('/posts', function () {
         $this->get('[/]', PostController::class . ':index');

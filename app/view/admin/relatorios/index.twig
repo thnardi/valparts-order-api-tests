@@ -1,20 +1,66 @@
 {% extends "admin/layout.twig" %}
 {% block html_title %}Relatórios - Administração - {{ parent() }}{% endblock %}
-{% set nav_active = 'user' %}
+{% set nav_active = 'relatorios' %}
 {% block breadcrumbs %}
 <ol class="breadcrumb">
   <li><a href="{{ base_url() }}/admin">Início</a></li>
-  <li class="active">Usuários</li>
+  <li class="active">Relatórios</li>
 </ol>
 {% endblock %}
 {% block content %}
+
 <div class="row">
-  <div class="col-xs-12 col-sm-3">
-    <a class="btn btn-success" href="{{ base_url() }}/admin/user/add">
-      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Novo Administrador
-    </a>
+  <div class="col-xs-12 col-sm-6">
+    <div class="panel panel-default">
+      <div class="panel-heading" >
+        <div class="row">
+          <div class="col-xs-12">
+            <p class="panel-title">Selecionar Relatório</p>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-6">
+    <div class="panel panel-default">
+      <div class="panel-heading" >
+        <div class="row">
+          <div class="col-xs-12">
+            <p class="panel-title">Filtros</p>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+      </div>
+    </div>
   </div>
 </div>
+<div class="panel panel-default">
+  <div class="panel-heading" >
+    <div class="row">
+      <div class="col-xs-12">
+        <p class="panel-title">Relatório</p>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-xs-12">
+        {% if users %}
+          <div class="table-responsive">
+            <table class="table table-striped">
+            </table>
+          </div>
+        {% else %}
+          <div class="alert alert-danger" role="alert">Não existem usuários cadastrados</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 

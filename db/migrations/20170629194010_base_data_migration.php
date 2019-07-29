@@ -197,6 +197,36 @@ class BaseDataMigration extends AbstractMigration
                 // 'role_list' => '["1","2"]'
             ],
             [
+                'resource' => '/admin/clientes',
+                'description' => 'Página administrativa',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["1","2"]'
+            ],
+            [
+                'resource' => '/admin/clientes/add',
+                'description' => 'Página administrativa',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["1","2"]'
+            ],
+            [
+                'resource' => '/admin/clientes/edit/:id',
+                'description' => 'Página administrativa',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["1","2"]'
+            ],
+            [
+                'resource' => '/admin/clientes/delete/:id',
+                'description' => 'Página administrativa',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["1","2"]'
+            ],
+            [
+                'resource' => '/admin/clientes/update',
+                'description' => 'Página administrativa',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["1","2"]'
+            ],
+            [
                 'resource' => '/admin/login',
                 'description' => 'Página administrativa',
                 'id_admin_ancora_type' => 1,

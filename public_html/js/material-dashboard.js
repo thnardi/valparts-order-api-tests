@@ -1,17 +1,17 @@
 /*!
-    
+
  =========================================================
  * Material Dashboard - v1.1.1
  =========================================================
- 
+
  * Product Page: http://www.creative-tim.com/product/material-dashboard
  * Copyright 2017 Creative Tim (http://www.creative-tim.com)
  * Licensed under MIT (https://github.com/creativetimofficial/material-dashboard/blob/master/LICENSE.md)
- 
+
  =========================================================
- 
+
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
- 
+
  */
 
 // Material Dashboard Wizard Functions
@@ -134,8 +134,8 @@ md = {
 
             // insert the navbar form before the sidebar list
             $nav_content = $(nav_content);
-            $nav_content.insertBefore($sidebar_nav);
-            $navbar_form.insertBefore($nav_content);
+            $nav_content.insertAfter($sidebar_nav);
+            $navbar_form.insertAfter($nav_content);
 
             $(".sidebar-wrapper .dropdown .dropdown-menu > li > a").click(function(event) {
                 event.stopPropagation();

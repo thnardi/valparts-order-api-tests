@@ -447,20 +447,43 @@ h2.title {
   width: 60px;
   height: 60px;
 }
-.sidebar .nav,
-.off-canvas-sidebar .nav {
-  margin-top: 5px;
+.sidebar .nav li,
+.off-canvas-sidebar .nav li {
+  border-bottom-color: #3c4858;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
+.sidebar .nav li .submenu,
+.off-canvas-sidebar .nav li .submenu {
+  padding: 0px;
+}
+.sidebar .nav li .submenu .active,
+.off-canvas-sidebar .nav li .submenu .active {
+  padding: 5px 10px;
+}
+.sidebar .nav li .submenu .submenu-item,
+.off-canvas-sidebar .nav li .submenu .submenu-item {
+  border-bottom-width: 0px;
+  padding: 5px 10px;
+}
+.sidebar .nav li .submenu .submenu-item a,
+.off-canvas-sidebar .nav li .submenu .submenu-item a {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+.sidebar .nav li a:focus,
+.off-canvas-sidebar .nav li a:focus {
+  background: #028899 !important;
+  color: #dde1ea;
 }
 .sidebar .nav li > a,
 .off-canvas-sidebar .nav li > a {
-  margin: 5px 10px;
   padding: 5px 10px;
-  border-radius: 3px;
   color: #dde1ea;
 }
 .sidebar .nav li:hover > a,
 .off-canvas-sidebar .nav li:hover > a {
-  background: rgba(200, 200, 200, 0.2);
+  background: #028899 !important;
   color: #dde1ea;
 }
 .sidebar .nav li.active > a,
@@ -484,7 +507,7 @@ h2.title {
   margin-right: 2px;
   line-height: 30px;
   width: 30px;
-  color: #a9afbb;
+  color: white;
 }
 .sidebar .sidebar-background,
 .off-canvas-sidebar .sidebar-background {
@@ -583,32 +606,26 @@ h2.title {
 .sidebar[data-color=blue] .nav li.active a,
 .off-canvas-sidebar[data-color=blue] .nav li.active a {
   background-color: #00bcd4;
-  box-shadow: 0 12px 20px -10px rgba(0, 188, 212, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(0, 188, 212, 0.2);
 }
 .sidebar[data-color=green] .nav li.active a,
 .off-canvas-sidebar[data-color=green] .nav li.active a {
   background-color: #4caf50;
-  box-shadow: 0 12px 20px -10px rgba(76, 175, 80, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(76, 175, 80, 0.2);
 }
 .sidebar[data-color=orange] .nav li.active a,
 .off-canvas-sidebar[data-color=orange] .nav li.active a {
   background-color: #ff9800;
-  box-shadow: 0 12px 20px -10px rgba(255, 152, 0, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(255, 152, 0, 0.2);
 }
 .sidebar[data-color=red] .nav li.active a,
 .off-canvas-sidebar[data-color=red] .nav li.active a {
   background-color: #f44336;
-  box-shadow: 0 12px 20px -10px rgba(244, 67, 54, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(244, 67, 54, 0.2);
 }
 .sidebar[data-color=purple] .nav li.active a,
 .off-canvas-sidebar[data-color=purple] .nav li.active a {
   background-color: #9c27b0;
-  box-shadow: 0 12px 20px -10px rgba(156, 39, 176, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(156, 39, 176, 0.2);
 }
 .sidebar[data-color=blue-menu] .nav li.active a,
 .off-canvas-sidebar[data-color=blue-menu] .nav li.active a {
   background-color: #028899;
-  box-shadow: 0 12px 20px -10px rgba(2, 136, 153, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(2, 136, 153, 0.2);
 }
 
 .off-canvas-sidebar .nav > li > a,
@@ -1486,10 +1503,10 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4 {
 }
 
 a {
-  color: #9c27b0;
+  color: #028899;
 }
 a:hover, a:focus {
-  color: #89229b;
+  color: #027280;
   text-decoration: none;
 }
 a.text-info:hover, a.text-info:focus {
@@ -2894,8 +2911,8 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 }
 .navbar .navbar-nav > li > a {
   color: inherit;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 10px;
+  margin: 0px 2px;
   font-weight: 400;
   font-size: 12px;
   text-transform: uppercase;
@@ -4568,11 +4585,6 @@ footer .btn {
   .navbar-nav > li > .dropdown-menu,
 .dropdown .dropdown-menu,
 .dropdown-menu.bootstrap-datetimepicker-widget {
-    -webkit-transition: all 150ms linear;
-    -moz-transition: all 150ms linear;
-    -o-transition: all 150ms linear;
-    -ms-transition: all 150ms linear;
-    transition: all 150ms linear;
     margin-top: -20px;
     visibility: hidden;
     display: block;
@@ -4587,6 +4599,14 @@ footer .btn {
     filter: alpha(opacity=100);
     visibility: visible;
     margin-top: 0px;
+    position: static;
+    float: none;
+    width: auto;
+    margin-top: 0;
+    background-color: transparent;
+    border: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
   }
 
   /*.navbar-nav > li > .dropdown-menu:before{

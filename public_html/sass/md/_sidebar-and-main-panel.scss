@@ -37,35 +37,57 @@
             height: 60px;
         }
     }
-
-
-
     .nav{
-        margin-top: 5px;
-
+        // margin-top: 5px;
         li{
-            > a{
-                margin: 5px 10px;
-                padding: 5px 10px;
-                border-radius: $border-radius-base;
+          border-bottom-color: #3c4858;
+          border-bottom-style: solid;
+          border-bottom-width: 1px;
+          .submenu{
+            padding:0px;
+            .active{
+              padding: 5px 10px;
+              // background-color:gray !important;
+            }
+            .submenu-item {
+              border-bottom-width: 0px;
+              padding: 5px 10px;
+              a {
+                background-color:transparent !important;
+                box-shadow: none !important;
+              }
+            }
+          }
+          a:focus {
+                // background: rgba(200, 200, 200, 0.2);
+                background: $blue-new !important;
                 // color: $black-color;
                 color: #dde1ea;
-                @extend .animation-transition-general;
-            }
+          }
+          > a{
+              // margin: 5px 10px;
+              padding: 5px 10px;
+              // border-radius: $border-radius-base;
+              // color: $black-color;
+              color: #dde1ea;
+              @extend .animation-transition-general;
 
-            &:hover > a{
-                background: rgba(200, 200, 200, 0.2);
-                // color: $black-color;
-                color: #dde1ea;
-            }
+          }
 
-            &.active > a{
-                color: #FFFFFF;
+          &:hover > a{
+              // background: rgba(200, 200, 200, 0.2);
+              background: $blue-new !important;
+              // color: $black-color;
+              color: #dde1ea;
+          }
 
-                i{
-                    color: #FFFFFF;
-                }
-            }
+          &.active > a{
+              color: #FFFFFF;
+
+              i{
+                  color: #FFFFFF;
+              }
+          }
         }
 
         p{
@@ -82,7 +104,7 @@
             margin-right: 2px;
             line-height: 30px;
             width: 30px;
-            color: #a9afbb;
+            color: white;
         }
     }
 
@@ -205,7 +227,7 @@
         @include set-background-color-button($brand-primary);
     }
     &[data-color="blue-menu"]{
-        @include set-background-color-button(#028899);
+        @include set-background-color-button($blue-new);
     }
 }
 
