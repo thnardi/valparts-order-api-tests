@@ -456,35 +456,47 @@ h2.title {
 .sidebar .nav li .submenu,
 .off-canvas-sidebar .nav li .submenu {
   padding: 0px;
+  background-color: #3c4858;
 }
 .sidebar .nav li .submenu .active,
 .off-canvas-sidebar .nav li .submenu .active {
   padding: 5px 10px;
 }
+.sidebar .nav li .submenu .active a,
+.off-canvas-sidebar .nav li .submenu .active a {
+  padding-left: 20px;
+  font-weight: 400;
+  color: white !important;
+}
+.sidebar .nav li .submenu :hover,
+.off-canvas-sidebar .nav li .submenu :hover {
+  background-color: #028899 !important;
+}
 .sidebar .nav li .submenu .submenu-item,
 .off-canvas-sidebar .nav li .submenu .submenu-item {
   border-bottom-width: 0px;
-  padding: 5px 10px;
+  padding: 6px 9px;
 }
 .sidebar .nav li .submenu .submenu-item a,
 .off-canvas-sidebar .nav li .submenu .submenu-item a {
   background-color: transparent !important;
   box-shadow: none !important;
+  color: #afd3da;
 }
 .sidebar .nav li a:focus,
 .off-canvas-sidebar .nav li a:focus {
   background: #028899 !important;
-  color: #dde1ea;
+  color: white;
 }
 .sidebar .nav li > a,
 .off-canvas-sidebar .nav li > a {
   padding: 5px 10px;
-  color: #dde1ea;
+  color: white;
 }
 .sidebar .nav li:hover > a,
 .off-canvas-sidebar .nav li:hover > a {
   background: #028899 !important;
-  color: #dde1ea;
+  color: white;
 }
 .sidebar .nav li.active > a,
 .off-canvas-sidebar .nav li.active > a {

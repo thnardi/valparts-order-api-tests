@@ -45,16 +45,26 @@
           border-bottom-width: 1px;
           .submenu{
             padding:0px;
+            background-color: #3c4858;
             .active{
               padding: 5px 10px;
-              // background-color:gray !important;
+              // background-color:$blue-new !important;
+              a {
+                padding-left: 20px;
+                font-weight: 400;
+                color: white !important;
+              }
+            }
+            :hover{
+              background-color:$blue-new !important;
             }
             .submenu-item {
               border-bottom-width: 0px;
-              padding: 5px 10px;
+              padding: 6px 9px;
               a {
                 background-color:transparent !important;
                 box-shadow: none !important;
+                color: #afd3da;
               }
             }
           }
@@ -62,14 +72,14 @@
                 // background: rgba(200, 200, 200, 0.2);
                 background: $blue-new !important;
                 // color: $black-color;
-                color: #dde1ea;
+                color: white;
           }
           > a{
               // margin: 5px 10px;
               padding: 5px 10px;
               // border-radius: $border-radius-base;
               // color: $black-color;
-              color: #dde1ea;
+              color: white;
               @extend .animation-transition-general;
 
           }
@@ -78,7 +88,7 @@
               // background: rgba(200, 200, 200, 0.2);
               background: $blue-new !important;
               // color: $black-color;
-              color: #dde1ea;
+              color: white;
           }
 
           &.active > a{

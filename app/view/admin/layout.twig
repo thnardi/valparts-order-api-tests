@@ -37,20 +37,30 @@
               </a>
             </li>
             <li {% if nav_active == "clientes" %} class="active" {% endif %} >
-              <a href="{{ base_url }}/admin/clientes">
+              <a href="#clientes-submenu" aria-controls="posts-submenu" data-toggle="collapse" class="parent collapsed" aria-expanded="true" href="{{ base_url }}/admin/clientes">
                 <i class="material-icons">person</i>
                 <p>Clientes</p>
               </a>
+            <ul id="clientes-submenu" style="" {% if nav_active == "clientes" %} class="collapse submenu in" {% else %} class="collapse submenu" {% endif %} aria-expanded="false">
+          <li {% if subnav_active == "clientes" %} class="active submenu-item" {% else %} class="submenu-item" {% endif %} >
+                  <a href="{{ base_url() }}/admin/posts"> > Lista de clientes</a></li>
+                <li {% if subnav_active == "cliente_tipos" %} class="active submenu-item" {% else %} class="submenu-item" {% endif %} >
+                  <a href="{{ base_url() }}/admin/post_types"> > Tipos de clientes</a>
+                  </li>
+              </ul>
             </li>
             <li {% if nav_active == "posts" %} class="active" {% endif %} style=" ">
               <a href="#posts-submenu" aria-controls="posts-submenu" data-toggle="collapse" class="parent collapsed" aria-expanded="true">
                 <i class="material-icons">list</i>
                 <p>Postagens</p>
               </a>
-            <ul id="posts-submenu" {% if nav_active == "posts" %} class="collapse submenu in" {% else %} class="collapse submenu" {% endif %} aria-expanded="false">
-                <li {% if subnav_active == "posts" %} class="active submenu-item" {% else %} class="submenu-item" {% endif %} ><a href="{{ base_url() }}/admin/posts"
-                        style="">Postagens</a></li>
-                <li {% if subnav_active == "post_types" %} class="active submenu-item" {% else %} class="submenu-item" {% endif %} ><a href="{{ base_url() }}/admin/logout">Tipo Postagem</a></li>
+              <ul id="posts-submenu" {% if nav_active == "posts" %} class="collapse submenu in" {% else %} class="collapse submenu" {% endif %} aria-expanded="false">
+                <li {% if subnav_active == "posts" %} class="active submenu-item" {% else %} class="submenu-item" {% endif %} >
+                <a href="{{ base_url() }}/admin/posts"
+                        style=""> > Lista de postagens</a></li>
+                <li {% if subnav_active == "post_types" %} class="active submenu-item" {% else %} class="submenu-item" {% endif %} >
+                  <a href="{{ base_url() }}/admin/post_types"> > Tipos de postagem</a>
+                  </li>
               </ul>
             </li>
           </ul>
