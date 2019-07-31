@@ -93,9 +93,21 @@ class ClientesController extends Controller
 
         $clientes = $this->entityFactory->createUser($request->getParsedBody());
         //var_dump($clientes);die;
-        $this->userModel->add($clientes);
-        $this->flash->addMessage('success', 'Cliente cadastrado com sucesso.');
-        return $this->httpRedirect($request, $response, "/admin/clientes");
+        try {
+          $this->userModel->beginTransaction();
+          $return_clientes = $this->userModel->add($clientes);
+          if ($return_clientes->status == false) {var_dump($return_clientes);die;
+            throw new ModelException($return_clientes, "Erro no cadastro de Admin Ancora. COD:0001.");
+          }
+          $this->userModel->commit();
+          $this->flash->addMessage('success', 'Cliente cadastrado com sucesso.');
+          return $this->httpRedirect($request, $response, "/admin/clientes");
+        } catch(ModelException $e) {
+          $this->userModel->rollback();
+          CustomLogger::ModelErrorLog($e->getMessage(), $e->getdata());
+          $this->flash->addMessage('danger', $e->getMessage() . ' Se o problema persistir contate um administrador.');
+          return $this->httpRedirect($request, $response, "/admin/clientes");
+        }
     }
 
     public function delete(Request $request, Response $response, array $args): Response

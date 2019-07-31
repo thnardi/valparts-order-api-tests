@@ -8,12 +8,12 @@ class User
     public $id;
     public $email;
     public $name;
+    public $slug;
     public $password;
     public $nascimento;
+    public $is_cnpj;
     public $cpf;
-    //public $tel_area;
     public $tel_numero;
-
     public $role_id;
     public $recover_token;
     public $verification_token;
@@ -29,8 +29,10 @@ class User
         $this->id = $data['id'] ?? null;
         $this->email = !empty($data['email']) ? strtolower($data['email']) : null;
         $this->name = $data['name'] ?? null;
+        $this->slug = $data['slug'] ?? null;
         $this->password = !empty($data['password']) ? password_hash($data['password'], PASSWORD_DEFAULT) : null;
         $this->nascimento = !empty($data['nascimento']) ? date('Y-m-d', strtotime($data['nascimento'])) : null;
+        $this->is_cnpj = $data['is_cnpj'] ?? null;
         $this->cpf = $data['cpf'] ?? null;
         //$this->tel_area = $data['tel_area'] ?? null;
         $this->tel_numero = $data['tel_numero'] ?? null;
