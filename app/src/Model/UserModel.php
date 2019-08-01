@@ -15,11 +15,12 @@ class UserModel extends Model
             INSERT INTO users (
                 email,
                 name,
+                slug,
                 password,
                 nascimento,
+                is_cnpj,
                 cpf,
                 tel_numero,
-
                 role_id,
                 active,
                 deleted,
@@ -29,11 +30,12 @@ class UserModel extends Model
             VALUES (
                 :email,
                 :name,
+                :slug,
                 :password,
                 :nascimento,
+                :is_cnpj,
                 :cpf,
                 :tel_numero,
-
                 :role_id,
                 :active,
                 :deleted,
@@ -45,23 +47,35 @@ class UserModel extends Model
         $parameters = [
             ':email' => $user->email,
             ':name' => $user->name,
+            ':slug' => $user->slug,
             ':password' => $user->password,
             ':role_id' => $user->role_id,
             ':nascimento' => $user->nascimento,
+            ':is_cnpj' => 0,
             ':cpf' => $user->cpf,
-            //':tel_area' => $user->tel_area,
             ':tel_numero' => $user->tel_numero,
-
             ':active' => 1,
             ':deleted' => 0,
             ':created_at' => time(),
             ':updated_at' => null
         ];
-        if ($query->execute($parameters)) {
-            return $this->db->lastInsertId();
-        } else {
-            return null;
-        }
+        $stmt = $this->db->prepare($sql);
+        $exec = $stmt->execute($parameters);
+        if ($exec) {
+        $data['data'] = $this->db->lastInsertId();
+        $data['errorCode'] = null;
+        $data['errorInfo'] = null;
+      } else {
+        $data['data'] = false;
+        $data['errorCode'] = $stmt->errorCode();
+        $data['errorInfo'] = $stmt->errorInfo();
+      }
+      // completa demais dados
+      $data['status'] = $exec;
+      $data['table'] = 'admin_ancora';
+      $data['function'] = 'add';
+      $modelReturn = new ModelReturn($data);
+      return $modelReturn;
     }
 
     public function delete(int $userId): bool
