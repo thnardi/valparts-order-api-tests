@@ -4,36 +4,27 @@ declare(strict_types=1);
 namespace Farol360\Ancora\Model;
 
 use Farol360\Ancora\Model;
-use Farol360\Ancora\Model\EventLogAdminAction;
+use Farol360\Ancora\Model\Relatorio;
 
-class EventLogAdminActionModel extends Model
+class RelatorioModel extends Model
 {
-  public function add(EventLogAdminAction $eventLog)
+  public function add(Relatorio $relatorio)
   {
     $sql =
-      "INSERT INTO event_logs_admin_action (
-        id_event_log_types_admin_action,
-        id_admin_ancora,
-        id_object,
-        date,
-        time,
+      "INSERT INTO relatorios (
+        slug,
+        name,
         description
       )
       VALUES (
-        :id_event_log_types_admin_action,
-        :id_admin_ancora,
-        :id_object,
-        :date,
-        :time,
+        :slug,
+        :name,
         :description
       )";
     $parameters = [
-        ':id_event_log_types_admin_action'    => $eventLog->id_event_log_types_admin_action,
-        ':id_admin_ancora'      => $eventLog->id_admin_ancora,
-        ':id_object'            => $eventLog->id_object,
-        ':date'                 => $eventLog->date,
-        ':time'                 => $eventLog->time,
-        ':description'          => $eventLog->description,
+        ':slug'         => $relatorio->slug,
+        ':name'         => $relatorio->name,
+        ':description'  => $relatorio->description,
     ];
     $stmt = $this->db->prepare($sql);
     $exec = $stmt->execute($parameters);
@@ -49,7 +40,7 @@ class EventLogAdminActionModel extends Model
     }
     // completa demais dados
     $data['status'] = $exec;
-    $data['table'] = 'event_logs_admin_action';
+    $data['table'] = 'relatorios';
     $data['function'] = 'add';
     $modelReturn = new ModelReturn($data);
     return $modelReturn;
@@ -61,7 +52,7 @@ class EventLogAdminActionModel extends Model
       "SELECT
           *
       FROM
-          event_logs_admin_action
+          relatorios
       WHERE
           id = :id
       LIMIT 1
@@ -71,7 +62,7 @@ class EventLogAdminActionModel extends Model
     $exec = $stmt->execute($parameters);
     // verifica se ocorreu com sucesso o execute
     if ($exec) {
-      $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, EventLogAdminAction::class);
+      $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Relatorio::class);
       $data['data'] = $stmt->fetch();
       $data['errorCode'] = null;
       $data['errorInfo'] = null;
@@ -82,7 +73,7 @@ class EventLogAdminActionModel extends Model
     }
     // completa demais dados
     $data['status'] = $exec;
-    $data['table'] = 'event_logs_admin_action';
+    $data['table'] = 'relatorios';
     $data['function'] = 'get';
     $modelReturn = new ModelReturn($data);
     return $modelReturn;
@@ -93,7 +84,7 @@ class EventLogAdminActionModel extends Model
     $sql = "SELECT
             *
         FROM
-            event_logs_admin_action
+            relatorios
         ORDER BY
             date
         LIMIT ? , ?
@@ -104,7 +95,7 @@ class EventLogAdminActionModel extends Model
     $exec = $stmt->execute($parameters);
     // verifica se ocorreu com sucesso o execute
     if ($exec) {
-      $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, EventLogAdminAction::class);
+      $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Relatorio::class);
       $data['data'] = $stmt->fetchAll();
       $data['errorCode'] = null;
       $data['errorInfo'] = null;
@@ -115,7 +106,7 @@ class EventLogAdminActionModel extends Model
     }
     // completa demais dados
     $data['status'] = $exec;
-    $data['table'] = 'event_logs_admin_action';
+    $data['table'] = 'relatorios';
     $data['function'] = 'getAll';
     $modelReturn = new ModelReturn($data);
     return $modelReturn;

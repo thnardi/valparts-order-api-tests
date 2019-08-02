@@ -4,32 +4,26 @@ declare(strict_types=1);
 namespace Farol360\Ancora\Model;
 
 use Farol360\Ancora\Model;
-use Farol360\Ancora\Model\EventLogAdminAccess;
+use Farol360\Ancora\Model\EventLogUserActionType;
 
-class EventLogAdminAccessModel extends Model
+class EventLogUserActionTypeModel extends Model
 {
-  public function add(EventLogAdminAccess $eventLog)
+  public function add(EventLogUserActionType $eventLog)
   {
     $sql =
-      "INSERT INTO event_logs_admin_access (
-        id_event_log_types_admin_access,
-        id_admin_ancora,
-        date,
-        time,
+      "INSERT INTO event_log_types_user_actions (
+        slug,
+        name,
         description
       )
       VALUES (
-        :id_event_log_types_admin_access,
-        :id_admin_ancora,
-        :date,
-        :time,
+        :slug,
+        :name,
         :description
       )";
     $parameters = [
-        ':id_event_log_types_admin_access'    => $eventLog->id_event_log_types_admin_access,
-        ':id_admin_ancora'      => $eventLog->id_admin_ancora,
-        ':date'                 => $eventLog->date,
-        ':time'                 => $eventLog->time,
+        ':slug'    => $eventLog->slug,
+        ':name'      => $eventLog->name,
         ':description'          => $eventLog->description,
     ];
     $stmt = $this->db->prepare($sql);
@@ -46,7 +40,7 @@ class EventLogAdminAccessModel extends Model
     }
     // completa demais dados
     $data['status'] = $exec;
-    $data['table'] = 'event_logs_admin_access';
+    $data['table'] = 'event_log_types_user_actions';
     $data['function'] = 'add';
     $modelReturn = new ModelReturn($data);
     return $modelReturn;
@@ -58,7 +52,7 @@ class EventLogAdminAccessModel extends Model
       "SELECT
           *
       FROM
-          event_logs_admin_access
+          event_log_types_user_actions
       WHERE
           id = :id
       LIMIT 1
@@ -68,7 +62,7 @@ class EventLogAdminAccessModel extends Model
     $exec = $stmt->execute($parameters);
     // verifica se ocorreu com sucesso o execute
     if ($exec) {
-      $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, EventLogAdminAcess::class);
+      $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, EventLogUserActionType::class);
       $data['data'] = $stmt->fetch();
       $data['errorCode'] = null;
       $data['errorInfo'] = null;
@@ -79,7 +73,7 @@ class EventLogAdminAccessModel extends Model
     }
     // completa demais dados
     $data['status'] = $exec;
-    $data['table'] = 'event_logs_admin_access';
+    $data['table'] = 'event_log_types_user_access';
     $data['function'] = 'get';
     $modelReturn = new ModelReturn($data);
     return $modelReturn;
@@ -90,7 +84,7 @@ class EventLogAdminAccessModel extends Model
     $sql = "SELECT
             *
         FROM
-            event_logs_admin_access
+            event_log_types_user_actions
         ORDER BY
             date
         LIMIT ? , ?
@@ -101,7 +95,7 @@ class EventLogAdminAccessModel extends Model
     $exec = $stmt->execute($parameters);
     // verifica se ocorreu com sucesso o execute
     if ($exec) {
-      $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, EventLogAdminAcess::class);
+      $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, EventLogUserActionType::class);
       $data['data'] = $stmt->fetchAll();
       $data['errorCode'] = null;
       $data['errorInfo'] = null;
@@ -112,7 +106,7 @@ class EventLogAdminAccessModel extends Model
     }
     // completa demais dados
     $data['status'] = $exec;
-    $data['table'] = 'event_logs_admin_access';
+    $data['table'] = 'event_log_types_user_actions';
     $data['function'] = 'getAll';
     $modelReturn = new ModelReturn($data);
     return $modelReturn;

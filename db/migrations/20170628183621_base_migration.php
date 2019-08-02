@@ -47,35 +47,31 @@ class BaseMigration extends AbstractMigration
       $event_logs = $this->table('event_logs_admin_access');
         $event_logs->addColumn('id_event_log_type', 'integer');
         $event_logs->addColumn('id_admin_ancora', 'integer', ['null' => true]);
-        $event_logs->addColumn('date', 'timestamp');
-        $event_logs->addColumn('time', 'time', ['null' => true]);
         $event_logs->addColumn('description', 'string');
+        $event_logs->addTimestamps();
       $event_logs->create();
 
       $event_logs = $this->table('event_logs_admin_actions');
         $event_logs->addColumn('id_event_log_type', 'integer');
         $event_logs->addColumn('id_admin_ancora', 'integer', ['null' => true]);
-        $event_logs->addColumn('objects', 'string', ['null' => true]);
-        $event_logs->addColumn('date', 'timestamp');
-        $event_logs->addColumn('time', 'time', ['null' => true]);
+        $event_logs->addColumn('id_objects', 'string', ['null' => true]);
         $event_logs->addColumn('description', 'string');
+        $event_logs->addTimestamps();
       $event_logs->create();
 
       $event_logs = $this->table('event_logs_user_access');
         $event_logs->addColumn('id_event_log_type', 'integer');
         $event_logs->addColumn('id_user', 'integer', ['null' => true]);
-        $event_logs->addColumn('date', 'timestamp');
-        $event_logs->addColumn('time', 'time', ['null' => true]);
         $event_logs->addColumn('description', 'string');
+        $event_logs->addTimestamps();
       $event_logs->create();
 
       $event_logs = $this->table('event_logs_user_actions');
         $event_logs->addColumn('id_event_log_type', 'integer');
         $event_logs->addColumn('id_user', 'integer', ['null' => true]);
         $event_logs->addColumn('id_objects', 'string', ['null' => true]);
-        $event_logs->addColumn('date', 'timestamp');
-        $event_logs->addColumn('time', 'time', ['null' => true]);
         $event_logs->addColumn('description', 'string');
+        $event_logs->addTimestamps();
       $event_logs->create();
 
       $event_logs_type = $this->table('event_log_types_admin_access');
@@ -137,7 +133,6 @@ class BaseMigration extends AbstractMigration
         $relatorios->addColumn('name', 'string');
         $relatorios->addColumn('description', 'string');
         $relatorios->addColumn('slug', 'string');
-        $relatorios->addTimestamps();
       $relatorios->create();
 
       $roles = $this->table('roles');
