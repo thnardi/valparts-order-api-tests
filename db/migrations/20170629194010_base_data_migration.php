@@ -143,6 +143,50 @@ class BaseDataMigration extends AbstractMigration
 
         $this->insert('enderecos_uf', $uf);
 
+        $event_log_types_admin_access = [
+          [
+            'slug' => 'login_admin_ancora',
+            'name' => 'Evento de Login',
+            'description' => 'Evento de Login Administrativo Ancora.'
+          ],
+          [
+            'slug' => 'logout_admin_ancora',
+            'name' => 'Evento de Logout',
+            'description' => 'Evento de Logout Administrativo Ancora.'
+          ]
+        ];
+
+        $this->insert('event_log_types_admin_access', $event_log_types_admin_access);
+
+        $event_log_types_user_access = [
+          [
+            'slug' => 'login_user',
+            'name' => 'Evento de User',
+            'description' => 'Evento de Login User.'
+          ],
+          [
+            'slug' => 'logout_user',
+            'name' => 'Evento de User',
+            'description' => 'Evento de Logout User.'
+          ]
+        ];
+
+        $this->insert('event_log_types_user_access', $event_log_types_user_access);
+
+        $relatorios = [
+          [
+            'slug' => 'acesso_admin',
+            'name' => 'Acessos Administrativos',
+            'description' => 'Relatório de acessos de Adminstradores.',
+          ],
+          [
+            'slug' => 'acesso_user',
+            'name' => 'Acessos Usuario',
+            'description' => 'Relatório de acessos de Usuários.',
+          ]
+        ];
+
+        $this->insert('relatorios', $relatorios);
         $roles = [
             [
                 'id' => 1,
