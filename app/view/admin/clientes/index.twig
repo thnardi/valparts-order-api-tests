@@ -61,6 +61,7 @@
                   <th>Slug</th>
                   <th class="hidden-xs">Nome</th>
                   <th class="hidden-xs hidden-sm">Criado em</th>
+                  <th class="hidden-xs hidden-sm">Situação</th>
                   <th style="max-width:100px; text-align:center;"> Ações</th>
                   {# <th class="th-button" style="width:100px;"></th> #}
                 </tr>
@@ -76,6 +77,10 @@
                   </td>
                   <td class="hidden-xs">{{ cliente.name }}</td>
                   <td class="hidden-xs hidden-sm">{{ cliente.created_at }}</td>
+                  <td class="hidden-xs hidden-sm">
+                    {% if cliente.active == 1 %}Ativo{% endif %}
+                    {% if cliente.active == 0 %}Inativo{% endif %}
+                  </td>
 
                   <td style="max-width:100px;">
 

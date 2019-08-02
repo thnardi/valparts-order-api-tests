@@ -64,7 +64,7 @@ class ClientesController extends Controller
         $amountPages = ceil($amountCliente->amount / $limit);
 
         $pageTitle = 'Clientes';
-        $clientes = $this->userModel->getAll($offset, $limit);
+        $clientes = $this->userModel->getAllOrder($order, $filtro, $offset, $limit);
         //var_dump($clientes);die;
         //$admin_ancora = $_SESSION['admin_ancora'];
         foreach($clientes as $cliente) {
@@ -85,18 +85,38 @@ class ClientesController extends Controller
 
     public function add(Request $request, Response $response, array $args)
     {
-      if (empty($request->getParsedBody())) {
-            return $this->view->render($response, 'admin/clientes/add.twig');
-        }
+      $permissao_type_user = ($_SESSION['admin_ancora']['type'] > 1 ) ? true : false;
+        if ($permissao_type_user) {
+          if (empty($request->getParsedBody())) {
+            $admin_ancora = $_SESSION['admin_ancora'];
+              return $this->view->render($response, 'admin/clientes/add.twig', [
+              'admin_ancora' => $admin_ancora
+            ]);
+          }
 
         $clientes = $request->getParsedBody();
 
         $clientes = $this->entityFactory->createUser($request->getParsedBody());
-        //var_dump($clientes);die;
+        //var_dump($clientes);
+        $clientes_slug = $this->userModel->getSlug(null, $clientes->slug);
+        //var_dump($clientes_slug);die;
+        if ($clientes_slug != NULL) {
+          $this->flash->addMessage('danger', 'Não é permitido, cadastro de Login repetido.');
+          return $this->httpRedirect($request, $response, "/admin/clientes");
+        }
+        $deleted = "deleted";
+        $pos = strpos($clientes->slug, $deleted);
+        //var_dump($clientes->slug);
+        //var_dump($pos);die;
+        if (!preg_match("/^([a-zA-Z0-9]+)$/", $clientes->slug) || ($pos != false)) {
+          $this->flash->addMessage('danger', 'Não é permitido o uso de caracteres especiais ou espaços.');
+          return $this->httpRedirect($request, $response, "/admin/clientes");
+        }
         try {
           $this->userModel->beginTransaction();
           $return_clientes = $this->userModel->add($clientes);
-          if ($return_clientes->status == false) {var_dump($return_clientes);die;
+          if ($return_clientes->status == false) {
+            var_dump($return_clientes);die;
             throw new ModelException($return_clientes, "Erro no cadastro de Admin Ancora. COD:0001.");
           }
           $this->userModel->commit();
@@ -108,6 +128,10 @@ class ClientesController extends Controller
           $this->flash->addMessage('danger', $e->getMessage() . ' Se o problema persistir contate um administrador.');
           return $this->httpRedirect($request, $response, "/admin/clientes");
         }
+        } else {
+        $this->flash->addMessage('danger', 'Rota não permitida para o usuário atual.');
+        return $this->httpRedirect($request, $response, '/admin/clientes');
+      }
     }
 
     public function delete(Request $request, Response $response, array $args): Response
@@ -122,28 +146,27 @@ class ClientesController extends Controller
 
     public function edit(Request $request, Response $response, array $args): Response
     {
+      $userId = intval($args['id']);
+        $user = $this->userModel->get((int)$userId);//var_dump($user);die;
+        if ($user !== false) {
 
-        // retrive argument id in url, if has it
-        $postId = intval($args['id']);
-
-        // select in db the post by id
-        $post = $this->postModel->get($postId);
-
-        // if post dnt exist, return error
-        if (!$post) {
-             $this->flash->addMessage('danger', "Post não encontrado.");
-            return $this->httpRedirect($request, $response, '/admin/posts');
+          $permissao_type_user = ($_SESSION['admin_ancora']['type'] > 1 ) ? true : false;
         }
+        if ($user === false) {
 
-        // get objets to render edit interface
-        $postTypes = $this->postTypeModel->getPublished();
-
-        return $this->view->render($response, 'admin/post/edit.twig', [
-                'post' => $post,
-                'postTypes' => $postTypes
-            ]
-        );
-
+            $this->flash->addMessage('danger', 'Usuário não encontrado.');
+            return $this->httpRedirect($request, $response, '/admin/clientes');
+        }
+        if ($permissao_type_user) {
+          //$roles = $this->roleModel->getAll();
+          return $this->view->render($response, 'admin/clientes/edit.twig', [
+              'user' => $user
+              //'roles' => $roles
+          ]);
+        } else {
+            $this->flash->addMessage('danger', 'Usuário não permissão.');
+            return $this->httpRedirect($request, $response, '/admin/clientes');
+        }
     }
 
     public function disable(Request $request, Response $response, array $args): Response
@@ -252,101 +275,39 @@ class ClientesController extends Controller
 
     public function update(Request $request, Response $response): Response
     {
-        // get data from body request
-        $data = $request->getParsedBody();
+      $user = $this->entityFactory->createUser($request->getParsedBody());
+      //var_dump($user);die;
+        $old_user = $this->userModel->get((int)$user->id);
+        $user_slug = $this->userModel->getSlug(null, $user->slug);
+        //var_dump($old_user);
+        //var_dump($user);die;
+        $deleted = "deleted";
+        $pos = strpos($user->slug, $deleted);
 
-        // if has any treatment on data, do it in here..
-        // $data = ?
-
-        // if status not set..
-        if ($data['status'] == null ) {
-            $data['status'] = 1;
-
-        // just typecast to int
-        } else {
-            $data['status'] = (int) $data['status'];
-
+        if (($user_slug != NULL) && ($old_user->slug != $user->slug)) {
+            $this->flash->addMessage('danger', 'Não é permitido, cadastro de Login repetido.');
+            return $this->httpRedirect($request, $response, "/admin/clientes");
         }
-
-        $data['id_post_type'] = (int) $data['id_post_type'];
-
-        // create object post
-        $post = $this->entityFactory->createpost($data);
-
-        $oldpost = $this->postModel->get((int) $post->id);
-
-        $post->trash = $oldpost->trash;
-
-        $files = $request->getUploadedFiles();
-
-        // if files are empty means size == 0
-        if ($files['img_featured']->getSize() != 0) {
-            $image = $files['img_featured'];
-
-            if ($image->getError() === UPLOAD_ERR_OK) {
-
-               //verify allowed extensions
-                $filename = $image->getClientFilename();
-
-                $allowedExtensions = [
-                    'jpg',
-                    'jpeg',
-                    'gif',
-                    'png'
-                ];
-
-                // if not allowed extension
-                if (!in_array(pathinfo($filename,PATHINFO_EXTENSION), $allowedExtensions)) {
-
-                    //inform error msg
-                    $this->flash->addMessage('danger', "Imagem em formato inválido.");
-
-                    //redirect to this url
-                    return $this->httpRedirect($request, $response, '/admin/posts/add');
-                }
-
-                //verify size
-                if ($image->getSize() > 400000) {
-
-                    //inform error msg
-                    $this->flash->addMessage('danger', "Imagem muito grande (max 300kb).");
-
-                    //redirect to this url
-                    return $this->httpRedirect($request, $response, '/admin/posts/add');
-                }
-
-                $filename = sprintf(
-                    '%s.%s',
-                    uniqid(),
-                    pathinfo($image->getClientFilename(), PATHINFO_EXTENSION)
-                );
-
-                $path = 'upload/img/';
-                $image->moveTo($path . $filename);
-                $post->img_featured = $path . $filename;
-
-            }
-
-            // remove old img from disk
-            if (file_exists($request->getParsedBody()['img_featured_old'])) {
-                unlink($request->getParsedBody()['img_featured_old']);
-            }
-
-        // if has no image, set old as atual
-        } else {
-            $oldpost = $this->postModel->get((int)$post->id);
-            $post->img_featured = $oldpost->img_featured;
-
+        if (!preg_match("/^([a-zA-Z0-9]+)$/", $user->slug) || ($pos != false)) {
+          $this->flash->addMessage('danger', 'Não é permitido o uso de caracteres especiais ou espaços.');
+          return $this->httpRedirect($request, $response, "/admin/clientes");
         }
-
-
-        $this->postModel->update($post);
-
-        $this->flash->addMessage('success', "Post atualizado com sucesso.");
-        return $this->httpRedirect($request, $response, '/admin/posts');
-
-
-
+        try {
+          $this->userModel->beginTransaction();
+          $return_user = $this->userModel->update($user);
+          //var_dump($return_user);die;
+          if ($return_user->status == false) {
+            throw new ModelException($return_user, "Erro no cadastro de Admin Ancora. COD:0002.");
+          }
+          $this->userModel->commit();
+          $this->flash->addMessage('success', 'Usuário atualizado com sucesso.');
+          return $this->httpRedirect($request, $response, '/admin/clientes');
+        } catch(ModelException $e) {
+          $this->userModel->rollback();
+          CustomLogger::ModelErrorLog($e->getMessage(), $e->getdata());
+          $this->flash->addMessage('danger', $e->getMessage() . ' Se o problema persistir contate um administrador.');
+          return $this->httpRedirect($request, $response, "/admin/clientes");
+        }
     }
 
 
@@ -354,8 +315,28 @@ class ClientesController extends Controller
     $body = $request->getParsedBody();
     if (isset($body['slug'])) {
       $body['slug'] = trim($body['slug']);
-      $user = $this->userModel->getSlug(null, $body['slug']);
-      if ($clientes == false) {
+      $cliente = $this->userModel->getSlug(null, $body['slug']);
+      if ($cliente == false) {
+        return $response->withJson(true, 200);
+      }
+      return $response->withJson(false, 200);
+    }
+    return $response->withJson(false, 200);
+  }
+
+  public function verify_slug_edit(Request $request, Response $response): Response {
+    $body = $request->getParsedBody();
+    $id_user = $request->getQueryParams()['user'];
+    if (isset($body['slug'])) {
+      $body['slug'] = trim($body['slug']);
+      $user = $this->userModel->getSlug(null, trim($body['slug']));
+     //var_dump($user);die;
+      // verify if not exist
+      if ($user == null) {
+        return $response->withJson(true, 200);
+      }
+      // verify if is the same.
+      if ($user->id == $id_user) {
         return $response->withJson(true, 200);
       }
       return $response->withJson(false, 200);

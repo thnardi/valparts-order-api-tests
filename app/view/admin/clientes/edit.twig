@@ -1,89 +1,95 @@
 {% extends "admin/layout.twig" %}
-{% block html_title %}Usuários - Administração - {{ parent() }}{% endblock %}
-{% set nav_active = 'user' %}
+{% block html_title %}Clientes - Administração - {{ parent() }}{% endblock %}
+{% set nav_active = 'clientes' %}
 {% block breadcrumbs %}
-  <ol class="breadcrumb" style="">
-    <li><a href="{{ base_url() }}/admin">Início</a></li>
-    <li><a href="{{ base_url() }}/admin/user/all">Usuários</a></li>
-    <li class="active">Adicionar</li>
-  </ol>
+
+  <ol class="breadcrumb">
+  <li><a href="{{ base_url() }}/admin">Início</a></li>
+  <li class="active">Editar</li>
+</ol>
+
 {% endblock %}
 {% block content %}
 
 <div class="card">
   <div class="card-header" data-background-color="blue">
-    <h3>Cadastrar um Administrador</h3>
+    <h3>Editar Administrador</h3>
   </div>
-
   <div class="card-content">
     <div class="row">
       <div class="col-xs-12 col-sm-10">
-        <form id="userform" role="form" action="{{ base_url() }}/admin/user/add" method="POST">
+        <form id="userform" role="form" data-toggle="validator" action="{{ base_url() }}/admin/clientes/update" method="POST">
+          <input type="hidden" name="id" value="{{ user.id }}">
           <div class="row">
             <div class="col-xs-12 col-sm-6">
               <div class="form-group">
                 <label for="inputName">Nome</label>
-                <input type="text" class="form-control" id="inputName" name="name"  required>
+                <input type="text" class="form-control" id="inputName" name="name" value="{{ user.name }}" data-minlength="5" required>
               </div>
             </div>
+
             <div class="col-xs-12 col-sm-6">
               <div class="form-group">
                 <label for="inputEmail">Email</label>
-                <input type="email" class="form-control" id="inputEmail" name="email"  required>
+                <input type="email" class="form-control" id="inputEmail" name="email" value="{{ user.email }}" required>
               </div>
             </div>
           </div>
           <div class="row">
-          <div class="col-xs-12 col-sm-6">
+            <div class="col-xs-12 col-sm-4">
+              <div class="form-group">
+                <label for="inputTelefone">Telefone</label>
+                <input type="text" class="form-control" id="inputTelefone" name="tel_numero" value="{{ user.tel_numero }}" required>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
             <div class="form-group">
-              <label for="inputTelefone">Telefone</label>
-              <input type="text" class="form-control" id="inputTelefone" name="telefone"  required>
+              <label for="inputNascimento">Data de Nascimento</label>
+              <input type="date" class="form-control" id="inputNascimento" name="nascimento" value="{{ user.nascimento }}">
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+              <label for="inputCPF">CPF</label>
+              <input type="text" class="form-control" id="inputCPF" name="cpf" value="{{ user.cpf }}" required>
             </div>
           </div>
           </div>
+
           <div class="row">
             <div class="col-xs-12 col-sm-6">
               <div class="form-group">
                 <label for="inputLogin">Login</label>
-                <input type="text" class="form-control" id="inputLogin" name="slug" onkeyup="return AlteraMinusculas(this);" required>
+                <input type="text" class="form-control" id="inputLogin" name="slug" value="{{ user.slug }}" onkeyup="return AlteraMinusculas(this);"  required>
                 <div id="inputLogin-feedback"></div>
 
               </div>
             </div>
             <div class="col-xs-12 col-sm-6">
               <div class="form-group">
-                <label for="inputPassword">Senha</label>
-                <input type="password" class="form-control" id="inputPassword" name="password" required>
+                <label for="inputPassword">Nova senha</label>
+                <input type="password" class="form-control" id="inputPassword" name="password">
               </div>
             </div>
           </div>
-
           <div class="row">
             <div class="col-xs-12 col-sm-6">
               <div class="form-group">
-                <label for="type">Nível Permissão</label>
-                <select class="form-control" id="type" name="type">
-                  {% if admin_ancora.type > 3 %}<option value="3">Alto</option>{% endif %}
-                  {% if admin_ancora.type > 2 %}<option value="2">Médio</option>{% endif %}
-                  {% if admin_ancora.type > 1 %}<option value="1">Baixo</option>{% endif %}
+                <label for="active">Situação do Usuário</label>
+                <select class="form-control" id="active" name="active">
+                  <option value="1" {% if user.active == 1 %}selected{% endif %}>Ativo</option>
+                  <option value="0" {% if user.active == 0 %}selected{% endif %}>Inativo</option>
                 </select>
               </div>
             </div>
-            <div class="col-xs-12 col-sm-6">
-
-                <label for="ativo">Situação do Usuário</label>
-                <select class="form-control" id="ativo" name="ativo">
-                  <option value= "1">Ativo</option>
-                  <option value= "0">Inativo</option>
-                </select>
-
-            </div>
           </div>
           <div class="form-group">
-            <button type="submit" class="btn btn-success">Cadastrar</button>
+            <button type="submit" class="btn btn-primary">Atualizar</button>
           </div>
         </form>
+        <script type="text/javascript">
 
+        </script>
       </div>
     </div>
   </div>
@@ -91,14 +97,12 @@
 
 {% endblock %}
 {% block javascripts %}
-<script type="text/javascript">
-
-</script>
 
 <script type="text/javascript">
-  function AlteraMinusculas(campo) {
-  campo.value=campo.value.toLowerCase();
-}
+  $(document).ready(function(){
+    //console.log('teste console log');
+    $('#inputLogin').attr('ok', 'ok');
+  });
 </script>
 
 <script>
@@ -110,7 +114,7 @@
     } else {
       $.ajax({
         method: "POST",
-        url: "{{ base_url }}/admin/user/add/verify_slug",
+        url: "{{ base_url }}/admin/clientes/edit/verify_slug?user={{ user.id }}",
         data: { slug: $('#inputLogin').val()},
         beforeSend: function(jqXHR) {
           $('#inputLogin-feedback').html('<p style="position:absolute;">Aguarde.</p>');
@@ -119,9 +123,7 @@
           var slug_filtered = slug.match(/[A-Za-z0-9_-]*/);
           var dif = slug.localeCompare(slug_filtered);
           var n = slug.indexOf("deleted");
-          //var str = "Hello world, welcome to the universe.";
-
-          if ((dif) || (n !== -1)){
+          if ((dif) || (n !== -1)) {
             jqXHR.abort(event);
             $('#inputLogin-feedback').html('<p style="color:red; position:absolute;">Padrão não permitido.</p>');
             $('#inputLogin').parent('.form-group').addClass('has-error');
@@ -146,13 +148,14 @@
 </script>
 
 <script>
-  // tratamento do botão enter
+
   $('body').on('keydown', 'input, select, textarea', function(e) {
     var self = $(this)
       , form = self.parents('form:eq(0)')
       , focusable
       , next
       ;
+
     //console.log(e.currentTarget);
     if (e.keyCode == 13) {
         focusable = form.find('input,a,select,button,textarea').filter(':visible');
@@ -169,6 +172,13 @@
         return false;
     }
   });
+
+</script>
+
+<script type="text/javascript">
+  function AlteraMinusculas(campo) {
+  campo.value=campo.value.toLowerCase();
+}
 </script>
 
 <script type="text/javascript">
@@ -180,5 +190,4 @@
     return true;
   });
 </script>
-
 {% endblock %}

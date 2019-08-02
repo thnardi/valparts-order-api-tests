@@ -265,6 +265,12 @@ class BaseDataMigration extends AbstractMigration
                 // 'role_list' => '["1","2"]'
             ],
             [
+                'resource' => '/admin/clientes/edit/verify_slug',
+                'description' => 'Verificar slug na hora de editar cliente',
+                'id_admin_ancora_type' => 2,
+                // 'role_list' => '["2","3"]'
+            ],
+            [
                 'resource' => '/admin/clientes/delete/:id',
                 'description' => 'Página administrativa',
                 'id_admin_ancora_type' => 1,

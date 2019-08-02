@@ -23,9 +23,7 @@ class UserModel extends Model
                 tel_numero,
                 role_id,
                 active,
-                deleted,
-                created_at,
-                updated_at
+                deleted
             )
             VALUES (
                 :email,
@@ -38,9 +36,7 @@ class UserModel extends Model
                 :tel_numero,
                 :role_id,
                 :active,
-                :deleted,
-                :created_at,
-                :updated_at
+                :deleted
             )
         ";
         $query = $this->db->prepare($sql);
@@ -55,9 +51,7 @@ class UserModel extends Model
             ':cpf' => $user->cpf,
             ':tel_numero' => $user->tel_numero,
             ':active' => 1,
-            ':deleted' => 0,
-            ':created_at' => time(),
-            ':updated_at' => null
+            ':deleted' => 0
         ];
         $stmt = $this->db->prepare($sql);
         $exec = $stmt->execute($parameters);
@@ -145,7 +139,7 @@ class UserModel extends Model
                 deleted != 1";
             if ($filtro == 1) {
         $sql .="
-          AND users.active = 1
+          AND users.active = 1 OR users.active = NULL
         ";
       }
       if ($filtro == 2) {
@@ -190,13 +184,13 @@ class UserModel extends Model
 
   public function getSlug(int $cliente_id = null, string $slug = "")
   {
-      //$session = new Session();
-      //if (empty($admin_ancora_id) && empty($slug) && !empty($session->get('admin_ancora'))) {
-          //if (isset($session->admin_ancora['id'])) {
-             // $admin_ancora_id = (int)$session->admin_ancora['id'];
-          //}
-      //}
-      //if (!empty($admin_ancora_id) || !empty($slug)) {
+      $session = new Session();
+      if (empty($admin_ancora_id) && empty($slug) && !empty($session->get('admin_ancora'))) {
+          if (isset($session->admin_ancora['id'])) {
+              $admin_ancora_id = (int)$session->admin_ancora['id'];
+          }
+      }
+      if (!empty($admin_ancora_id) || !empty($slug)) {
           $sql = "
               SELECT
                   *
@@ -211,8 +205,8 @@ class UserModel extends Model
           $stmt->execute($parameters);
           $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, User::class);
           return $stmt->fetch();
-      //}
-      //return new AdminAncora();
+      }
+      return new AdminAncora();
   }
 
     public function getByEmail(string $email)
@@ -293,34 +287,27 @@ class UserModel extends Model
         return $stmt->fetchAll();
     }
 
-    public function update(User $user): bool
+    public function update($user)
     {
 
         $sql = "
             UPDATE
                 users
             SET
-        ";
+            ";
         if (!empty($password)) {
             $sql .= "
                 password = :password,
             ";
         }
         $sql .= "
-                email = :email,
+                email= :email,
                 name = :name,
+                slug = :slug,
                 nascimento = :nascimento,
                 cpf = :cpf,
-
                 tel_numero = :tel_numero,
-                end_rua = :end_rua,
-                end_numero = :end_numero,
-                end_complemento = :end_complemento,
-                end_bairro = :end_bairro,
-                end_cidade = :end_cidade,
-                end_estado = :end_estado,
-                end_cep = :end_cep,
-                role_id = :role_id
+                active = :active
 
             WHERE
                 id = :id
@@ -330,25 +317,31 @@ class UserModel extends Model
             ':id' => (int) $user->id,
             ':email' => $user->email,
             ':name' => $user->name,
-            ':password' => $user->password,
-            ':role_id' => $user->role_id,
+            ':slug' => $user->slug,
+            //':password' => $user->password,
             ':nascimento' => $user->nascimento,
             ':cpf' => $user->cpf,
-           // ':tel_area' => $user->tel_area,
             ':tel_numero' => $user->tel_numero,
-            ':end_rua' => $user->end_rua,
-            ':end_numero' => $user->end_numero,
-            ':end_complemento' => $user->endComplemento,
-            ':end_bairro' => $user->end_bairro,
-            ':end_cidade' => $user->end_cidade,
-            ':end_estado' => $user->end_estado,
-            ':end_cep' => $user->end_cep
-
+            ':active' => $user->active
         ];
-        if (!empty($password)) {
-            $parameters[':password'] = password_hash($password, PASSWORD_DEFAULT);
+        $stmt = $this->db->prepare($sql);
+        $exec = $stmt->execute($parameters);
+        // verifica se ocorreu com sucesso o execute
+        if ($exec) {
+          $data['data'] = $stmt->rowCount();
+          $data['errorCode'] = null;
+          $data['errorInfo'] = null;
+        } else {
+          $data['data'] = false;
+          $data['errorCode'] = $stmt->errorCode();
+          $data['errorInfo'] = $stmt->errorInfo();
         }
-        return $query->execute($parameters);
+        // completa demais dados
+        $data['status'] = $exec;
+        $data['table'] = 'users';
+        $data['function'] = 'update';
+        $modelReturn = new ModelReturn($data);
+        return $modelReturn;
     }
 
     public function verify(int $userId): bool

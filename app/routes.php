@@ -32,6 +32,7 @@ $app->group('/admin', function () {
           });
         $this->get('/delete/{id:[0-9]+}', ClientesAdmin::class . ':delete');
         $this->get('/edit/{id:[0-9]+}', ClientesAdmin::class . ':edit');
+        $this->post('/edit/verify_slug', ClientesAdmin::class . ':verify_slug_edit');
         $this->post('/update', ClientesAdmin::class . ':update');
     });
 

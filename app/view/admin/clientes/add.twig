@@ -4,7 +4,7 @@
 {% block breadcrumbs %}
   <ol class="breadcrumb" style="">
     <li><a href="{{ base_url() }}/admin">Início</a></li>
-    <li><a href="{{ base_url() }}/admin/clientes/all">Clientes</a></li>
+    <li><a href="{{ base_url() }}/admin/clientes">Clientes</a></li>
     <li class="active">Adicionar</li>
   </ol>
 {% endblock %}
@@ -180,7 +180,78 @@
 }
 </script>
 
-{#<script type="text/javascript">
+<script>
+  $('#inputLogin').on('blur', function(){
+    $('#inputLogin').removeAttr('ok');
+    $('#inputLogin').val($('#inputLogin').val().trim());
+    if ($('#inputLogin').val().trim() == '') {
+        $('#inputLogin-feedback').html('');
+    } else {
+      $.ajax({
+        method: "POST",
+        url: "{{ base_url }}/admin/clientes/add/verify_slug",
+        data: { slug: $('#inputLogin').val()},
+        beforeSend: function(jqXHR) {
+          $('#inputLogin-feedback').html('<p style="position:absolute;">Aguarde.</p>');
+          // lógica para verificar caracteres inválidos no link
+          var slug = $('#inputLogin').val();
+          var slug_filtered = slug.match(/[A-Za-z0-9_-]*/);
+          var dif = slug.localeCompare(slug_filtered);
+          var n = slug.indexOf("deleted");
+          //var str = "Hello world, welcome to the universe.";
+
+          if ((dif) || (n !== -1)){
+            jqXHR.abort(event);
+            $('#inputLogin-feedback').html('<p style="color:red; position:absolute;">Padrão não permitido.</p>');
+            $('#inputLogin').parent('.form-group').addClass('has-error');
+          }
+        }
+      }).done(function(result)
+        {
+          if (result === true) {
+            $('#inputLogin-feedback').html('<p style="color:green; position:absolute;">Disponível para cadastro.</p>');
+            $('#inputLogin').attr('ok', 'ok');
+          }
+
+          if (result === false) {
+            $('#inputLogin-feedback').html('<p style="color:red; position:absolute;">Login já utilizado. Selecione outro.</p>');
+            $('#inputLogin').parent('.form-group').addClass('has-error');
+          }
+        }).fail(function(jqXHR, textStatus, msg){
+            console.log(textStatus);
+          });
+      }
+  });
+</script>
+
+
+<script>
+  // tratamento do botão enter
+  $('body').on('keydown', 'input, select, textarea', function(e) {
+    var self = $(this)
+      , form = self.parents('form:eq(0)')
+      , focusable
+      , next
+      ;
+    //console.log(e.currentTarget);
+    if (e.keyCode == 13) {
+        focusable = form.find('input,a,select,button,textarea').filter(':visible');
+        next = focusable.eq(focusable.index(this)+1);
+        if (next.length || e.currentTarget.id == "selectRole") {
+          if (e.currentTarget.id == "selectRole") {
+            form.submit();
+          }
+          next.focus();
+
+        } else {
+            form.submit();
+        }
+        return false;
+    }
+  });
+</script>
+
+<script type="text/javascript">
   $('#userform').submit(function(){
     if ( $('#inputLogin').attr('ok') !== 'ok') {
       $('#inputLogin').focus();
@@ -188,6 +259,6 @@
     }
     return true;
   });
-</script>#}
+</script>
 
 {% endblock %}

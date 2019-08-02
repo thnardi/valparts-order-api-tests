@@ -86,7 +86,7 @@
                   </td>
                   <td>
                     {% if user.ativo == 1 %}Ativo{% endif %}
-                    {% if user.ativo == 2 %}Inativo{% endif %}
+                    {% if user.ativo == 0 %}Inativo{% endif %}
                   </td>
                   <td style="max-width:100px;">
                     {% if user.type >= admin_ancora.type and user.id != admin_ancora.id %}
