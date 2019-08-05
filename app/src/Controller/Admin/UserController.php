@@ -129,21 +129,21 @@ class UserController extends Controller
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-        $userId = intval($args['id']);
-        $currentUser = $this->adminAncoraModel->get();
-        if ($userId == $currentUser->id) {
-            $this->flash->addMessage('danger', 'Não é possível remover seu próprio usuário.');
-            return $this->httpRedirect($request, $response, '/admin/user/all');
-        }
-        $usuario = $this->adminAncoraModel->get($userId);
-        //var_dump($usuario->deleted);die;
-        if ($usuario->deleted == 1) {
-          $this->flash->addMessage('danger', 'Não é possível realizar esta ação.');
+      $userId = intval($args['id']);
+      $currentUser = $this->adminAncoraModel->get();
+      if ($userId == $currentUser->id) {
+          $this->flash->addMessage('danger', 'Não é possível remover seu próprio usuário.');
           return $this->httpRedirect($request, $response, '/admin/user/all');
-        }
-        $this->adminAncoraModel->delete($usuario);
-        $this->flash->addMessage('success', 'Usuário removido com sucesso.');
+      }
+      $usuario = $this->adminAncoraModel->get($userId);
+      //var_dump($usuario->deleted);die;
+      if ($usuario->deleted == 1) {
+        $this->flash->addMessage('danger', 'Não é possível realizar esta ação.');
         return $this->httpRedirect($request, $response, '/admin/user/all');
+      }
+      $this->adminAncoraModel->delete($usuario);
+      $this->flash->addMessage('success', 'Usuário removido com sucesso.');
+      return $this->httpRedirect($request, $response, '/admin/user/all');
     }
     public function edit(Request $request, Response $response, array $args): Response
     {

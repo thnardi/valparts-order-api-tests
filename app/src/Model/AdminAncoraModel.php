@@ -63,29 +63,27 @@ class AdminAncoraModel extends Model
 
   public function delete($adminAncora)
   {
+    $sql = "
+        UPDATE
+            admin_ancora
+        SET
+            slug            = :slug,
+            deleted         = true
+        WHERE
+            id = :id
+    ";
+    $parameters =
+    [
 
-
-      $sql = "
-          UPDATE
-              admin_ancora
-          SET
-              slug            = :slug,
-              deleted         = true
-          WHERE
-              id = :id
-      ";
-      $parameters =
-      [
-
-       ':id'   => (int)$adminAncora->id,
-       ':slug' => $adminAncora->slug.'_deleted'
-      ];
-      $stmt = $this->db->prepare($sql);
-      //var_dump($stmt);
-      //var_dump($sql);
-      //die;
-      $exec = $stmt->execute($parameters);
-      //var_dump($exec);die;
+     ':id'   => (int)$adminAncora->id,
+     ':slug' => $adminAncora->slug.'_deleted'
+    ];
+    $stmt = $this->db->prepare($sql);
+    //var_dump($stmt);
+    //var_dump($sql);
+    //die;
+    $exec = $stmt->execute($parameters);
+    //var_dump($exec);die;
   }
 
   public function get(int $id = 0)

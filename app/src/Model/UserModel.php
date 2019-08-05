@@ -72,12 +72,29 @@ class UserModel extends Model
       return $modelReturn;
     }
 
-    public function delete(int $userId): bool
+    public function delete($cliente)
     {
-         $sql = "UPDATE users SET deleted = 1 WHERE id = :id";
-        $query = $this->db->prepare($sql);
-        $parameters = [':id' => $id];
-        return $query->execute($parameters);
+      $sql = "
+        UPDATE
+            users
+        SET
+            slug            = :slug,
+            deleted         = 1
+        WHERE
+            id = :id
+    ";
+    $parameters =
+    [
+
+     ':id'   => (int)$cliente->id,
+     ':slug' => $cliente->slug.'_deleted'
+    ];
+    $stmt = $this->db->prepare($sql);
+    //var_dump($stmt);
+    //var_dump($sql);
+    //die;
+    $exec = $stmt->execute($parameters);
+    //var_dump($exec);die;
     }
 
     public function get(int $userId = null, string $email = "")

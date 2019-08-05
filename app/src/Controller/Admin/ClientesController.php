@@ -136,12 +136,21 @@ class ClientesController extends Controller
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-        $post_id = intval($args['id']);
-        $this->postModel->delete((int)$post_id);
-
-
-        $this->flash->addMessage('success', 'Postagem removida com sucesso.');
-        return $this->httpRedirect($request, $response, '/admin/posts');
+      $clienteId = intval($args['id']);
+      $currentCliente = $this->userModel->get();
+      if ($clienteId == $currentCliente->id) {
+          $this->flash->addMessage('danger', 'Não é possível remover seu próprio usuário.');
+          return $this->httpRedirect($request, $response, '/admin/clientes');
+      }
+      $cliente = $this->userModel->get($clienteId);
+      //var_dump($cliente->deleted);die;
+      if ($cliente->deleted == 1) {
+        $this->flash->addMessage('danger', 'Não é possível realizar esta ação.');
+        return $this->httpRedirect($request, $response, '/admin/clientes');
+      }
+      $this->userModel->delete($cliente);
+      $this->flash->addMessage('success', 'Usuário removido com sucesso.');
+      return $this->httpRedirect($request, $response, '/admin/clientes');
     }
 
     public function edit(Request $request, Response $response, array $args): Response
