@@ -114,6 +114,7 @@ class ClientesController extends Controller
         }
         try {
           $this->userModel->beginTransaction();
+          //var_dump($clientes);die;
           $return_clientes = $this->userModel->add($clientes);
           if ($return_clientes->status == false) {
             var_dump($return_clientes);die;

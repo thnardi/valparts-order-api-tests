@@ -50,7 +50,7 @@ class UserModel extends Model
             ':is_cnpj' => 0,
             ':cpf' => $user->cpf,
             ':tel_numero' => $user->tel_numero,
-            ':active' => 1,
+            ':active' => $user->active,
             ':deleted' => 0
         ];
         $stmt = $this->db->prepare($sql);
