@@ -95,7 +95,7 @@ class ClientesController extends Controller
           }
 
         $clientes = $request->getParsedBody();
-
+        //var_dump($clientes);die;
         $clientes = $this->entityFactory->createUser($request->getParsedBody());
         //var_dump($clientes);
         $clientes_slug = $this->userModel->getSlug(null, $clientes->slug);
@@ -353,4 +353,61 @@ class ClientesController extends Controller
     }
     return $response->withJson(false, 200);
   }
+
+  public function view(Request $request, Response $response, array $args): Response
+    {
+        $userId = intval($args['id']);
+        $user = $this->userModel->get((int)$userId);
+        if (!$user) {
+            $this->flash->addMessage('danger', 'Usuário não encontrado.');
+            return $this->httpRedirect($request, $response, '/admin/clientes');
+        }
+        //$roles = $this->roleModel->getAll();
+        return $this->view->render($response, 'admin/clientes/view.twig', [
+            'user' => $user
+            //'roles' => $roles
+        ]);
+    }
+  public function clientes_types(Request $request, Response $response): Response
+    {
+      $params = $request->getQueryParams();
+        if (!empty($params['page'])) {
+            $page = intval($params['page']);
+        } else {
+            $page = 1;
+        }
+        if (!empty($params['order'])) {
+          $order = (int)$params['order'];
+        } else {
+          $order = 1;
+        }
+        if (!empty($params['filtro'])) {
+          $filtro = (int)$params['filtro'];
+        } else {
+          $filtro = 1;
+        }
+        $limit = 20;
+        $offset = ($page - 1) * $limit;
+        $amountCliente = $this->userModel->getAmount();
+        $amountPages = ceil($amountCliente->amount / $limit);
+
+        $pageTitle = 'Clientes';
+        $clientes = $this->userModel->getAllOrder($order, $filtro, $offset, $limit);
+        //var_dump($clientes);die;
+        //$admin_ancora = $_SESSION['admin_ancora'];
+        foreach($clientes as $cliente) {
+            $new_data = explode(" ", $cliente->created_at);
+            $data_separado = explode("-", $new_data[0]);
+            $cliente->created_at = "$data_separado[2]/$data_separado[1]/$data_separado[0] $new_data[1]";
+      }//var_dump($admin_ancora);die;
+      return $this->view->render($response, 'admin/clientes_types/index.twig', [
+        'clientes' => $clientes,
+        //'users' => $users,
+        'page_title' => $pageTitle,
+        'page' => $page,
+        'amountPages' => $amountPages,
+        'order' => $order,
+        'filtro' => $filtro
+      ]);
+    }
 }

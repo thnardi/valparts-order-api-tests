@@ -24,16 +24,20 @@ $app->group('/admin', function () {
     $this->map(['GET', 'POST'], '/logout', IndexAdmin::class . ':logout');
 
     $this->group('/clientes', function () {
-        $this->get('[/]', ClientesAdmin::class . ':index');
-        //$this->map(['GET', 'POST'], '/add', ClientesAdmin::class . ':add');
-        $this->group('/add', function () {
-            $this->map(['GET', 'POST'], '[/]', ClientesAdmin::class . ':add');
-            $this->post('/verify_slug', ClientesAdmin::class . ':verify_slug');
-          });
-        $this->get('/delete/{id:[0-9]+}', ClientesAdmin::class . ':delete');
-        $this->get('/edit/{id:[0-9]+}', ClientesAdmin::class . ':edit');
-        $this->post('/edit/verify_slug', ClientesAdmin::class . ':verify_slug_edit');
-        $this->post('/update', ClientesAdmin::class . ':update');
+      $this->get('[/]', ClientesAdmin::class . ':index');
+      //$this->map(['GET', 'POST'], '/add', ClientesAdmin::class . ':add');
+      $this->group('/add', function () {
+          $this->map(['GET', 'POST'], '[/]', ClientesAdmin::class . ':add');
+          $this->post('/verify_slug', ClientesAdmin::class . ':verify_slug');
+        });
+      $this->get('/{id:[0-9]+}', ClientesAdmin::class . ':view');
+      $this->get('/delete/{id:[0-9]+}', ClientesAdmin::class . ':delete');
+      $this->get('/edit/{id:[0-9]+}', ClientesAdmin::class . ':edit');
+      $this->post('/edit/verify_slug', ClientesAdmin::class . ':verify_slug_edit');
+      $this->post('/update', ClientesAdmin::class . ':update');
+    });
+    $this->group('/clientes_types', function () {
+      $this->get('[/]', ClientesAdmin::class . ':clientes_types');
     });
 
     $this->group('/permission', function () {

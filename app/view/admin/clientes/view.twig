@@ -1,0 +1,40 @@
+{% extends "admin/layout.twig" %}
+{% block html_title %}{{ user.name }} - Usuários - Administração - {{ parent() }}{% endblock %}
+{% set nav_active = 'clientes' %}
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+  <li><a href="{{ base_url() }}/admin">Início</a></li>
+  <li><a href="{{ base_url() }}/admin/clientes">Usuários</a></li>
+  <li class="active">{{ user.name }}</li>
+</ol>
+{% endblock %}
+{% block content %}
+
+
+  <div class="pull-right">
+    <a class="btn btn-primary" href="{{ base_url() }}/admin/clientes/edit/{{ user.id }}">
+      <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+    </a>
+    <a class="btn btn-danger" href="{{ base_url() }}/admin/clientes/delete/{{ user.id }}">
+      <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+    </a>
+  </div>
+  <h1>{{ user.name }}</h1>
+
+
+<div class="row">
+  <div class="col-md-10">
+    <ul class="list-group">
+      <li class="list-group-item">Nome: <strong>{{ user.name }}</strong></li>
+      <li class="list-group-item">Email: <strong>{{ user.email }}</strong></li>
+      <li class="list-group-item">Criado em: <strong>{{ user.created_at }}</strong></li>
+      <li class="list-group-item">Data de nascimento: <strong>{{ user.nascimento|date('d/m/Y') }}</strong></li>
+      <li class="list-group-item">CPF: <strong>{{ user.cpf }}</strong></li>
+      <li class="list-group-item">Telefone: <strong>{{ user.tel_numero }}</strong></li>
+
+    </ul>
+  </div>
+
+</div>
+
+{% endblock %}
