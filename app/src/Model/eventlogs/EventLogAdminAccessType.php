@@ -1,5 +1,5 @@
 <?php
- namespace Farol360\Ancora\Model;
+ namespace Farol360\Ancora\Model\eventlogs;
 
 class EventLogAdminAccessType
 {

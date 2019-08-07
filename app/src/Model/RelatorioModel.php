@@ -79,20 +79,18 @@ class RelatorioModel extends Model
     return $modelReturn;
   }
 
-  public function getAll(int $offset = 0, int $limit = PHP_INT_MAX): array
+  public function getAll(int $offset = 0, int $limit = PHP_INT_MAX)
   {
     $sql = "SELECT
             *
         FROM
             relatorios
-        ORDER BY
-            date
         LIMIT ? , ?
     ";
-    $query->bindValue(1, $offset, \PDO::PARAM_INT);
-    $query->bindValue(2, $limit, \PDO::PARAM_INT);
     $stmt = $this->db->prepare($sql);
-    $exec = $stmt->execute($parameters);
+    $stmt->bindValue(1, $offset, \PDO::PARAM_INT);
+    $stmt->bindValue(2, $limit, \PDO::PARAM_INT);
+    $exec = $stmt->execute();
     // verifica se ocorreu com sucesso o execute
     if ($exec) {
       $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Relatorio::class);

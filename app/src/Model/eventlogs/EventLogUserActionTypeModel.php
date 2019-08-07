@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Farol360\Ancora\Model;
+namespace Farol360\Ancora\Model\eventlogs;
 
 use Farol360\Ancora\Model;
-use Farol360\Ancora\Model\EventLogUserActionType;
+use Farol360\Ancora\Model\eventlogs\EventLogUserActionType;
 
 class EventLogUserActionTypeModel extends Model
 {
