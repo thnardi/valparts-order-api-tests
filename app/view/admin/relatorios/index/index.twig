@@ -24,11 +24,14 @@
             <div class="col-xs-12">
               <select id="select-relatorio">
                 {% for relatorio in relatorios %}
-                  <option id="relatorio-{{ relatorio.id }}" value="{{ relatorio.id }}">
+              <option id="relatorio-{{ relatorio.id }}" value="{{ relatorio.id }}" {% if lista.id_relatorio == relatorio.id %} selected {% endif %}>
                     {{ relatorio.name }}
                   </option>
                 {% endfor %}
               </select>
+              {# <a class="btn btn-primary btn-sm controle_tabela" href="" id="relatorio_btn">
+                <i class="material-icons" >search</i> Gerar
+              </a> #}
             </div>
           </div>
         </div>
@@ -51,13 +54,37 @@
   {% if lista.tipo == 'accesso_admin' %}
     {% include 'admin/relatorios/index/tabela_relatorio_accesso_admin.twig' %}
   {% endif %}
+
+  {% if lista.tipo == 'action_admin' %}
+    {% include 'admin/relatorios/index/tabela_relatorio_action_admin.twig' %}
+  {% endif %}
+
+  <div class="row">
+    <div class="col-xs-12">
+      <ul class="pager">
+        <li{% if page == 1 %} class="disabled"{% endif %}>
+          <a {% if page > 1 %} href="{{ base_url() }}/admin/relatorios?relatorio={{lista.id_relatorio}}&order={{ params.order }}&filtro={{ params.filtro }}&page={{ page - 1 }}"{% endif %}>Anterior</a>
+        </li>
+        <li {% if page >= amountPages %} class="disabled"{% endif %}>
+          <a{% if page < amountPages %} href="{{ base_url() }}/admin/relatorios?relatorio={{lista.id_relatorio}}&order={{ params.order }}&filtro={{ params.filtro  }}&page={{ page + 1 }}"{% endif %}>Próximo</a>
+        </li>
+      </ul>
+    </div>
+  </div>
   <script type="text/javascript">
-      $('.controle_tabela').click(function(){
+
+    $('#select-relatorio').click(function(){
+      var relatorio = $('#select-relatorio').val();
+      window.location = '{{ base_url() }}/admin/relatorios?relatorio=' + relatorio;
+    });
+
+    $('.controle_tabela').click(function(){
       var relatorio = $('#select-relatorio').val();
       var order = $('#order').val();
       var filtro = $('#filtro').val();
       //console.log('.controle_tabela');
-      $("#order_btn").attr('href',   '{{ base_url() }}/admin/relatorios?relatorio' + relatorio + '&order=' + order + '&filtro=' + filtro + '&page={{ 1 }}');
+      $("#order_btn").attr('href',   '{{ base_url() }}/admin/relatorios?relatorio=' + relatorio + '&order=' + order + '&filtro=' + filtro + '&page={{ 1 }}');
     });
   </script>
+
 {% endblock %}

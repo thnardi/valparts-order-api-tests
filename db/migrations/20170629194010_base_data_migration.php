@@ -183,6 +183,16 @@ class BaseDataMigration extends AbstractMigration
             'slug' => 'accesso_user',
             'name' => 'Acessos Usuario',
             'description' => 'Relatório de acessos de Usuários.'
+          ],
+          [
+            'slug' => 'action_admin',
+            'name' => 'Ações Administrador',
+            'description' => 'Relatório de acessos de Usuários.'
+          ],
+          [
+            'slug' => 'action_user',
+            'name' => 'Ações Usuario',
+            'description' => 'Relatório de acessos de Usuários.'
           ]
         ];
 

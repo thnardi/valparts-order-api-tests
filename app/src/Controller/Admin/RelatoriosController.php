@@ -65,19 +65,24 @@ class RelatoriosController extends Controller
     $limit = 10;
     $offset = ($page - 1) * $limit;
     $relatorio = $this->relatoriosModel->get($id_relatorio);
-    if ($relatorio->data == false) {
+    // if ($relatorio->data == false) {
       $lista['data'] = false;
       $lista['tipo'] = false;
       $lista['quantidade'] = 0;
-    }
+    // }
     if ($relatorio->data->slug == 'accesso_admin') {
       $lista['quantidade'] = (int)$this->eventLogAdminAccessModel->getAmount($filtro)->amount;
       $lista['data'] = $this->eventLogAdminAccessModel->getAll($order, $filtro, $offset, $limit)->data;
       $lista['tipo'] = 'accesso_admin';
     }
+    if ($relatorio->data->slug == 'action_admin') {
+      $lista['quantidade'] = (int)$this->eventLogAdminActionModel->getAmount($filtro)->amount;
+      $lista['data'] = $this->eventLogAdminActionModel->getAll($order, $filtro, $offset, $limit)->data;
+      $lista['tipo'] = 'action_admin';
+    }
+    $lista['id_relatorio'] = (int)$relatorio->data->id;
     $relatorios = $this->relatoriosModel->getAll();
     $amountPages = ceil($lista['quantidade'] / $limit);
-
     // var_dump($relatorio);
     // var_dump($lista);
     // die;
