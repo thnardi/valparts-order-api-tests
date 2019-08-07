@@ -7,7 +7,7 @@ use Farol360\Ancora\Model;
 use Farol360\Ancora\Model\User;
 use RKA\Session;
 
-class UserModel extends Model
+class UserTypeModel extends Model
 {
     public function add(User $user)
     {
