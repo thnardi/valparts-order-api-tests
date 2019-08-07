@@ -1,10 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Farol360\Ancora\Model;
+namespace Farol360\Ancora\Model\eventlogs;
 
 use Farol360\Ancora\Model;
-use Farol360\Ancora\Model\EventLogAdminAccessType;
+use Farol360\Ancora\Model\ModelReturn;
+use Farol360\Ancora\Model\eventlogs\EventLogAdminAccessType;
 
 class EventLogAdminAccessTypeModel extends Model
 {
@@ -75,6 +76,39 @@ class EventLogAdminAccessTypeModel extends Model
     $data['status'] = $exec;
     $data['table'] = 'event_log_types_admin_access';
     $data['function'] = 'get';
+    $modelReturn = new ModelReturn($data);
+    return $modelReturn;
+  }
+
+  public function getBySlug($slug)
+  {
+    $sql =
+      "SELECT
+          *
+      FROM
+          event_log_types_admin_access
+      WHERE
+          slug = :slug
+      LIMIT 1
+    ";
+    $parameters = [':slug' => $slug];
+    $stmt = $this->db->prepare($sql);
+    $exec = $stmt->execute($parameters);
+    // verifica se ocorreu com sucesso o execute
+    if ($exec) {
+      $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, EventLogAdminAccessType::class);
+      $data['data'] = $stmt->fetch();
+      $data['errorCode'] = null;
+      $data['errorInfo'] = null;
+    } else {
+      $data['data'] = false;
+      $data['errorCode'] = $stmt->errorCode();
+      $data['errorInfo'] = $stmt->errorInfo();
+    }
+    // completa demais dados
+    $data['status'] = $exec;
+    $data['table'] = 'event_log_types_admin_access';
+    $data['function'] = 'getBySlug';
     $modelReturn = new ModelReturn($data);
     return $modelReturn;
   }

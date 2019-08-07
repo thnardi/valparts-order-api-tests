@@ -26,13 +26,10 @@
   <div class="panel-body">
     <div class="row">
       <div class="col-xs-12 col-sm-12">
-
         <select name="order" id="order">
           <option value="1" {% if order == '1' %} selected {% endif %}>Data Crescente</option>
           <option value="2" {% if order == '2' %} selected {% endif %}>Data Decrescente</option>
         </select>
-
-
         <select name="filtro" id="filtro">
           <option value="1" {% if filtro == '1' %} selected {% endif %}>Usuários Ativos</option>
           <option value="2" {% if filtro == '2' %} selected {% endif %}>Usuários Inativos</option>
@@ -41,13 +38,6 @@
         <a class="btn btn-primary btn-sm controle_tabela" href="" id="order_btn">
           <i class="material-icons" >search</i>
         </a>
-      </div>
-      <div class="col-xs-12 col-sm-3">
-
-
-      </div>
-        <div class="col-xs-12 col-sm-2">
-
       </div>
     </div>
     <div class="row">
@@ -126,11 +116,8 @@
   </div>
 </div>
 
-
-
 {% endblock %}
 {% block javascripts %}
-
 
   <script type="text/javascript">
       $('.controle_tabela').click(function(){

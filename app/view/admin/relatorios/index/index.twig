@@ -1,0 +1,63 @@
+{% extends "admin/layout.twig" %}
+{% block html_title %}Relatórios - Administração - {{ parent() }}{% endblock %}
+{% set nav_active = 'relatorios' %}
+{% block breadcrumbs %}
+  <ol class="breadcrumb">
+    <li><a href="{{ base_url() }}/admin">Início</a></li>
+    <li class="active">Relatórios</li>
+  </ol>
+{% endblock %}
+{% block content %}
+
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <div class="panel panel-default">
+        <div class="panel-heading" >
+          <div class="row">
+            <div class="col-xs-12">
+              <p class="panel-title">Selecionar Relatório</p>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-xs-12">
+              <select id="select-relatorio">
+                {% for relatorio in relatorios %}
+                  <option id="relatorio-{{ relatorio.id }}" value="{{ relatorio.id }}">
+                    {{ relatorio.name }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {# <div class="col-xs-12 col-sm-6">
+      <div class="panel panel-default">
+        <div class="panel-heading" >
+          <div class="row">
+            <div class="col-xs-12">
+              <p class="panel-title">Filtros</p>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+        </div>
+      </div>
+    </div> #}
+  </div>
+  {% if lista.tipo == 'accesso_admin' %}
+    {% include 'admin/relatorios/index/tabela_relatorio_accesso_admin.twig' %}
+  {% endif %}
+  <script type="text/javascript">
+      $('.controle_tabela').click(function(){
+      var relatorio = $('#select-relatorio').val();
+      var order = $('#order').val();
+      var filtro = $('#filtro').val();
+      //console.log('.controle_tabela');
+      $("#order_btn").attr('href',   '{{ base_url() }}/admin/relatorios?relatorio' + relatorio + '&order=' + order + '&filtro=' + filtro + '&page={{ 1 }}');
+    });
+  </script>
+{% endblock %}

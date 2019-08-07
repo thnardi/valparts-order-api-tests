@@ -175,14 +175,14 @@ class BaseDataMigration extends AbstractMigration
 
         $relatorios = [
           [
-            'slug' => 'acesso_admin',
+            'slug' => 'accesso_admin',
             'name' => 'Acessos Administrativos',
-            'description' => 'Relatório de acessos de Adminstradores.',
+            'description' => 'Relatório de acessos de Adminstradores.'
           ],
           [
-            'slug' => 'acesso_user',
+            'slug' => 'accesso_user',
             'name' => 'Acessos Usuario',
-            'description' => 'Relatório de acessos de Usuários.',
+            'description' => 'Relatório de acessos de Usuários.'
           ]
         ];
 

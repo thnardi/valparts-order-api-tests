@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Farol360\Ancora\Model;
+namespace Farol360\Ancora\Model\eventlogs;
 
 use Farol360\Ancora\Model;
-use Farol360\Ancora\Model\EventLogAdminAction;
+use Farol360\Ancora\Model\eventlogs\EventLogAdminAction;
 
 class EventLogAdminActionModel extends Model
 {
@@ -12,19 +12,19 @@ class EventLogAdminActionModel extends Model
   {
     $sql =
       "INSERT INTO event_logs_admin_action (
-        id_event_log_types_admin_action,
+        id_event_log_type,
         id_admin_ancora,
         id_object,
         description
       )
       VALUES (
-        :id_event_log_types_admin_action,
+        :id_event_log_type,
         :id_admin_ancora,
         :id_object,
         :description
       )";
     $parameters = [
-        ':id_event_log_types_admin_action'    => $eventLog->id_event_log_types_admin_action,
+        ':id_event_log_type'    => $eventLog->id_event_log_types_admin_action,
         ':id_admin_ancora'      => $eventLog->id_admin_ancora,
         ':id_object'            => $eventLog->id_object,
         ':description'          => $eventLog->description

@@ -129,6 +129,8 @@ $container['Farol360\Ancora\Controller\Admin\IndexController'] = function ($c) {
         $c['view'],
         $c['flash'],
         new Farol360\Ancora\Model\AdminAncoraModel($c['db']),
+        new Farol360\Ancora\Model\eventlogs\EventLogAdminAccessModel($c['db']),
+        new Farol360\Ancora\Model\eventlogs\EventLogAdminAccessTypeModel($c['db']),
         new Farol360\Ancora\Model\EntityFactory(),
         $c['version']
     );
@@ -179,6 +181,15 @@ $container['Farol360\Ancora\Controller\Admin\RelatoriosController'] = function (
     return new Farol360\Ancora\Controller\Admin\RelatoriosController(
         $c['view'],
         $c['flash'],
+        new Farol360\Ancora\Model\RelatorioModel($c['db']),
+        new Farol360\Ancora\Model\eventlogs\EventLogAdminAccessModel($c['db']),
+        new Farol360\Ancora\Model\eventlogs\EventLogAdminAccessTypeModel($c['db']),
+        new Farol360\Ancora\Model\eventlogs\EventLogAdminActionModel($c['db']),
+        new Farol360\Ancora\Model\eventlogs\EventLogAdminActionTypeModel($c['db']),
+        new Farol360\Ancora\Model\eventlogs\EventLogUserAccessModel($c['db']),
+        new Farol360\Ancora\Model\eventlogs\EventLogUserAccessTypeModel($c['db']),
+        new Farol360\Ancora\Model\eventlogs\EventLogUserActionModel($c['db']),
+        new Farol360\Ancora\Model\eventlogs\EventLogUserActionTypeModel($c['db']),
         new Farol360\Ancora\Model\EntityFactory()
     );
 };

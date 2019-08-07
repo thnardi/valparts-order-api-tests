@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Farol360\Ancora\Model;
+namespace Farol360\Ancora\Model\eventlogs;
 
 use Farol360\Ancora\Model;
-use Farol360\Ancora\Model\EventLogUserAccess;
+use Farol360\Ancora\Model\eventlogs\EventLogUserAccess;
 
 class EventLogUserAccessModel extends Model
 {
@@ -12,17 +12,17 @@ class EventLogUserAccessModel extends Model
   {
     $sql =
       "INSERT INTO event_logs_user_access (
-        id_event_log_types_user_access,
+        id_event_log_type,
         id_user,
         description
       )
       VALUES (
-        :id_event_log_types_user_access,
+        :id_event_log_type,
         :id_user,
         :description
       )";
     $parameters = [
-        ':id_event_log_types_user_access'    => $eventLog->id_event_log_types_user_access,
+        ':id_event_log_type'    => $eventLog->id_event_log_types_user_access,
         ':id_user'              => $eventLog->id_user,
         ':description'          => $eventLog->description,
     ];

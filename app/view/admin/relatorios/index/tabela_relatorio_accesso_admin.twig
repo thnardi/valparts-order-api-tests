@@ -1,0 +1,69 @@
+<div class="panel panel-default">
+  <div class="panel-heading" >
+    <div class="row">
+      <div class="col-xs-12">
+        <p class="panel-title">Relatório</p>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body" style="padding-top:0px;">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12">
+        <span>Ordem:</span>
+        <select name="order" id="order">
+          <option value="1" {% if params.order == '1' %} selected {% endif %}>Data Decrescente</option>
+          <option value="2" {% if params.order == '2' %} selected {% endif %}>Data Crescente</option>
+        </select>
+        <span style="padding-left:5px;">Filtro:</span>
+        <select name="filtro" id="filtro">
+          <option value="1" {% if params.filtro == '1' %} selected {% endif %}>Todos os Eventos</option>
+          <option value="2" {% if params.filtro == '2' %} selected {% endif %}>Evento de Login</option>
+          <option value="3" {% if params.filtro == '3' %} selected {% endif %}>Evento de Logout</option>
+        </select>
+        <a class="btn btn-primary btn-sm controle_tabela" href="" id="order_btn">
+          <i class="material-icons" >search</i>
+        </a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        {% if lista.data %}
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>User Admin</th>
+                  <th>Descrição</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for evento in lista.data %}
+                  <tr>
+                    <td>{{ evento.created_at }}</td>
+                    <td>{{ evento.admin_name }}</td>
+                    <td>{{ evento.description }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="alert alert-danger" role="alert">Não existem usuários cadastrados</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+      <ul class="pager">
+        <li{% if page == 1 %} class="disabled"{% endif %}>
+          <a{% if page > 1 %} href="{{ base_url() }}/admin/relatorios?order={{ params.order }}&filtro={{ params.filtro }}&page={{ page - 1 }}"{% endif %}>Anterior</a>
+        </li>
+        <li{% if page >= amountPages %} class="disabled"{% endif %}>
+          <a{% if page < amountPages %} href="{{ base_url() }}/admin/relatorios?order={{ params.order }}&filtro={{ params.filtro  }}&page={{ page + 1 }}"{% endif %}>Próximo</a>
+        </li>
+      </ul>
+    </div>
+</div>
