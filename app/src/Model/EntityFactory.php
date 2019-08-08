@@ -19,6 +19,7 @@ use Farol360\Ancora\Model\Post;
 use Farol360\Ancora\Model\Permission;
 use Farol360\Ancora\Model\Role;
 use Farol360\Ancora\Model\User;
+use Farol360\Ancora\Model\UserType;
 
 class EntityFactory
 {
@@ -75,5 +76,9 @@ class EntityFactory
     public function createUser(array $data = []): User
     {
         return new User($data);
+    }
+    public function createUserType(array $data = []): UserType
+    {
+        return new UserType($data);
     }
 }

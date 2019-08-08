@@ -7,7 +7,7 @@ class UserType
 {
     public $id;
     public $name;
-    public $description
+    public $description;
     public $slug;
 
     public function __construct(array $data = [])

@@ -81,6 +81,16 @@
                 </select>
 
             </div>
+            <div class="col-xs-12 col-sm-6">
+
+                <label for="users_type">Tipo de Usuário</label>
+                <select class="form-control" id="users_type" name="users_type">
+                  {% for tipo_de_cliente in tipos_de_cliente %}
+                  <option value="{{ tipo_de_cliente.id }}">{{ tipo_de_cliente.name }}</option>
+                  {% endfor %}
+                </select>
+
+            </div>
           </div>
           <div class="form-group">
             <button type="submit" class="btn btn-success">Cadastrar</button>

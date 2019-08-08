@@ -4,54 +4,30 @@ declare(strict_types=1);
 namespace Farol360\Ancora\Model;
 
 use Farol360\Ancora\Model;
-use Farol360\Ancora\Model\User;
+use Farol360\Ancora\Model\UserType;
 use RKA\Session;
 
-class UserModel extends Model
+class UserTypeModel extends Model
 {
-    public function add(User $user)
+    public function add(UserType $users_type)
     {
         $sql = "
-            INSERT INTO users (
-                email,
+            INSERT INTO users_type (
                 name,
-                slug,
-                password,
-                nascimento,
-                is_cnpj,
-                cpf,
-                tel_numero,
-                role_id,
-                active,
-                deleted
+                description,
+                slug
             )
             VALUES (
-                :email,
                 :name,
-                :slug,
-                :password,
-                :nascimento,
-                :is_cnpj,
-                :cpf,
-                :tel_numero,
-                :role_id,
-                :active,
-                :deleted
+                :description,
+                :slug
             )
         ";
         $query = $this->db->prepare($sql);
         $parameters = [
-            ':email' => $user->email,
-            ':name' => $user->name,
-            ':slug' => $user->slug,
-            ':password' => $user->password,
-            ':role_id' => $user->role_id,
-            ':nascimento' => $user->nascimento,
-            ':is_cnpj' => 0,
-            ':cpf' => $user->cpf,
-            ':tel_numero' => $user->tel_numero,
-            ':active' => $user->active,
-            ':deleted' => 0
+            ':name' => $users_type->name,
+            ':description' => $users_type->description,
+            ':slug' => $users_type->slug
         ];
         $stmt = $this->db->prepare($sql);
         $exec = $stmt->execute($parameters);
@@ -66,7 +42,7 @@ class UserModel extends Model
       }
       // completa demais dados
       $data['status'] = $exec;
-      $data['table'] = 'admin_ancora';
+      $data['table'] = 'users_type';
       $data['function'] = 'add';
       $modelReturn = new ModelReturn($data);
       return $modelReturn;
@@ -76,7 +52,7 @@ class UserModel extends Model
     {
       $sql = "
         UPDATE
-            users
+            users_type
         SET
             slug            = :slug,
             deleted         = 1
@@ -97,28 +73,21 @@ class UserModel extends Model
     //var_dump($exec);die;
     }
 
-    public function get(int $userId = null, string $email = "")
+    public function get(int $user_typeId = null)
     {
-        $session = new Session();
-        if (empty($userId) && empty($email) && !empty($session->get('user'))) {
-            $userId = (int)$session->user['id'];
-        }
-        if (!empty($userId) || !empty($email)) {
+        if (!empty($user_typeId)) {
             $sql = "
                 SELECT
-                    users.*,
-                    roles.description AS role
+                    users_type.*
                 FROM
-                    users
-                    LEFT JOIN roles ON roles.id = users.role_id
+                    users_type
                 WHERE
-                    (users.id = :id OR users.email = :email)
-                    AND deleted != 1
+                    users_type.id = :id
             ";
             $stmt = $this->db->prepare($sql);
-            $parameters = [':id' => $userId, ':email' => $email];
+            $parameters = [':id' => $user_typeId];
             $stmt->execute($parameters);
-            $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, User::class);
+            $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, UserType::class);
             return $stmt->fetch();
         }
         return new User();
@@ -130,28 +99,26 @@ class UserModel extends Model
             SELECT
                *
             FROM
-                users
+                users_type
             ORDER BY
-                users.name ASC
+                users_type.name ASC
                 LIMIT ? , ?
         ";
         $query = $this->db->prepare($sql);
         $query->bindValue(1, $offset, \PDO::PARAM_INT);
         $query->bindValue(2, $limit, \PDO::PARAM_INT);
         $query->execute();
-        $query->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, User::class);
+        $query->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, UserType::class);
         return $query->fetchAll();
     }
 
-    public function getAllOrder(int $order, int $filtro, int $offset = 0, int $limit = PHP_INT_MAX): array
+    public function getAllOrder(int $offset = 0, int $limit = PHP_INT_MAX): array
     {
         $sql = "
             SELECT
-                users.*,
-                roles.name AS role
+                users_type.*,
             FROM
                 users
-                LEFT JOIN roles ON roles.id = users.role_id
             WHERE
                 deleted != 1";
             if ($filtro == 1) {
@@ -192,7 +159,7 @@ class UserModel extends Model
           SELECT
               COUNT(id) AS amount
           FROM
-            users
+            users_type
       ";
       $query = $this->db->prepare($sql);
       $query->execute();
@@ -212,15 +179,15 @@ class UserModel extends Model
               SELECT
                   *
               FROM
-                users
+                users_type
               WHERE
-                users.id = :id OR users.slug = :slug
+                users_type.id = :id OR users_type.slug = :slug
 
           ";
           $stmt = $this->db->prepare($sql);
           $parameters = [':id' => $cliente_id, ':slug' => $slug];
           $stmt->execute($parameters);
-          $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, User::class);
+          $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, UserType::class);
           return $stmt->fetch();
       }
       return new AdminAncora();
@@ -304,42 +271,26 @@ class UserModel extends Model
         return $stmt->fetchAll();
     }
 
-    public function update($user)
+    public function update($tipo_de_cliente)
     {
 
         $sql = "
             UPDATE
-                users
+                users_type
             SET
-            ";
-        if (!empty($password)) {
-            $sql .= "
-                password = :password,
-            ";
-        }
-        $sql .= "
-                email= :email,
                 name = :name,
                 slug = :slug,
-                nascimento = :nascimento,
-                cpf = :cpf,
-                tel_numero = :tel_numero,
-                active = :active
+                description = :description
 
             WHERE
                 id = :id
         ";
         $query = $this->db->prepare($sql);
         $parameters = [
-            ':id' => (int) $user->id,
-            ':email' => $user->email,
-            ':name' => $user->name,
-            ':slug' => $user->slug,
-            //':password' => $user->password,
-            ':nascimento' => $user->nascimento,
-            ':cpf' => $user->cpf,
-            ':tel_numero' => $user->tel_numero,
-            ':active' => $user->active
+            ':id' => (int) $tipo_de_cliente->id,
+            ':name' => $tipo_de_cliente->name,
+            ':slug' => $tipo_de_cliente->slug,
+            ':description' => $tipo_de_cliente->description
         ];
         $stmt = $this->db->prepare($sql);
         $exec = $stmt->execute($parameters);

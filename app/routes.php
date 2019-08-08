@@ -36,8 +36,16 @@ $app->group('/admin', function () {
       $this->post('/edit/verify_slug', ClientesAdmin::class . ':verify_slug_edit');
       $this->post('/update', ClientesAdmin::class . ':update');
     });
-    $this->group('/clientes_types', function () {
-      $this->get('[/]', ClientesAdmin::class . ':clientes_types');
+    $this->group('/tipos_de_cliente', function () {
+      $this->get('[/]', ClientesAdmin::class . ':tipos_de_cliente');
+      //$this->map(['GET', 'POST'], '/add', ClientesAdmin::class . ':tipos_de_cliente_add');
+      $this->group('/add', function () {
+          $this->map(['GET', 'POST'], '[/]', ClientesAdmin::class . ':tipos_de_cliente_add');
+          $this->post('/verify_slug', ClientesAdmin::class . ':verify_slug_type');
+        });
+      $this->get('/edit/{id:[0-9]+}', ClientesAdmin::class . ':tipos_de_cliente_edit');
+      $this->post('/edit/verify_slug', ClientesAdmin::class . ':verify_slug_edit_type');
+      $this->post('/update', ClientesAdmin::class . ':tipos_de_cliente_update');
     });
 
     $this->group('/permission', function () {

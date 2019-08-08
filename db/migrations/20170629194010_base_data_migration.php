@@ -257,7 +257,7 @@ class BaseDataMigration extends AbstractMigration
                 // 'role_list' => '["1","2"]'
             ],
             [
-                'resource' => '/admin/clientes_types',
+                'resource' => '/admin/tipos_de_cliente',
                 'description' => 'Página administrativa',
                 'id_admin_ancora_type' => 1,
                 // 'role_list' => '["1","2"]'
@@ -275,7 +275,19 @@ class BaseDataMigration extends AbstractMigration
                 // 'role_list' => '["1","2"]'
             ],
             [
+                'resource' => '/admin/tipos_de_cliente/add',
+                'description' => 'Página para cadastro de um tipo novo de cliente',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["1","2"]'
+            ],
+            [
                 'resource' => '/admin/clientes/add/verify_slug',
+                'description' => 'Verificar slug',
+                'id_admin_ancora_type' => 2,
+                // 'role_list' => '["2","3"]'
+            ],
+            [
+                'resource' => '/admin/tipos_de_cliente/add/verify_slug',
                 'description' => 'Verificar slug',
                 'id_admin_ancora_type' => 2,
                 // 'role_list' => '["2","3"]'
@@ -287,7 +299,19 @@ class BaseDataMigration extends AbstractMigration
                 // 'role_list' => '["1","2"]'
             ],
             [
+                'resource' => '/admin/tipos_de_cliente/edit/:id',
+                'description' => 'Página administrativa',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["1","2"]'
+            ],
+            [
                 'resource' => '/admin/clientes/edit/verify_slug',
+                'description' => 'Verificar slug na hora de editar cliente',
+                'id_admin_ancora_type' => 2,
+                // 'role_list' => '["2","3"]'
+            ],
+            [
+                'resource' => '/admin/tipos_de_cliente/edit/verify_slug',
                 'description' => 'Verificar slug na hora de editar cliente',
                 'id_admin_ancora_type' => 2,
                 // 'role_list' => '["2","3"]'
@@ -300,6 +324,12 @@ class BaseDataMigration extends AbstractMigration
             ],
             [
                 'resource' => '/admin/clientes/update',
+                'description' => 'Página administrativa',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["1","2"]'
+            ],
+            [
+                'resource' => '/admin/tipos_de_cliente/update',
                 'description' => 'Página administrativa',
                 'id_admin_ancora_type' => 1,
                 // 'role_list' => '["1","2"]'

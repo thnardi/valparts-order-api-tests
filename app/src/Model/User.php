@@ -10,6 +10,7 @@ class User
     public $name;
     public $slug;
     public $password;
+    public $users_type;
     public $nascimento;
     public $is_cnpj;
     public $cpf;
@@ -31,6 +32,7 @@ class User
         $this->name = $data['name'] ?? null;
         $this->slug = $data['slug'] ?? null;
         $this->password = !empty($data['password']) ? password_hash($data['password'], PASSWORD_DEFAULT) : null;
+        $this->users_type = $data['users_type'] ?? null;
         $this->nascimento = !empty($data['nascimento']) ? date('Y-m-d', strtotime($data['nascimento'])) : null;
         $this->is_cnpj = $data['is_cnpj'] ?? null;
         $this->cpf = $data['cpf'] ?? null;

@@ -13,6 +13,7 @@ use Slim\Flash\Messages as FlashMessages;
 use Slim\Views\Twig as View;
 
 use Farol360\Ancora\User;
+use Farol360\Ancora\UserType;
 use Farol360\Ancora\AdminAncora;
 use Farol360\Ancora\UserModel;
 
@@ -22,6 +23,7 @@ class ClientesController extends Controller
     protected $version;
     protected $adminAncoraModel;
     protected $userModel;
+    protected $userTypeModel;
     protected $entityFactory;
 
     public function __construct(
@@ -29,12 +31,14 @@ class ClientesController extends Controller
         FlashMessages $flash,
         Model $adminAncoraModel,
         Model $userModel,
+        Model $userTypeModel,
         $entityFactory,
         $version
     ) {
         parent::__construct($view, $flash);
         $this->adminAncoraModel = $adminAncoraModel;
         $this->userModel = $userModel;
+        $this->userTypeModel = $userTypeModel;
         $this->entityFactory = $entityFactory;
         $this->version = $version;
     }
@@ -89,8 +93,11 @@ class ClientesController extends Controller
         if ($permissao_type_user) {
           if (empty($request->getParsedBody())) {
             $admin_ancora = $_SESSION['admin_ancora'];
+            $tipos_de_cliente = $this->userTypeModel->getAll();
+            //var_dump($tipos_de_cliente);die;
               return $this->view->render($response, 'admin/clientes/add.twig', [
-              'admin_ancora' => $admin_ancora
+              'admin_ancora' => $admin_ancora,
+              'tipos_de_cliente' => $tipos_de_cliente
             ]);
           }
 
@@ -368,7 +375,7 @@ class ClientesController extends Controller
             //'roles' => $roles
         ]);
     }
-  public function clientes_types(Request $request, Response $response): Response
+  public function tipos_de_cliente(Request $request, Response $response): Response
     {
       $params = $request->getQueryParams();
         if (!empty($params['page'])) {
@@ -376,38 +383,121 @@ class ClientesController extends Controller
         } else {
             $page = 1;
         }
-        if (!empty($params['order'])) {
-          $order = (int)$params['order'];
-        } else {
-          $order = 1;
-        }
-        if (!empty($params['filtro'])) {
-          $filtro = (int)$params['filtro'];
-        } else {
-          $filtro = 1;
-        }
         $limit = 20;
         $offset = ($page - 1) * $limit;
-        $amountCliente = $this->userModel->getAmount();
-        $amountPages = ceil($amountCliente->amount / $limit);
+        $amountTipodeCliente = $this->userTypeModel->getAmount();
+        $amountPages = ceil($amountTipodeCliente->amount / $limit);
 
-        $pageTitle = 'Clientes';
-        $clientes = $this->userModel->getAllOrder($order, $filtro, $offset, $limit);
-        //var_dump($clientes);die;
-        //$admin_ancora = $_SESSION['admin_ancora'];
-        foreach($clientes as $cliente) {
-            $new_data = explode(" ", $cliente->created_at);
-            $data_separado = explode("-", $new_data[0]);
-            $cliente->created_at = "$data_separado[2]/$data_separado[1]/$data_separado[0] $new_data[1]";
-      }//var_dump($admin_ancora);die;
-      return $this->view->render($response, 'admin/clientes_types/index.twig', [
-        'clientes' => $clientes,
-        //'users' => $users,
+        $pageTitle = 'Tipos de Clientes';
+        $tipos_de_cliente = $this->userTypeModel->getAll($offset, $limit);
+        //var_dump($tipos_de_cliente);die;
+      return $this->view->render($response, 'admin/tipos_de_cliente/index.twig', [
+        'tipos_de_cliente' => $tipos_de_cliente,
         'page_title' => $pageTitle,
         'page' => $page,
-        'amountPages' => $amountPages,
-        'order' => $order,
-        'filtro' => $filtro
+        'amountPages' => $amountPages
       ]);
+    }
+
+  public function tipos_de_cliente_add(Request $request, Response $response): Response
+    {
+      if (empty($request->getParsedBody())) {
+            return $this->view->render($response, 'admin/tipos_de_cliente/add.twig');
+        }
+        $tipos_de_cliente = $request->getParsedBody();
+        $tipos_de_cliente = $this->entityFactory->createUserType($request->getParsedBody());
+        try {
+          $this->userModel->beginTransaction();
+          //var_dump($clientes);die;
+          $return_clientes = $this->userTypeModel->add($tipos_de_cliente);
+          if ($return_clientes->status == false) {
+            var_dump($return_clientes);die;
+            throw new ModelException($return_clientes, "Erro no cadastro de Admin Ancora. COD:0001.");
+          }
+          $this->userModel->commit();
+          $this->flash->addMessage('success', 'Adição feita com sucesso.');
+          return $this->httpRedirect($request, $response, '/admin/tipos_de_cliente');
+        } catch(ModelException $e) {
+          $this->userModel->rollback();
+          CustomLogger::ModelErrorLog($e->getMessage(), $e->getdata());
+          $this->flash->addMessage('danger', $e->getMessage() . ' Se o problema persistir contate um administrador.');
+          return $this->httpRedirect($request, $response, "/admin/tipos_de_cliente");
+        }
+  }
+
+  public function tipos_de_cliente_edit(Request $request, Response $response, array $args): Response
+    {
+      $tipo_de_clienteId = intval($args['id']);
+      $tipo_de_cliente = $this->userTypeModel->get((int)$tipo_de_clienteId);
+      //var_dump($tipo_de_cliente);die;
+      if ($tipo_de_cliente === false) {
+
+          $this->flash->addMessage('danger', 'Tipo de cliente não encontrado.');
+          return $this->httpRedirect($request, $response, '/admin/tipos_de_cliente');
+      }
+        return $this->view->render($response, 'admin/tipos_de_cliente/edit.twig', [
+            'tipo_de_cliente' => $tipo_de_cliente
+        ]);
+    }
+
+  public function tipos_de_cliente_update(Request $request, Response $response): Response
+    {
+        $tipo_de_cliente = $this->entityFactory->createUserType($request->getParsedBody());
+        $this->userTypeModel->update($tipo_de_cliente);//var_dump($tipo_de_cliente);die;
+        $this->flash->addMessage('success', 'Atualização realizada com sucesso.');
+        return $this->httpRedirect($request, $response, '/admin/tipos_de_cliente');
+    }
+    public function verify_slug_type(Request $request, Response $response): Response
+    {
+    $body = $request->getParsedBody();
+    if (isset($body['slug'])) {
+      $body['slug'] = trim($body['slug']);
+      $user_type = $this->userTypeModel->getSlug(null, $body['slug']);
+      if ($user_type == false) {
+        return $response->withJson(true, 200);
+      }
+      return $response->withJson(false, 200);
+    }
+    return $response->withJson(false, 200);
+    }
+
+    public function verify_slug_edit_type(Request $request, Response $response): Response
+    {
+      $body = $request->getParsedBody();
+      $id_user_type = $request->getQueryParams()['tipo_de_cliente'];
+      if (isset($body['slug'])) {
+        $body['slug'] = trim($body['slug']);
+        $user = $this->userTypeModel->getSlug(null, trim($body['slug']));
+       //var_dump($user);die;
+        // verify if not exist
+        if ($user == null) {
+          return $response->withJson(true, 200);
+        }
+        // verify if is the same.
+        if ($user->id == $id_user_type) {
+          return $response->withJson(true, 200);
+        }
+        return $response->withJson(false, 200);
+      }
+      return $response->withJson(false, 200);var_dump('teste');die;
+    }
+
+    public function tipos_de_cliente_delete(Request $request, Response $response, array $args): Response
+    {
+      $clienteId = intval($args['id']);
+      $currentCliente = $this->userTypeModel->get();
+      if ($clienteId == $currentCliente->id) {
+          $this->flash->addMessage('danger', 'Não é possível remover seu próprio usuário.');
+          return $this->httpRedirect($request, $response, '/admin/tipos_de_cliente');
+      }
+      $cliente = $this->userTypeModel->get($clienteId);
+      //var_dump($cliente->deleted);die;
+      if ($cliente->deleted == 1) {
+        $this->flash->addMessage('danger', 'Não é possível realizar esta ação.');
+        return $this->httpRedirect($request, $response, '/admin/tipos_de_cliente');
+      }
+      $this->userTypeModel->delete($cliente);
+      $this->flash->addMessage('success', 'Usuário removido com sucesso.');
+      return $this->httpRedirect($request, $response, '/admin/tipos_de_cliente');
     }
 }
