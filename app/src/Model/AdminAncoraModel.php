@@ -8,57 +8,56 @@ use Farol360\Ancora\Model\AdminAncora;
 use Farol360\Ancora\Model\ModelReturn;
 use RKA\Session;
 
-
 class AdminAncoraModel extends Model
 {
   public function add(AdminAncora $adminAncora)
   {
-      $sql = "INSERT INTO admin_ancora (name,
-          email,
-          telefone,
-          slug,
-          type,
-          password,
-          ativo,
-          deleted
-      ) VALUES (
-          :name,
-          :email,
-          :telefone,
-          :slug,
-          :type,
-          :password,
-          :ativo,
-          :deleted
-          )";
-      $parameters = [
-        ':name'             => $adminAncora->name,
-        ':email'             => $adminAncora->email,
-        ':telefone'             => $adminAncora->telefone,
-        ':slug'     => $adminAncora->slug,
-        ':type'     => $adminAncora->type,
-        ':password'     => $adminAncora->password,
-        ':ativo'    => $adminAncora->ativo,
-        ':deleted'  => $adminAncora->deleted
-      ];
-      $stmt = $this->db->prepare($sql);
-      $exec = $stmt->execute($parameters);
-      // verifica se ocorreu com sucesso o execute
-      if ($exec) {
-        $data['data'] = $this->db->lastInsertId();
-        $data['errorCode'] = null;
-        $data['errorInfo'] = null;
-      } else {
-        $data['data'] = false;
-        $data['errorCode'] = $stmt->errorCode();
-        $data['errorInfo'] = $stmt->errorInfo();
-      }
-      // completa demais dados
-      $data['status'] = $exec;
-      $data['table'] = 'admin_ancora';
-      $data['function'] = 'add';
-      $modelReturn = new ModelReturn($data);
-      return $modelReturn;
+    $sql = "INSERT INTO admin_ancora (name,
+        email,
+        telefone,
+        slug,
+        type,
+        password,
+        ativo,
+        deleted
+    ) VALUES (
+        :name,
+        :email,
+        :telefone,
+        :slug,
+        :type,
+        :password,
+        :ativo,
+        :deleted
+        )";
+    $parameters = [
+      ':name'             => $adminAncora->name,
+      ':email'             => $adminAncora->email,
+      ':telefone'             => $adminAncora->telefone,
+      ':slug'     => $adminAncora->slug,
+      ':type'     => $adminAncora->type,
+      ':password'     => $adminAncora->password,
+      ':ativo'    => $adminAncora->ativo,
+      ':deleted'  => $adminAncora->deleted
+    ];
+    $stmt = $this->db->prepare($sql);
+    $exec = $stmt->execute($parameters);
+    // verifica se ocorreu com sucesso o execute
+    if ($exec) {
+      $data['data'] = $this->db->lastInsertId();
+      $data['errorCode'] = null;
+      $data['errorInfo'] = null;
+    } else {
+      $data['data'] = false;
+      $data['errorCode'] = $stmt->errorCode();
+      $data['errorInfo'] = $stmt->errorInfo();
+    }
+    // completa demais dados
+    $data['status'] = $exec;
+    $data['table'] = 'admin_ancora';
+    $data['function'] = 'add';
+    $modelReturn = new ModelReturn($data);
+    return $modelReturn;
   }
 
   public function delete($adminAncora)

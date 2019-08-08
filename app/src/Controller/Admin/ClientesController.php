@@ -92,13 +92,13 @@ class ClientesController extends Controller
     public function add(Request $request, Response $response, array $args)
     {
       $permissao_type_user = ($_SESSION['admin_ancora']['type'] > 1 ) ? true : false;
-        if ($permissao_type_user) {
-          if (empty($request->getParsedBody())) {
-            $admin_ancora = $_SESSION['admin_ancora'];
-              return $this->view->render($response, 'admin/clientes/add.twig', [
-              'admin_ancora' => $admin_ancora
-            ]);
-          }
+      if ($permissao_type_user) {
+        if (empty($request->getParsedBody())) {
+          $admin_ancora = $_SESSION['admin_ancora'];
+            return $this->view->render($response, 'admin/clientes/add.twig', [
+            'admin_ancora' => $admin_ancora
+          ]);
+        }
 
         $clientes = $request->getParsedBody();
         //var_dump($clientes);die;
