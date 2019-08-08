@@ -143,6 +143,8 @@ $container['Farol360\Ancora\Controller\Admin\ClientesController'] = function ($c
         new Farol360\Ancora\Model\AdminAncoraModel($c['db']),
         new Farol360\Ancora\Model\UserModel($c['db']),
         new Farol360\Ancora\Model\UserTypeModel($c['db']),
+        new Farol360\Ancora\Model\eventlogs\EventLogAdminActionModel($c['db']),
+        new Farol360\Ancora\Model\eventlogs\EventLogAdminActionTypeModel($c['db']),
         new Farol360\Ancora\Model\EntityFactory(),
         $c['version']
     );
@@ -158,8 +160,8 @@ $container['Farol360\Ancora\Controller\Admin\PostController'] = function ($c) {
     );
 };
 
-$container['Farol360\Ancora\Controller\Admin\PostTypesController'] = function ($c) {
-    return new Farol360\Ancora\Controller\Admin\PostTypesController(
+$container['Farol360\Ancora\Controller\Admin\PostTypeController'] = function ($c) {
+    return new Farol360\Ancora\Controller\Admin\PostTypeController(
         $c['view'],
         $c['flash'],
         new Farol360\Ancora\Model\PostModel($c['db']),

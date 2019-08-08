@@ -389,6 +389,42 @@ class BaseDataMigration extends AbstractMigration
                 // 'role_list' => '["2","3"]'
             ],
             [
+                'resource' => '/admin/post_types',
+                'description' => 'Lista de postagens',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["2","3"]'
+            ],
+            [
+                'resource' => '/admin/post_types/:id',
+                'description' => 'Postagem Especifica',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["2","3"]'
+            ],
+            [
+                'resource' => '/admin/post_types/add',
+                'description' => 'Adicionar um novo post',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["2","3"]'
+            ],
+            [
+                'resource' => '/admin/post_types/delete/:id',
+                'description' => 'Remover post',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["2","3"]'
+            ],
+            [
+                'resource' => '/admin/post_types/edit/:id',
+                'description' => 'Remover post',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["2","3"]'
+            ],
+            [
+                'resource' => '/admin/post_types/update',
+                'description' => 'Remover post',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["2","3"]'
+            ],
+            [
                 'resource' => '/admin/role',
                 'description' => 'Ver cargos',
                 'id_admin_ancora_type' => 4,
@@ -528,8 +564,8 @@ class BaseDataMigration extends AbstractMigration
                 'id' => 1,
                 'name' => 'Categoria Padrão',
                 'description' => 'Favor alterar esta categoria nas configurações da plataforma.',
-                'status' => 1,
-                'trash' => 0
+                'slug' => 'padrao',
+                'status' => 1
             ]
         ];
         $this->insert('post_types', $post_types);

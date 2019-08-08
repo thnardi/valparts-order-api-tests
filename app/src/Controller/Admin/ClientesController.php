@@ -23,18 +23,24 @@ class ClientesController extends Controller
     protected $adminAncoraModel;
     protected $userModel;
     protected $entityFactory;
+    protected $eventLogAdminActionModel;
+    protected $eventLogAdminActionTypeModel;
 
     public function __construct(
         View $view,
         FlashMessages $flash,
         Model $adminAncoraModel,
         Model $userModel,
+        Model $eventLogAdminActionModel,
+        Model $eventLogAdminActionTypeModel,
         $entityFactory,
         $version
     ) {
         parent::__construct($view, $flash);
         $this->adminAncoraModel = $adminAncoraModel;
         $this->userModel = $userModel;
+        $this->eventLogAdminActionModel = $eventLogAdminActionModel;
+        $this->eventLogAdminActionTypeModel = $eventLogAdminActionTypeModel;
         $this->entityFactory = $entityFactory;
         $this->version = $version;
     }

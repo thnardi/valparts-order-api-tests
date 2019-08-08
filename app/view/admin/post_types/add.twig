@@ -1,0 +1,71 @@
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+{% endblock %}
+{% extends "admin/layout.twig" %}
+{% block html_title %}Usuários - Administração - {{ parent() }}{% endblock %}
+{% set nav_active = 'posts' %}
+{% set subnav_active = 'post_types' %}
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+  <li><a href="{{ base_url() }}/admin">Início</a></li>
+  <li><a href="{{ base_url() }}/admin/post_types">Categorias</a></li>
+  <li class="active">Adicionar</li>
+</ol>
+{% endblock %}
+{% block content %}
+
+<div class="panel panel-default">
+  <div class="panel-heading" data-background-color="blue">
+    <p class="panel-title">Cadastrar uma Categoria</p>
+  </div>
+
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-xs-12">
+        <form role="form" data-toggle="validator" action="{{ base_url() }}/admin/post_types/add" method="POST"  enctype="multipart/form-data">
+          <div class="row">
+            <div class="col-xs-12 col-sm-6">
+              <div class="form-group">
+                <label for="inputName">Nome</label>
+                <input type="text" class="form-control" id="inputName" name="name"  required>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <div class="form-group">
+                <label for="inputName">Slug</label>
+                <input type="text" class="form-control" id="inputSlug" name="slug"  required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-6">
+              <div class="form-group">
+                <label for="inputName">Descrição</label>
+                <textarea class="form-control" id="inputDescription" name="description"></textarea>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <div class="form-group">
+                <label for="inputStatus">Status</label>
+                <select class="form-control">
+                  <option>Ativo</option>
+                  <option>Inativo</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-success">Cadastrar</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
+{% block javascripts %}
+{% endblock %}

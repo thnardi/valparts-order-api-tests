@@ -124,8 +124,8 @@ class BaseMigration extends AbstractMigration
       $posts = $this->table('post_types');
         $posts->addColumn('name', 'string');
         $posts->addColumn('description', 'string');
+        $posts->addColumn('slug', 'string');
         $posts->addColumn('status', 'integer');
-        $posts->addColumn('trash', 'integer');
         $posts->addTimestamps();
       $posts->create();
 
