@@ -41,11 +41,13 @@
                 <i class="material-icons">person</i>
                 <p>Clientes</p>
               </a>
+
             <ul id="clientes-submenu" style="" {% if nav_active == "clientes" %} class="collapse submenu in" {% else %} class="collapse submenu" {% endif %} aria-expanded="false">
           <li {% if subnav_active == "clientes" %} class="active submenu-item" {% else %} class="submenu-item" {% endif %} >
                   <a href="{{ base_url() }}/admin/clientes"> > Lista de clientes</a></li>
                 <li {% if subnav_active == "cliente_tipos" %} class="active submenu-item" {% else %} class="submenu-item" {% endif %} >
                   <a href="{{ base_url() }}/admin/tipos_de_cliente"> > Tipos de clientes</a>
+
                   </li>
               </ul>
             </li>
@@ -56,10 +58,10 @@
               </a>
               <ul id="posts-submenu" {% if nav_active == "posts" %} class="collapse submenu in" {% else %} class="collapse submenu" {% endif %} aria-expanded="false">
                 <li {% if subnav_active == "posts" %} class="active submenu-item" {% else %} class="submenu-item" {% endif %} >
-                <a href="{{ base_url() }}/admin/posts"
-                        style=""> > Lista de postagens</a></li>
+                  <a href="{{ base_url() }}/admin/posts"> > Lista de postagens</a>
+                </li>
                 <li {% if subnav_active == "post_types" %} class="active submenu-item" {% else %} class="submenu-item" {% endif %} >
-                  <a href="{{ base_url() }}/admin/post_types"> > Tipos de postagem</a>
+                  <a href="{{ base_url() }}/admin/post_types"> > Categorias</a>
                   </li>
               </ul>
             </li>
@@ -67,7 +69,7 @@
         </div>
       </div>
       <div class="main-panel">
-        <nav class="navbar navbar-transparent navbar-absolute" style="padding-bottom:0px; background-color:white;">
+        <nav class="navbar navbar-default navbar-fixed-top" style="padding-bottom:0px; background-color:white;">
           <div class="container-fluid">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse">

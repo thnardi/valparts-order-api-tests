@@ -25,6 +25,8 @@ class ClientesController extends Controller
     protected $userModel;
     protected $userTypeModel;
     protected $entityFactory;
+    protected $eventLogAdminActionModel;
+    protected $eventLogAdminActionTypeModel;
 
     public function __construct(
         View $view,
@@ -32,6 +34,8 @@ class ClientesController extends Controller
         Model $adminAncoraModel,
         Model $userModel,
         Model $userTypeModel,
+        Model $eventLogAdminActionModel,
+        Model $eventLogAdminActionTypeModel,
         $entityFactory,
         $version
     ) {
@@ -39,6 +43,9 @@ class ClientesController extends Controller
         $this->adminAncoraModel = $adminAncoraModel;
         $this->userModel = $userModel;
         $this->userTypeModel = $userTypeModel;
+        $this->eventLogAdminActionModel = $eventLogAdminActionModel;
+        $this->eventLogAdminActionTypeModel = $eventLogAdminActionTypeModel;
+
         $this->entityFactory = $entityFactory;
         $this->version = $version;
     }
@@ -90,6 +97,7 @@ class ClientesController extends Controller
     public function add(Request $request, Response $response, array $args)
     {
       $permissao_type_user = ($_SESSION['admin_ancora']['type'] > 1 ) ? true : false;
+
         if ($permissao_type_user) {
           if (empty($request->getParsedBody())) {
             $admin_ancora = $_SESSION['admin_ancora'];
@@ -100,6 +108,7 @@ class ClientesController extends Controller
               'tipos_de_cliente' => $tipos_de_cliente
             ]);
           }
+
 
         $clientes = $request->getParsedBody();
         //var_dump($clientes);die;
@@ -164,26 +173,28 @@ class ClientesController extends Controller
     public function edit(Request $request, Response $response, array $args): Response
     {
       $userId = intval($args['id']);
-        $user = $this->userModel->get((int)$userId);//var_dump($user);die;
-        if ($user !== false) {
+      $tipos_de_cliente = $this->userTypeModel->getAll();
+      $user = $this->userModel->get((int)$userId);//var_dump($user);die;
+      if ($user !== false) {
 
-          $permissao_type_user = ($_SESSION['admin_ancora']['type'] > 1 ) ? true : false;
-        }
-        if ($user === false) {
+        $permissao_type_user = ($_SESSION['admin_ancora']['type'] > 1 ) ? true : false;
+      }
+      if ($user === false) {
 
-            $this->flash->addMessage('danger', 'Usuário não encontrado.');
-            return $this->httpRedirect($request, $response, '/admin/clientes');
-        }
-        if ($permissao_type_user) {
-          //$roles = $this->roleModel->getAll();
-          return $this->view->render($response, 'admin/clientes/edit.twig', [
-              'user' => $user
-              //'roles' => $roles
-          ]);
-        } else {
-            $this->flash->addMessage('danger', 'Usuário não permissão.');
-            return $this->httpRedirect($request, $response, '/admin/clientes');
-        }
+          $this->flash->addMessage('danger', 'Usuário não encontrado.');
+          return $this->httpRedirect($request, $response, '/admin/clientes');
+      }
+      if ($permissao_type_user) {
+        //$roles = $this->roleModel->getAll();
+        return $this->view->render($response, 'admin/clientes/edit.twig', [
+            'user' => $user,
+            'tipos_de_cliente' => $tipos_de_cliente
+            //'roles' => $roles
+        ]);
+      } else {
+          $this->flash->addMessage('danger', 'Usuário não permissão.');
+          return $this->httpRedirect($request, $response, '/admin/clientes');
+      }
     }
 
     public function disable(Request $request, Response $response, array $args): Response

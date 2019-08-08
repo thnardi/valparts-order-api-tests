@@ -31,7 +31,7 @@ class UserModel extends Model
                 :name,
                 :slug,
                 :password,
-                users_type,
+                :users_type,
                 :nascimento,
                 :is_cnpj,
                 :cpf,
@@ -324,7 +324,7 @@ class UserModel extends Model
                 email= :email,
                 name = :name,
                 slug = :slug,
-                users_type = :users_type
+                users_type = :users_type,
                 nascimento = :nascimento,
                 cpf = :cpf,
                 tel_numero = :tel_numero,

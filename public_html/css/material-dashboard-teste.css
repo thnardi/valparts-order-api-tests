@@ -460,6 +460,7 @@ h2.title {
 }
 .sidebar .nav li .submenu .active,
 .off-canvas-sidebar .nav li .submenu .active {
+  background-color: cadetblue;
   padding: 5px 10px;
 }
 .sidebar .nav li .submenu .active a,
@@ -481,7 +482,6 @@ h2.title {
 .off-canvas-sidebar .nav li .submenu .submenu-item a {
   background-color: transparent !important;
   box-shadow: none !important;
-  color: #afd3da;
 }
 .sidebar .nav li a:focus,
 .off-canvas-sidebar .nav li a:focus {

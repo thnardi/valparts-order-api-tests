@@ -47,6 +47,7 @@
             padding:0px;
             background-color: #3c4858;
             .active{
+              background-color: cadetblue;
               padding: 5px 10px;
               // background-color:$blue-new !important;
               a {
@@ -64,7 +65,7 @@
               a {
                 background-color:transparent !important;
                 box-shadow: none !important;
-                color: #afd3da;
+                // color: #afd3da;
               }
             }
           }

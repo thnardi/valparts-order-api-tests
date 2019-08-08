@@ -6,6 +6,7 @@ use Farol360\Ancora\Controller\Admin\IndexController as IndexAdmin;
 use Farol360\Ancora\Controller\Admin\ClientesController as ClientesAdmin;
 use Farol360\Ancora\Controller\Admin\PermissionController as PermissionAdmin;
 use Farol360\Ancora\Controller\Admin\PostController as PostController;
+use Farol360\Ancora\Controller\Admin\PostTypeController as PostTypeController;
 use Farol360\Ancora\Controller\Admin\RelatoriosController as RelatoriosAdmin;
 use Farol360\Ancora\Controller\Admin\RoleController as RoleAdmin;
 use Farol360\Ancora\Controller\Admin\UserController as UserAdmin;
@@ -56,7 +57,6 @@ $app->group('/admin', function () {
         $this->post('/update', PermissionAdmin::class . ':update');
     });
 
-
     $this->group('/posts', function () {
         $this->get('[/]', PostController::class . ':index');
         $this->map(['GET', 'POST'], '/add', PostController::class . ':add');
@@ -64,7 +64,13 @@ $app->group('/admin', function () {
         $this->get('/edit/{id:[0-9]+}', PostController::class . ':edit');
         $this->post('/update', PostController::class . ':update');
     });
-
+    $this->group('/post_types', function () {
+        $this->get('[/]', PostTypeController::class . ':index');
+        $this->map(['GET', 'POST'], '/add', PostTypeController::class . ':add');
+        $this->get('/delete/{id:[0-9]+}', PostTypeController::class . ':delete');
+        $this->get('/edit/{id:[0-9]+}', PostTypeController::class . ':edit');
+        $this->post('/update', PostTypeController::class . ':update');
+    });
     $this->group('/relatorios', function () {
       $this->get('[/]', RelatoriosAdmin::class . ':index');
     });

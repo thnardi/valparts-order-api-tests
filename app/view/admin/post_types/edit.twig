@@ -1,0 +1,71 @@
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+{% endblock %}
+{% extends "admin/layout.twig" %}
+{% block html_title %}Usuários - Administração - {{ parent() }}{% endblock %}
+{% set nav_active = 'posts' %}
+{% set subnav_active = 'post_types' %}
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+  <li><a href="{{ base_url() }}/admin">Início</a></li>
+  <li><a href="{{ base_url() }}/admin/post_types">Categorias</a></li>
+  <li class="active">{{ post_type.slug }}</li>
+</ol>
+{% endblock %}
+{% block content %}
+
+<div class="panel panel-default">
+  <div class="panel-heading" data-background-color="blue">
+    <p class="panel-title">Editar Categoria</p>
+  </div>
+
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-xs-12">
+        <form role="form" data-toggle="validator" action="{{ base_url() }}/admin/post_types/update" method="POST"  enctype="multipart/form-data">
+          <div class="row">
+            <div class="col-xs-12 col-sm-6">
+              <div class="form-group">
+                <label for="inputName">Nome</label>
+                <input type="text" class="form-control" id="inputName" name="name" value="{{ post_type.name }}"  required>
+                <input type="hidden" class="form-control" id="id" name="id" value="{{ post_type.id }}"  required>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <div class="form-group">
+                <label for="inputName">Slug</label>
+                <input type="text" class="form-control" id="inputSlug" name="slug" value="{{ post_type.slug }}" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-6">
+              <div class="form-group">
+                <label for="inputName">Descrição</label>
+                <textarea class="form-control" id="inputDescription" name="description">{{ post_type.description }}</textarea>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <div class="form-group">
+                <label for="inputStatus">Situação</label>
+                <select class="form-control" name="status">
+                  <option value="1" {% if post_type.status == 1 %} selected {% endif %}>Ativo</option>
+                  <option value="0" {% if post_type.status == 0 %} selected {% endif %}>Inativo</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-group pull-right">
+            <a href="{{ base_url }}/admin/post_types" class="btn btn-default">Voltar</a>
+            <button type="submit" class="btn btn-success">Editar</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block javascripts %}
+{% endblock %}
