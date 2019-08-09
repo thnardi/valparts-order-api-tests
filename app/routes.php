@@ -44,6 +44,8 @@ $app->group('/admin', function () {
           $this->map(['GET', 'POST'], '[/]', ClientesAdmin::class . ':tipos_de_cliente_add');
           $this->post('/verify_slug', ClientesAdmin::class . ':verify_slug_type');
         });
+      $this->get('/{id:[0-9]+}', ClientesAdmin::class . ':tipos_de_cliente_view');
+      $this->get('/delete/{id:[0-9]+}', ClientesAdmin::class . ':tipos_de_cliente_delete');
       $this->get('/edit/{id:[0-9]+}', ClientesAdmin::class . ':tipos_de_cliente_edit');
       $this->post('/edit/verify_slug', ClientesAdmin::class . ':verify_slug_edit_type');
       $this->post('/update', ClientesAdmin::class . ':tipos_de_cliente_update');

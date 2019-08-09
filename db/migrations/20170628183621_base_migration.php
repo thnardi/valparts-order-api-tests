@@ -172,6 +172,7 @@ class BaseMigration extends AbstractMigration
         $users_type->addColumn('name', 'string');
         $users_type->addColumn('description', 'string');
         $users_type->addColumn('slug', 'string');
+        $users_type->addColumn('deleted', 'boolean', ['null' => true, 'default' => false]);
       $users_type->create();
     }
 }

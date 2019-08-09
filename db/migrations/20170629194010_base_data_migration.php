@@ -269,6 +269,12 @@ class BaseDataMigration extends AbstractMigration
                 // 'role_list' => '["2","3"]'
             ],
             [
+                'resource' => '/admin/tipos_de_cliente/:id',
+                'description' => 'Ver tipo usuário',
+                'id_admin_ancora_type' => 2,
+                // 'role_list' => '["2","3"]'
+            ],
+            [
                 'resource' => '/admin/clientes/add',
                 'description' => 'Página administrativa',
                 'id_admin_ancora_type' => 1,
@@ -318,6 +324,12 @@ class BaseDataMigration extends AbstractMigration
             ],
             [
                 'resource' => '/admin/clientes/delete/:id',
+                'description' => 'Página administrativa',
+                'id_admin_ancora_type' => 1,
+                // 'role_list' => '["1","2"]'
+            ],
+            [
+                'resource' => '/admin/tipos_de_cliente/delete/:id',
                 'description' => 'Página administrativa',
                 'id_admin_ancora_type' => 1,
                 // 'role_list' => '["1","2"]'

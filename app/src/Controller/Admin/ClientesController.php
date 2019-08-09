@@ -511,4 +511,19 @@ class ClientesController extends Controller
       $this->flash->addMessage('success', 'Usuário removido com sucesso.');
       return $this->httpRedirect($request, $response, '/admin/tipos_de_cliente');
     }
+
+    public function tipos_de_cliente_view(Request $request, Response $response, array $args): Response
+    {
+      $userId = intval($args['id']);
+        $user = $this->userTypeModel->get((int)$userId);
+        if (!$user) {
+            $this->flash->addMessage('danger', 'Não encontrado.');
+            return $this->httpRedirect($request, $response, '/admin/tipos_de_cliente');
+        }
+        //$roles = $this->roleModel->getAll();
+        return $this->view->render($response, 'admin/tipos_de_cliente/view.twig', [
+            'user' => $user
+            //'roles' => $roles
+        ]);
+    }
 }

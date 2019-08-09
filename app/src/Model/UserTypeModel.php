@@ -100,6 +100,8 @@ class UserTypeModel extends Model
                *
             FROM
                 users_type
+            WHERE
+                deleted != 1
             ORDER BY
                 users_type.name ASC
                 LIMIT ? , ?
@@ -112,46 +114,6 @@ class UserTypeModel extends Model
         return $query->fetchAll();
     }
 
-    public function getAllOrder(int $offset = 0, int $limit = PHP_INT_MAX): array
-    {
-        $sql = "
-            SELECT
-                users_type.*,
-            FROM
-                users
-            WHERE
-                deleted != 1";
-            if ($filtro == 1) {
-        $sql .="
-          AND users.active = 1 OR users.active = NULL
-        ";
-      }
-      if ($filtro == 2) {
-        $sql .="
-          AND users.active = 0
-        ";
-      }
-      if ($filtro == 3) {
-
-      }
-      if ($order == 1) {
-
-      }
-      if ($order == 2) {
-        $sql .="
-          ORDER BY
-            users.created_at DESC
-        ";
-      }
-      $sql .="
-        LIMIT ? , ?
-      ";
-        $query = $this->db->prepare($sql);
-        $query->bindValue(1, $offset, \PDO::PARAM_INT);
-        $query->bindValue(2, $limit, \PDO::PARAM_INT);
-        $query->execute();
-        return $query->fetchAll();
-    }
 
     public function getAmount()
   {
@@ -192,85 +154,6 @@ class UserTypeModel extends Model
       }
       return new AdminAncora();
   }
-
-    public function getByEmail(string $email)
-    {
-        $sql = "
-            SELECT
-                users.*
-            FROM
-                users
-            WHERE
-                email = :email
-        ";
-        $stmt = $this->db->prepare($sql);
-        $parameters = [':email' => $email];
-        $stmt->execute($parameters);
-        $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, User::class);
-        return $stmt->fetch();
-    }
-
-    public function getUserCourses(int $userId): array
-    {
-        $sql = "
-            SELECT
-                courses.*
-            FROM
-                users
-                LEFT JOIN users_courses ON users_courses.user_id = users.id
-                INNER JOIN courses ON courses.id = users_courses.course_id
-            WHERE
-                users.id = :id
-        ";
-        $stmt = $this->db->prepare($sql);
-        $parameters = [':id' => $userId];
-        $stmt->execute($parameters);
-        $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, User::class);
-        return $stmt->fetchAll();
-    }
-
-    public function getUserOrders(int $userId): array
-    {
-        $sql = "
-            SELECT
-                orders.*,
-                courses.title AS course_name
-            FROM
-                users
-                LEFT JOIN orders ON orders.user_id = users.id
-                LEFT JOIN courses ON courses.id = orders.course_id
-            WHERE
-                users.id = :id
-                AND orders.transaction IS NOT NULL
-        ";
-        $stmt = $this->db->prepare($sql);
-        $parameters = [':id' => $userId];
-        $stmt->execute($parameters);
-        $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, User::class);
-        return $stmt->fetchAll();
-    }
-
-    public function getUsers(int $offset = 0, int $limit = PHP_INT_MAX): array
-    {
-        $sql = "
-            SELECT
-                users.*,
-                roles.description AS role
-            FROM
-                users
-                LEFT JOIN roles ON roles.id = users.role_id
-            WHERE
-                deleted != 1 AND roles.name = 'user'
-            LIMIT ? , ?
-        ";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(1, $offset, \PDO::PARAM_INT);
-        $stmt->bindValue(2, $limit, \PDO::PARAM_INT);
-        $stmt->execute();
-        $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, User::class);
-        return $stmt->fetchAll();
-    }
-
     public function update($tipo_de_cliente)
     {
 
@@ -310,24 +193,5 @@ class UserTypeModel extends Model
         $data['function'] = 'update';
         $modelReturn = new ModelReturn($data);
         return $modelReturn;
-    }
-
-    public function verify(int $userId): bool
-    {
-        $sql = "
-            UPDATE
-                users
-            SET
-                recover_token = NULL,
-                verification_token = NULL,
-                active = 1
-            WHERE
-                id = :id
-        ";
-        $stmt = $this->db->prepare($sql);
-        $parameters = [
-            ':id' => $userId
-        ];
-        return $stmt->execute($parameters);
     }
 }
