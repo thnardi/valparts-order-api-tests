@@ -82,7 +82,7 @@
               <a{% if page > 1 %} href="{{ base_url() }}/admin/tipos_de_cliente?page={{ page - 1 }}"{% endif %}>Anterior</a>
             </li>
             <li{% if page >= amountPages %} class="disabled"{% endif %}>
-              <a{% if page < amountPages %} href="{{ base_url() }}/admin/tipos_de_clientepage={{ page + 1 }}"{% endif %}>Próximo</a>
+              <a{% if page < amountPages %} href="{{ base_url() }}/admin/tipos_de_cliente?page={{ page + 1 }}"{% endif %}>Próximo</a>
             </li>
           </ul>
         </div>

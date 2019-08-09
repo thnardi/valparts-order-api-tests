@@ -122,6 +122,8 @@ class UserTypeModel extends Model
               COUNT(id) AS amount
           FROM
             users_type
+          WHERE
+            deleted != 1
       ";
       $query = $this->db->prepare($sql);
       $query->execute();
