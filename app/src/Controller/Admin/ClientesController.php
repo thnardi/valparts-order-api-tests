@@ -454,9 +454,23 @@ class ClientesController extends Controller
   public function tipos_de_cliente_update(Request $request, Response $response): Response
     {
         $tipo_de_cliente = $this->entityFactory->createUserType($request->getParsedBody());
-        $this->userTypeModel->update($tipo_de_cliente);//var_dump($tipo_de_cliente);die;
-        $this->flash->addMessage('success', 'Atualização realizada com sucesso.');
-        return $this->httpRedirect($request, $response, '/admin/tipos_de_cliente');
+        //var_dump($tipo_de_cliente);die;
+        try {
+          $this->userModel->beginTransaction();
+          $return_type = $this->userTypeModel->update($tipo_de_cliente);
+          //var_dump($return_user);die;
+          if ($return_type->status == false) {
+            throw new ModelException($return_user, "Erro no cadastro de Admin Ancora. COD:0002.");
+          }
+          $this->userTypeModel->commit();
+          $this->flash->addMessage('success', 'Atualização realizada com sucesso.');
+          return $this->httpRedirect($request, $response, '/admin/tipos_de_cliente');
+        } catch(ModelException $e) {
+          $this->userTypeModel->rollback();
+          CustomLogger::ModelErrorLog($e->getMessage(), $e->getdata());
+          $this->flash->addMessage('danger', $e->getMessage() . ' Se o problema persistir contate um administrador.');
+          return $this->httpRedirect($request, $response, "/admin/tipos_de_cliente");
+        }
     }
     public function verify_slug_type(Request $request, Response $response): Response
     {
