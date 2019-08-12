@@ -15,13 +15,44 @@
   <div class="panel-heading" data-background-color="blue">
     <p class="panel-title">Cadastrar Novo Cliente</p>
   </div>
-  <form id="userform" role="form" action="{{ base_url() }}/admin/clientes/add" method="POST">
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-xs-12 col-sm-6">
-          <div class="form-group">
-            <label for="inputName">Nome</label>
-            <input type="text" class="form-control" id="inputName" name="name"  required>
+
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-xs-12 col-sm-10">
+        <form id="userform" role="form" action="{{ base_url() }}/admin/clientes/add" method="POST">
+          <div class="row">
+            <div class="col-xs-12 col-sm-6">
+              <div class="form-group">
+                <label for="inputName">Nome</label>
+                <input type="text" class="form-control" id="inputName" name="name"  required>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <div class="form-group">
+                <label for="inputEmail">Email</label>
+                <input type="email" class="form-control" id="inputEmail" name="email"  required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+          <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+              <label for="inputTelefone">Telefone</label>
+              <input type="text" class="form-control" id="inputTelefone" name="tel_numero"  required>
+            </div>
+          </div>
+            <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+              <label for="inputNascimento">Data de Nascimento</label>
+              <input type="date" class="form-control" id="inputNascimento" name="nascimento" min="1900-01-01" max="2050-01-01">
+              <span class="validity"></span>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+              <label for="inputCPF">CPF</label>
+              <input type="text" class="form-control" id="inputCPF" name="cpf"  required>
+            </div>
           </div>
         </div>
         <div class="col-xs-12 col-sm-6">
