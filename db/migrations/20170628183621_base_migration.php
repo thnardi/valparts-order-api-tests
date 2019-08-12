@@ -148,7 +148,7 @@ class BaseMigration extends AbstractMigration
         $users->addColumn('name', 'string');
         $users->addColumn('slug', 'string', ['null' => true]);
         $users->addColumn('password', 'string');
-        $users->addColumn('users_type', 'string');
+        $users->addColumn('users_type', 'string', ['null' => true]);
         $users->addColumn('nascimento', 'date', ['null' => true]);
         $users->addColumn('is_cnpj', 'boolean', ['default' => false]);
         $users->addColumn('cpf', 'string', ['null' => true]);
