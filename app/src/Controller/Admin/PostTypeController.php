@@ -125,16 +125,24 @@ class PostTypeController extends Controller
       return $this->httpRedirect($request, $response, '/admin/post_types');
   }
 
-  public function remove(Request $request, Response $response, array $args): Response
-  {
-      $postTypeId = (int) $args['id'];
-
-      $this->postTypeModel->delete($postTypeId);
-
-      $this->flash->addMessage('success', "Tipo de posto removido com sucesso.");
+  public function delete(Request $request, Response $response, array $args): Response
+    {
+      $postId = intval($args['id']);
+      //$currentPost = $this->postTypeModel->get();
+      //if ($postId == $currentPost->id) {
+          //$this->flash->addMessage('danger', 'Não é possível remover seu próprio tipo de post.');
+          //return $this->httpRedirect($request, $response, '/admin/post_types');
+      //}
+      $post_type = $this->postTypeModel->get($postId);
+      //var_dump($post_type->deleted);die;
+      if ($post_type->deleted == 1) {
+        $this->flash->addMessage('danger', 'Não é possível realizar esta ação.');
+        return $this->httpRedirect($request, $response, '/admin/post_types');
+      }
+      $this->postTypeModel->delete($post_type);
+      $this->flash->addMessage('success', 'Tipo de post removido com sucesso.');
       return $this->httpRedirect($request, $response, '/admin/post_types');
-
-  }
+    }
 
   public function update(Request $request, Response $response): Response
   {
@@ -163,40 +171,60 @@ class PostTypeController extends Controller
 
       $this->flash->addMessage('success', "Tipo de posto atualizado com sucesso.");
       return $this->httpRedirect($request, $response, '/admin/post_types');
-
-
-
   }
 
   public function verifytoremove(Request $request, Response $response, array $args)
   {
-
       $postTypeId = (int) $args['id'];
-
       $post_types = $this->postTypeModel->get($postTypeId);
-
       if (isset($post_types)) {
           $postAmount = $this->postModel->getAmountBypostType((int) $post_types->id);
-
           echo $postAmount->amount ;
-
       }
-
   }
 
   public function verifytounpublish(Request $request, Response $response, array $args)
   {
-
       $postTypeId = (int) $args['id'];
       $post_types = $this->postTypeModel->get($postTypeId);
-
       if (isset($post_types)) {
           $postAmount = $this->postModel->getAmountPublishedBypostType((int) $post_types->id);
-
           return $response->withJson($postAmount->amount, 200);
-
-
       }
-
   }
+
+  public function verify_slug(Request $request, Response $response): Response
+    {
+    $body = $request->getParsedBody();
+    if (isset($body['slug'])) {
+      $body['slug'] = trim($body['slug']);
+      $post_type = $this->postTypeModel->getSlug(null, $body['slug']);
+      if ($post_type == false) {
+        return $response->withJson(true, 200);
+      }
+      return $response->withJson(false, 200);
+    }
+      return $response->withJson(false, 200);
+    }
+
+  public function verify_slug_edit(Request $request, Response $response): Response
+    {
+      $body = $request->getParsedBody();
+      $id_post_type = $request->getQueryParams()['post_types'];
+      if (isset($body['slug'])) {
+        $body['slug'] = trim($body['slug']);
+        $post = $this->postTypeModel->getSlug(null, trim($body['slug']));
+       //var_dump($post);die;
+        // verify if not exist
+        if ($post == null) {
+          return $response->withJson(true, 200);
+        }
+        // verify if is the same.
+        if ($post->id == $id_post_type) {
+          return $response->withJson(true, 200);
+        }
+        return $response->withJson(false, 200);
+      }
+      return $response->withJson(false, 200);//var_dump('teste');die;
+    }
 }

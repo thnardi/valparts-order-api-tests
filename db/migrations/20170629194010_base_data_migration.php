@@ -449,6 +449,12 @@ class BaseDataMigration extends AbstractMigration
                 // 'role_list' => '["2","3"]'
             ],
             [
+                'resource' => '/admin/post_types/add/verify_slug',
+                'description' => 'Verificar slug',
+                'id_admin_ancora_type' => 2,
+                // 'role_list' => '["2","3"]'
+            ],
+            [
                 'resource' => '/admin/post_types/delete/:id',
                 'description' => 'Remover post',
                 'id_admin_ancora_type' => 1,
@@ -458,6 +464,12 @@ class BaseDataMigration extends AbstractMigration
                 'resource' => '/admin/post_types/edit/:id',
                 'description' => 'Remover post',
                 'id_admin_ancora_type' => 1,
+                // 'role_list' => '["2","3"]'
+            ],
+            [
+                'resource' => '/admin/post_types/edit/verify_slug',
+                'description' => 'Verificar slug na hora de editar tipo de post',
+                'id_admin_ancora_type' => 2,
                 // 'role_list' => '["2","3"]'
             ],
             [
@@ -600,6 +612,16 @@ class BaseDataMigration extends AbstractMigration
             ]
         ];
         $this->insert('permissions', $permissions);
+
+        $users_type = [
+            [
+                'id' => 1,
+                'name' => 'Tipo Padrão',
+                'description' => 'Favor alterar esta categoria nas configurações da plataforma.',
+                'slug' => 'padrao'
+            ]
+        ];
+        $this->insert('users_type', $users_type);
 
         $post_types = [
             [

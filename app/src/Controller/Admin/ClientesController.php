@@ -483,7 +483,7 @@ class ClientesController extends Controller
       }
       return $response->withJson(false, 200);
     }
-    return $response->withJson(false, 200);
+      return $response->withJson(false, 200);
     }
 
     public function verify_slug_edit_type(Request $request, Response $response): Response
@@ -504,7 +504,7 @@ class ClientesController extends Controller
         }
         return $response->withJson(false, 200);
       }
-      return $response->withJson(false, 200);var_dump('teste');die;
+      return $response->withJson(false, 200);//var_dump('teste');die;
     }
 
     public function tipos_de_cliente_delete(Request $request, Response $response, array $args): Response

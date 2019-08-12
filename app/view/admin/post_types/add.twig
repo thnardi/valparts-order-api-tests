@@ -22,7 +22,7 @@
   <div class="panel-body">
     <div class="row">
       <div class="col-xs-12">
-        <form role="form" data-toggle="validator" action="{{ base_url() }}/admin/post_types/add" method="POST"  enctype="multipart/form-data">
+        <form id="userform" role="form" data-toggle="validator" action="{{ base_url() }}/admin/post_types/add" method="POST"  enctype="multipart/form-data">
           <div class="row">
             <div class="col-xs-12 col-sm-6">
               <div class="form-group">
@@ -33,7 +33,9 @@
             <div class="col-xs-12 col-sm-6">
               <div class="form-group">
                 <label for="inputName">Slug</label>
-                <input type="text" class="form-control" id="inputSlug" name="slug"  required>
+                <input type="text" class="form-control" id="inputSlug" name="slug"  required onkeyup="return AlteraMinusculas(this);" required>
+                <div id="inputSlug-feedback"></div>
+              </div>
               </div>
             </div>
           </div>
@@ -66,4 +68,65 @@
 
 {% endblock %}
 {% block javascripts %}
+
+<script type="text/javascript">
+  function AlteraMinusculas(campo) {
+  campo.value=campo.value.toLowerCase();
+}
+</script>
+
+<script>
+  $('#inputSlug').on('blur', function(){
+    $('#inputSlug').removeAttr('ok');
+    $('#inputSlug').val($('#inputSlug').val().trim());
+    if ($('#inputSlug').val().trim() == '') {
+        $('#inputSlug-feedback').html('');
+    } else {
+      $.ajax({
+        method: "POST",
+        url: "{{ base_url }}/admin/post_types/add/verify_slug",
+        data: { slug: $('#inputSlug').val()},
+        beforeSend: function(jqXHR) {
+          $('#inputSlug-feedback').html('<p style="position:absolute;">Aguarde.</p>');
+          // lógica para verificar caracteres inválidos no link
+          var slug = $('#inputSlug').val();
+          var slug_filtered = slug.match(/[A-Za-z0-9_-]*/);
+          var dif = slug.localeCompare(slug_filtered);
+          var n = slug.indexOf("deleted");
+          //var str = "Hello world, welcome to the universe.";
+
+          if ((dif) || (n !== -1)){
+            jqXHR.abort(event);
+            $('#inputSlug-feedback').html('<p style="color:red; position:absolute;">Padrão não permitido.</p>');
+            $('#inputSlug').parent('.form-group').addClass('has-error');
+          }
+        }
+      }).done(function(result)
+        {
+          if (result === true) {
+            $('#inputSlug-feedback').html('<p style="color:green; position:absolute;">Disponível para cadastro.</p>');
+            $('#inputSlug').attr('ok', 'ok');
+          }
+
+          if (result === false) {
+            $('#inputSlug-feedback').html('<p style="color:red; position:absolute;">Slug já utilizado. Selecione outro.</p>');
+            $('#inputSlug').parent('.form-group').addClass('has-error');
+          }
+        }).fail(function(jqXHR, textStatus, msg){
+            console.log(textStatus);
+          });
+      }
+  });
+</script>
+
+<script type="text/javascript">
+  $('#userform').submit(function(){
+    if ( $('#inputSlug').attr('ok') !== 'ok') {
+      $('#inputSlug').focus();
+      return false;
+    }
+    return true;
+  });
+</script>
+
 {% endblock %}

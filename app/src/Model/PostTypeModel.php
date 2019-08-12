@@ -39,13 +39,30 @@ class PostTypeModel extends Model
     return $modelReturn;
   }
 
-  public function delete(int $id): bool
+  public function delete($post_types)
   {
-      $sql = "DELETE FROM post_types WHERE id = :id";
-      $stmt = $this->db->prepare($sql);
-      $parameters = [':id' => $id];
-      return $stmt->execute($parameters);
-  }
+      $sql = "
+        UPDATE
+            post_types
+        SET
+            slug            = :slug,
+            deleted         = 1
+        WHERE
+            id = :id
+    ";
+    $parameters =
+    [
+
+     ':id'   => (int)$post_types->id,
+     ':slug' => $post_types->slug.'_deleted'
+    ];
+    $stmt = $this->db->prepare($sql);
+    //var_dump($stmt);
+    //var_dump($sql);
+    //die;
+    $exec = $stmt->execute($parameters);
+    //var_dump($exec);die;
+    }
 
   public function disable(int $id): bool
   {
@@ -107,6 +124,8 @@ class PostTypeModel extends Model
               *
           FROM
               post_types
+          WHERE
+              deleted != 1
           ORDER BY
               id DESC
           LIMIT ? , ?
@@ -154,6 +173,24 @@ class PostTypeModel extends Model
       return $stmt->fetchAll();
   }
 
+  public function getSlug(int $post_type_id = null, string $slug = "")
+  {
+    $sql = "
+        SELECT
+            *
+        FROM
+          post_types
+        WHERE
+          post_types.id = :id OR post_types.slug = :slug
+
+    ";
+    $stmt = $this->db->prepare($sql);
+    $parameters = [':id' => $post_type_id, ':slug' => $slug];
+    $stmt->execute($parameters);
+    $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, PostType::class);
+    return $stmt->fetch();
+  }
+
   public function update(postType $postType): bool
   {
       $sql = "
@@ -162,8 +199,8 @@ class PostTypeModel extends Model
           SET
               name = :name,
               description = :description,
-              status = :status,
-              trash = :trash
+              slug = :slug,
+              status = :status
           WHERE
               id = :id
       ";
@@ -172,8 +209,8 @@ class PostTypeModel extends Model
           ':id'           => $postType->id,
           ':name'         => $postType->name,
           ':description'  => $postType->description,
-          ':status'       => $postType->status,
-          ':trash'        => $postType->trash
+          ':slug'         => $postType->slug,
+          ':status'       => $postType->status
       ];
       return $stmt->execute($parameters);
   }

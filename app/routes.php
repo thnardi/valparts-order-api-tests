@@ -68,9 +68,14 @@ $app->group('/admin', function () {
     });
     $this->group('/post_types', function () {
         $this->get('[/]', PostTypeController::class . ':index');
-        $this->map(['GET', 'POST'], '/add', PostTypeController::class . ':add');
+        //$this->map(['GET', 'POST'], '/add', PostTypeController::class . ':add');
+        $this->group('/add', function () {
+          $this->map(['GET', 'POST'], '[/]', PostTypeController::class . ':add');
+          $this->post('/verify_slug', PostTypeController::class . ':verify_slug');
+        });
         $this->get('/delete/{id:[0-9]+}', PostTypeController::class . ':delete');
         $this->get('/edit/{id:[0-9]+}', PostTypeController::class . ':edit');
+        $this->post('/edit/verify_slug', PostTypeController::class . ':verify_slug_edit');
         $this->post('/update', PostTypeController::class . ':update');
     });
     $this->group('/relatorios', function () {

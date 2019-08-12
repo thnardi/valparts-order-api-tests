@@ -126,6 +126,7 @@ class BaseMigration extends AbstractMigration
         $posts->addColumn('description', 'string');
         $posts->addColumn('slug', 'string');
         $posts->addColumn('status', 'integer');
+        $posts->addColumn('deleted', 'boolean', ['default' => false]);
         $posts->addTimestamps();
       $posts->create();
 
