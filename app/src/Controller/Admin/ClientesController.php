@@ -19,7 +19,6 @@ use Farol360\Ancora\UserModel;
 
 class ClientesController extends Controller
 {
-
     protected $version;
     protected $adminAncoraModel;
     protected $userModel;
@@ -27,61 +26,57 @@ class ClientesController extends Controller
     protected $entityFactory;
     protected $eventLogAdminActionModel;
     protected $eventLogAdminActionTypeModel;
-
     public function __construct(
-        View $view,
-        FlashMessages $flash,
-        Model $adminAncoraModel,
-        Model $userModel,
-        Model $userTypeModel,
-        Model $eventLogAdminActionModel,
-        Model $eventLogAdminActionTypeModel,
-        $entityFactory,
-        $version
+      View $view,
+      FlashMessages $flash,
+      Model $adminAncoraModel,
+      Model $userModel,
+      Model $userTypeModel,
+      Model $eventLogAdminActionModel,
+      Model $eventLogAdminActionTypeModel,
+      $entityFactory,
+      $version
     ) {
-        parent::__construct($view, $flash);
-        $this->adminAncoraModel = $adminAncoraModel;
-        $this->userModel = $userModel;
-        $this->userTypeModel = $userTypeModel;
-        $this->eventLogAdminActionModel = $eventLogAdminActionModel;
-        $this->eventLogAdminActionTypeModel = $eventLogAdminActionTypeModel;
-
-        $this->entityFactory = $entityFactory;
-        $this->version = $version;
+      parent::__construct($view, $flash);
+      $this->adminAncoraModel = $adminAncoraModel;
+      $this->userModel = $userModel;
+      $this->userTypeModel = $userTypeModel;
+      $this->eventLogAdminActionModel = $eventLogAdminActionModel;
+      $this->eventLogAdminActionTypeModel = $eventLogAdminActionTypeModel;
+      $this->entityFactory = $entityFactory;
+      $this->version = $version;
     }
-
 
     public function index(Request $request, Response $response): Response
     {
       $params = $request->getQueryParams();
-        if (!empty($params['page'])) {
-            $page = intval($params['page']);
-        } else {
-            $page = 1;
-        }
-        if (!empty($params['order'])) {
-          $order = (int)$params['order'];
-        } else {
-          $order = 1;
-        }
-        if (!empty($params['filtro'])) {
-          $filtro = (int)$params['filtro'];
-        } else {
-          $filtro = 1;
-        }
-        $limit = 20;
-        $offset = ($page - 1) * $limit;
-        $amountCliente = $this->userModel->getAmount();
-        $amountPages = ceil($amountCliente->amount / $limit);
-
-        $pageTitle = 'Clientes';
-        $clientes = $this->userModel->getAllOrder($order, $filtro, $offset, $limit);
-        //var_dump($clientes);die;
-        //$admin_ancora = $_SESSION['admin_ancora'];
-        foreach($clientes as $cliente) {
-            $new_data = explode(" ", $cliente->created_at);
-            $data_separado = explode("-", $new_data[0]);
-            $cliente->created_at = "$data_separado[2]/$data_separado[1]/$data_separado[0] $new_data[1]";
+      if (!empty($params['page'])) {
+          $page = intval($params['page']);
+      } else {
+          $page = 1;
+      }
+      if (!empty($params['order'])) {
+        $order = (int)$params['order'];
+      } else {
+        $order = 1;
+      }
+      if (!empty($params['filtro'])) {
+        $filtro = (int)$params['filtro'];
+      } else {
+        $filtro = 1;
+      }
+      $limit = 20;
+      $offset = ($page - 1) * $limit;
+      $amountCliente = $this->userModel->getAmount();
+      $amountPages = ceil($amountCliente->amount / $limit);
+      $pageTitle = 'Clientes';
+      $clientes = $this->userModel->getAllOrder($order, $filtro, $offset, $limit);
+      //var_dump($clientes);die;
+      //$admin_ancora = $_SESSION['admin_ancora'];
+      foreach($clientes as $cliente) {
+        $new_data = explode(" ", $cliente->created_at);
+        $data_separado = explode("-", $new_data[0]);
+        $cliente->created_at = "$data_separado[2]/$data_separado[1]/$data_separado[0] $new_data[1]";
       }//var_dump($admin_ancora);die;
       return $this->view->render($response, 'admin/clientes/index.twig', [
         'clientes' => $clientes,
@@ -97,43 +92,34 @@ class ClientesController extends Controller
     public function add(Request $request, Response $response, array $args)
     {
       $permissao_type_user = ($_SESSION['admin_ancora']['type'] > 1 ) ? true : false;
-
-        if ($permissao_type_user) {
-          if (empty($request->getParsedBody())) {
-            $admin_ancora = $_SESSION['admin_ancora'];
-            $tipos_de_cliente = $this->userTypeModel->getAll();
-            //var_dump($tipos_de_cliente);die;
-              return $this->view->render($response, 'admin/clientes/add.twig', [
-              'admin_ancora' => $admin_ancora,
-              'tipos_de_cliente' => $tipos_de_cliente
-            ]);
-          }
-
-
+      if ($permissao_type_user) {
+        if (empty($request->getParsedBody())) {
+          $admin_ancora = $_SESSION['admin_ancora'];
+          $tipos_de_cliente = $this->userTypeModel->getAll();
+          //var_dump($tipos_de_cliente);die;
+            return $this->view->render($response, 'admin/clientes/add.twig', [
+            'admin_ancora' => $admin_ancora,
+            'tipos_de_cliente' => $tipos_de_cliente
+          ]);
+        }
         $clientes = $request->getParsedBody();
-        //var_dump($clientes);die;
         $clientes = $this->entityFactory->createUser($request->getParsedBody());
-        //var_dump($clientes);
         $clientes_slug = $this->userModel->getSlug(null, $clientes->slug);
-        //var_dump($clientes_slug);die;
         if ($clientes_slug != NULL) {
           $this->flash->addMessage('danger', 'Não é permitido, cadastro de Login repetido.');
           return $this->httpRedirect($request, $response, "/admin/clientes");
         }
         $deleted = "deleted";
         $pos = strpos($clientes->slug, $deleted);
-        //var_dump($clientes->slug);
-        //var_dump($pos);die;
         if (!preg_match("/^([a-zA-Z0-9]+)$/", $clientes->slug) || ($pos != false)) {
           $this->flash->addMessage('danger', 'Não é permitido o uso de caracteres especiais ou espaços.');
           return $this->httpRedirect($request, $response, "/admin/clientes");
         }
         try {
           $this->userModel->beginTransaction();
-          //var_dump($clientes);die;
+          $clientes->role_id = 2;
           $return_clientes = $this->userModel->add($clientes);
           if ($return_clientes->status == false) {
-            var_dump($return_clientes);die;
             throw new ModelException($return_clientes, "Erro no cadastro de Admin Ancora. COD:0001.");
           }
           $this->userModel->commit();
@@ -142,10 +128,10 @@ class ClientesController extends Controller
         } catch(ModelException $e) {
           $this->userModel->rollback();
           CustomLogger::ModelErrorLog($e->getMessage(), $e->getdata());
-          $this->flash->addMessage('danger', $e->getMessage() . ' Se o problema persistir contate um administrador.');
+          $this->flash->addMessage('danger', $e->getMessage() . 'Se o problema persistir contate um administrador.');
           return $this->httpRedirect($request, $response, "/admin/clientes");
         }
-        } else {
+      } else {
         $this->flash->addMessage('danger', 'Rota não permitida para o usuário atual.');
         return $this->httpRedirect($request, $response, '/admin/clientes');
       }

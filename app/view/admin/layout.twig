@@ -42,13 +42,12 @@
                 <p>Clientes</p>
               </a>
 
-            <ul id="clientes-submenu" style="" {% if nav_active == "clientes" %} class="collapse submenu in" {% else %} class="collapse submenu" {% endif %} aria-expanded="false">
-          <li {% if subnav_active == "clientes" %} class="active submenu-item" {% else %} class="submenu-item" {% endif %} >
+              <ul id="clientes-submenu" style="" {% if nav_active == "clientes" %} class="collapse submenu in" {% else %} class="collapse submenu" {% endif %} aria-expanded="false">
+                <li {% if subnav_active == "clientes" %} class="active submenu-item" {% else %} class="submenu-item" {% endif %} >
                   <a href="{{ base_url() }}/admin/clientes"> > Lista de clientes</a></li>
                 <li {% if subnav_active == "cliente_tipos" %} class="active submenu-item" {% else %} class="submenu-item" {% endif %} >
                   <a href="{{ base_url() }}/admin/tipos_de_cliente"> > Tipos de clientes</a>
-
-                  </li>
+                </li>
               </ul>
             </li>
             <li {% if nav_active == "posts" %} class="active" {% endif %} style=" ">
@@ -112,7 +111,6 @@
                 {% if permissions_admin_ancora.p_admin_user %}
                   <li {% if nav_active == "usuarios" %} class="active" {% endif %}>
                     <a href="{{ base_url }}/admin/user">
-
                       <p style="margin-bottom:0px;"><i class="material-icons">assignment_ind</i>Administradores</p>
                     </a>
                   </li>

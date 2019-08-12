@@ -114,43 +114,39 @@ class UserController extends Controller
 
     public function signIn(Request $request, Response $response): Response
     {
-        if (empty($request->getParsedBody())) {
-            return $this->view->render($response, 'user/signin.twig');
+      if (empty($request->getParsedBody())) {
+        return $this->view->render($response, 'user/signin.twig');
+      } else {
+        $slug = strtolower($request->getParsedBody()['slug']);
+        $password = $request->getParsedBody()['password'];
+        $data['slug'] = $slug;
+        $data['password'] = $password;
+        $data['role_id'] = 2;
+        $user = $this->entityFactory->createUser($data);
+        if (!User::login($slug, $password)) {
+            $this->flash->addMessage('errorLogin', 'Usuário ou senha errados!');
+            return $this->httpRedirect($request, $response, '/login');
         } else {
-            $email = strtolower($request->getParsedBody()['email']);
-            $password = $request->getParsedBody()['password'];
-
-            $data['email'] = $email;
-            $data['password'] = $password;
-
-
-            $user = $this->entityFactory->createUser($data);
-
-            if (!User::login($email, $password)) {
-                $this->flash->addMessage('errorLogin', 'Usuário ou senha errados!');
-                return $this->httpRedirect($request, $response, '/users/signin');
-            } else {
-                $user = $this->userModel->get();
-                $user = $this->userModel->get((int)$user->id);
-
-                if ($user->active == 0) {
-                    if (isset($_SESSION['user'])) {
-                        User::setSessionId(null);
-                    }
-                    User::logout();
-                    $this->flash->addMessage('danger', 'Seu endereço de email não foi verificado.');
-                    $return = '/users/recover';
-                } else {
-                    if (isset($_SESSION['return'])) {
-                        $return = $_SESSION['return'];
-                        unset($_SESSION['return']);
-                    } else {
-                        $return = '/users/profile';
-                    }
+            $user = $this->userModel->get();
+            $user = $this->userModel->get((int)$user->id);
+            if ($user->active == 0) {
+                if (isset($_SESSION['user'])) {
+                    User::setSessionId(null);
                 }
-                return $this->httpRedirect($request, $response, $return);
+                User::logout();
+                $this->flash->addMessage('danger', 'Seu endereço de email não foi verificado.');
+                $return = '/users/recover';
+            } else {
+                if (isset($_SESSION['return'])) {
+                    $return = $_SESSION['return'];
+                    unset($_SESSION['return']);
+                } else {
+                    $return = '/perfil';
+                }
             }
+            return $this->httpRedirect($request, $response, $return);
         }
+      }
     }
 
     public function signOut(Request $request, Response $response): Response

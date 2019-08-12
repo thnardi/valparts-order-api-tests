@@ -210,6 +210,11 @@
         @include shadow-big-color($brand-info);
     }
 
+    [data-background-color="blue-new"]{
+        background: linear-gradient(60deg, $cyan-600, $blue-new);
+        @include shadow-big-color($brand-info);
+    }
+
     [data-background-color="green"]{
         background: linear-gradient(60deg, $green-400, $green-600);
         @include shadow-big-color($brand-success);

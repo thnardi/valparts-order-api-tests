@@ -1,19 +1,18 @@
 {% extends "admin/layout.twig" %}
 {% block html_title %}Clientes - Administração - {{ parent() }}{% endblock %}
 {% set nav_active = 'clientes' %}
+{% set subnav_active = 'cliente_tipos' %}
 {% block breadcrumbs %}
-
   <ol class="breadcrumb">
-  <li><a href="{{ base_url() }}/admin">Início</a></li>
-  <li class="active">Editar</li>
-</ol>
-
+    <li><a href="{{ base_url() }}/admin">Início</a></li>
+    <li class="active">Editar</li>
+  </ol>
 {% endblock %}
 {% block content %}
 
 <div class="card">
   <div class="card-header" data-background-color="blue">
-    <h3>Editar Administrador</h3>
+    <p class="panel-title">Editar Tipo Cliente</p>
   </div>
   <div class="card-content">
     <div class="row">

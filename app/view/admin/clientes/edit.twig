@@ -3,20 +3,18 @@
 {% set nav_active = 'clientes' %}
 {% set subnav_active = 'clientes' %}
 {% block breadcrumbs %}
-
   <ol class="breadcrumb">
-  <li><a href="{{ base_url() }}/admin">Início</a></li>
-  <li class="active">Editar</li>
-</ol>
-
+    <li><a href="{{ base_url() }}/admin">Início</a></li>
+    <li class="active">Editar</li>
+  </ol>
 {% endblock %}
 {% block content %}
 
-<div class="card">
-  <div class="card-header" data-background-color="blue">
-    <h3>Editar Administrador</h3>
+<div class="panel panel-default">
+  <div class="panel-heading" data-background-color="blue">
+    <p class="panel-title">Editar Cliente</p>
   </div>
-  <div class="card-content">
+  <div class="panel-body">
     <div class="row">
       <div class="col-xs-12 col-sm-10">
         <form id="userform" role="form" data-toggle="validator" action="{{ base_url() }}/admin/clientes/update" method="POST">

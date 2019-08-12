@@ -31,21 +31,27 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-offset-4 col-sm-4">
-        <form role="form" data-toggle="validator" class="form-signin" action="{{ base_url() }}/users/signin" method="POST">
-          <div class="form-signin-heading">
-            <h2>Entre, por favor</h2>
-            <p >Ainda não possui conta? <a href="{{ base_url() }}/users/signup">Cadastre-se!</a></p>
+        <div class="card">
+          <div class="card-header" data-background-color="blue-new">
+            <h3><strong>Entre, por favor</strong></h3>
           </div>
-          <label for="input-email" class="sr-only">Email</label>
-          <input type="email" name="email" id="input-email" class="form-control" placeholder="Email" required autofocus>
-          <label for="input-password" class="sr-only">Senha</label>
-          <input type="password" name="password" id="input-password" class="form-control" placeholder="Senha" required>
-          {% if(flash['errorLogin']) -%}
-          <div class='alert alert-danger'>{{ flash['errorLogin'] }}</div>
-          {%- endif %}
-          <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
-          <p >Problemas para se conectar?<br><a href="{{ base_url() }}/users/recover">Recupere a sua conta.</a></p>
-        </form>
+          <div class="card-content">
+            <form role="form" data-toggle="validator" class="form-signin" action="{{ base_url() }}/login" method="POST">
+              <div class="form-signin-heading">
+                <p >Ainda não possui conta? <a href="{{ base_url() }}/users/signup">Cadastre-se!</a></p>
+              </div>
+              <label for="input-email" class="sr-only">Email</label>
+              <input type="text" name="slug" id="input-slug" class="form-control" placeholder="Login" required autofocus>
+              <label for="input-password" class="sr-only">Senha</label>
+              <input type="password" name="password" id="input-password" class="form-control" placeholder="Senha" required>
+              {% if(flash['errorLogin']) -%}
+              <div class='alert alert-danger'>{{ flash['errorLogin'] }}</div>
+              {%- endif %}
+              <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+              <p >Problemas para se conectar?<br><a href="{{ base_url() }}/users/recover">Recupere a sua conta.</a></p>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
 

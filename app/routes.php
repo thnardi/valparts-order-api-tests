@@ -19,6 +19,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 $app->get('[/]', Page::class . ':index');
 
+$app->map(['GET', 'POST'], '/login', User::class . ':signIn');
+$app->get('/logout', User::class . ':signOut');
+$app->map(['GET', 'POST'], '/perfil', User::class . ':profile');
+
 $app->group('/admin', function () {
     $this->get('[/]', IndexAdmin::class . ':index');
     $this->map(['GET', 'POST'], '/login', IndexAdmin::class . ':login');
@@ -112,8 +116,6 @@ $app->group('/posts', function() {
     $this->get('[/]', Page::class . ':posts');
     $this->get('/{id:[0-9]+}', Page::class . ':post');
 });
-
-
 
 $app->group('/users', function () {
     $this->get('/dashboard', User::class . ':dashboard');
