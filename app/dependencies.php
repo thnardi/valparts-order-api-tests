@@ -150,6 +150,19 @@ $container['Farol360\Ancora\Controller\Admin\ClientesController'] = function ($c
     );
 };
 
+$container['Farol360\Ancora\Controller\Admin\ConfiguracoesController'] = function ($c) {
+    return new Farol360\Ancora\Controller\Admin\ConfiguracoesController(
+        $c['view'],
+        $c['flash'],
+        new Farol360\Ancora\Model\AdminAncoraModel($c['db']),
+        new Farol360\Ancora\Model\eventlogs\EventLogAdminAccessModel($c['db']),
+        new Farol360\Ancora\Model\eventlogs\EventLogAdminAccessTypeModel($c['db']),
+        new Farol360\Ancora\Model\ConfiguracoesModel($c['db']),
+        new Farol360\Ancora\Model\EntityFactory(),
+        $c['version']
+    );
+};
+
 $container['Farol360\Ancora\Controller\Admin\PostController'] = function ($c) {
     return new Farol360\Ancora\Controller\Admin\PostController(
         $c['view'],

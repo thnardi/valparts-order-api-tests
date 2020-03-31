@@ -4,6 +4,7 @@ declare(strict_types=1);
 // includes
 use Farol360\Ancora\Controller\Admin\IndexController as IndexAdmin;
 use Farol360\Ancora\Controller\Admin\ClientesController as ClientesAdmin;
+use Farol360\Ancora\Controller\Admin\ConfiguracoesController as ConfiguracoesController;
 use Farol360\Ancora\Controller\Admin\PermissionController as PermissionAdmin;
 use Farol360\Ancora\Controller\Admin\PostController as PostController;
 use Farol360\Ancora\Controller\Admin\PostTypeController as PostTypeController;
@@ -18,6 +19,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 $app->get('[/]', Page::class . ':index');
+$app->get('/manutencao', Page::class . ':manutencao');
 
 $app->map(['GET', 'POST'], '/login', User::class . ':signIn');
 $app->get('/logout', User::class . ':signOut');
@@ -27,6 +29,11 @@ $app->group('/admin', function () {
     $this->get('[/]', IndexAdmin::class . ':index');
     $this->map(['GET', 'POST'], '/login', IndexAdmin::class . ':login');
     $this->map(['GET', 'POST'], '/logout', IndexAdmin::class . ':logout');
+
+    $this->group('/configuracoes', function () {
+      $this->get('[/]', ConfiguracoesController::class . ':index');
+      $this->post('/update', ConfiguracoesController::class . ':update');
+    });
 
     $this->group('/clientes', function () {
       $this->get('[/]', ClientesAdmin::class . ':index');
@@ -65,6 +72,7 @@ $app->group('/admin', function () {
 
     $this->group('/posts', function () {
         $this->get('[/]', PostController::class . ':index');
+        $this->get('/{id:[0-9]+}', PostController::class . ':view');
         $this->map(['GET', 'POST'], '/add', PostController::class . ':add');
         $this->get('/delete/{id:[0-9]+}', PostController::class . ':delete');
         $this->get('/edit/{id:[0-9]+}', PostController::class . ':edit');

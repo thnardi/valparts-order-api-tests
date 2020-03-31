@@ -245,6 +245,12 @@ class BaseDataMigration extends AbstractMigration
             'role_list' => '["1"]'
         ],
         [
+            'resource' => '/manutencao',
+            'description' => 'Página de manutencao',
+            'id_admin_ancora_type' => 0,
+            'role_list' => '["1","2"]'
+        ],
+        [
             'resource' => '/admin',
             'description' => 'Página administrativa',
             'id_admin_ancora_type' => 1,
@@ -342,6 +348,18 @@ class BaseDataMigration extends AbstractMigration
         ],
         [
             'resource' => '/admin/tipos_de_cliente/update',
+            'description' => 'Página administrativa',
+            'id_admin_ancora_type' => 1,
+            // 'role_list' => '["1","2"]'
+        ],
+        [
+            'resource' => '/admin/configuracoes',
+            'description' => 'Página administrativa',
+            'id_admin_ancora_type' => 1,
+            // 'role_list' => '["1","2"]'
+        ],
+        [
+            'resource' => '/admin/configuracoes/update',
             'description' => 'Página administrativa',
             'id_admin_ancora_type' => 1,
             // 'role_list' => '["1","2"]'
@@ -622,6 +640,14 @@ class BaseDataMigration extends AbstractMigration
         ]
     ];
     $this->insert('users_type', $users_type);
+
+    $configuracoes = [
+        [
+            'name' => 'manutencao',
+            'value' => 0
+        ]
+    ];
+    $this->insert('configuracoes', $configuracoes);
 
     $post_types = [
         [

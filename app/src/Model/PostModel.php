@@ -33,7 +33,7 @@ class PostModel extends Model
          ':img_featured'     => $post->img_featured,
          ':id_post_type'     => $post->id_post_type,
          ':description'      => $post->description,
-         ':status'           => $post->status,
+         ':status'           => 1,
          ':trash'            => $post->trash
 
         ];

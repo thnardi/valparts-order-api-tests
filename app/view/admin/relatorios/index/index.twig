@@ -73,7 +73,7 @@
   </div>
   <script type="text/javascript">
 
-    $('#select-relatorio').click(function(){
+    $('#select-relatorio').change(function(){
       var relatorio = $('#select-relatorio').val();
       window.location = '{{ base_url() }}/admin/relatorios?relatorio=' + relatorio;
     });

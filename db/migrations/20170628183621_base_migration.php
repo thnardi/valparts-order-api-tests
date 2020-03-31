@@ -19,6 +19,11 @@ class BaseMigration extends AbstractMigration
         $admin_ancora->addTimestamps();
       $admin_ancora->create();
 
+      $configuracoes = $this->table('configuracoes');
+        $configuracoes->addColumn('name', 'string');
+        $configuracoes->addColumn('value', 'integer');
+      $configuracoes->create();
+
       $enderecos = $this->table('enderecos');
         $enderecos->addColumn('cep', 'string', ['null' => true]);
         $enderecos->addColumn('logradouro', 'string');

@@ -14,6 +14,7 @@ use Farol360\Ancora\Model\eventlogs\EventLogUserAccess;
 use Farol360\Ancora\Model\eventlogs\EventLogUserAccessType;
 use Farol360\Ancora\Model\eventlogs\EventLogUserAction;
 use Farol360\Ancora\Model\eventlogs\EventLogUserActionType;
+use Farol360\Ancora\Model\Configuracoes;
 use Farol360\Ancora\Model\Relatorio;
 use Farol360\Ancora\Model\Post;
 use Farol360\Ancora\Model\Permission;
@@ -46,6 +47,10 @@ class EntityFactory
     public function createEventLogUserAction(array $data = []) : EventLogUserAction
     {
         return new EventLogUserAction($data);
+    }
+    public function createConfiguracoes(array $data = []) : Configuracoes
+    {
+        return new Configuracoes($data);
     }
     public function createPost(array $data = []) : Post
     {

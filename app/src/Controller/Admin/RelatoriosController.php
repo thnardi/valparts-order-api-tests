@@ -91,7 +91,7 @@ class RelatoriosController extends Controller
       'lista' => $lista,
       'params' => $params,
       'page' => $page,
-      'amountPages' => $amountPages,
+      'amountPages' => $amountPages
     ]);
   }
 }

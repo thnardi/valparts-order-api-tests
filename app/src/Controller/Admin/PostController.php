@@ -84,14 +84,14 @@ class PostController extends Controller
 
         // if has any treatment on data, do it in here..
         // $data = ?
-
+        //var_dump($data);die;
         $data['img_featured'] = '';
 
-        if ($data['status'] == null) {
+        /*if ($data['status'] == null) {
             $data['status'] = 1;
         } else {
             $data['status'] = (int) $data['status'];
-        }
+        }*/
 
         $data['trash'] = 0;
 
@@ -116,7 +116,7 @@ class PostController extends Controller
             // if has file in img_featured key
             if (!empty($files['img_featured'])) {
                 $image = $files['img_featured'];
-
+                //var_dump($image);die;
                 //if has no error on upload
                 if ($image->getError() === UPLOAD_ERR_OK) {
 
@@ -162,7 +162,7 @@ class PostController extends Controller
                     );
 
                     // path to usr img
-                    $path = 'upload/img/';
+                    $path = 'C:\xampp\htdocs\ancora\app\src\Controller\Admin\upload\img'; //var_dump($path);die;
 
                     // move img to path
                     $image->moveTo($path . $filename);
@@ -356,18 +356,13 @@ class PostController extends Controller
         // just typecast to int
         } else {
             $data['status'] = (int) $data['status'];
-
         }
-
         $data['id_post_type'] = (int) $data['id_post_type'];
 
         // create object post
         $post = $this->entityFactory->createpost($data);
-
         $oldpost = $this->postModel->get((int) $post->id);
-
         $post->trash = $oldpost->trash;
-
         $files = $request->getUploadedFiles();
 
         // if files are empty means size == 0
@@ -405,38 +400,41 @@ class PostController extends Controller
                     //redirect to this url
                     return $this->httpRedirect($request, $response, '/admin/posts/add');
                 }
-
                 $filename = sprintf(
                     '%s.%s',
                     uniqid(),
                     pathinfo($image->getClientFilename(), PATHINFO_EXTENSION)
                 );
-
                 $path = 'upload/img/';
                 $image->moveTo($path . $filename);
                 $post->img_featured = $path . $filename;
-
             }
-
             // remove old img from disk
             if (file_exists($request->getParsedBody()['img_featured_old'])) {
                 unlink($request->getParsedBody()['img_featured_old']);
             }
-
         // if has no image, set old as atual
         } else {
             $oldpost = $this->postModel->get((int)$post->id);
             $post->img_featured = $oldpost->img_featured;
-
         }
-
-
         $this->postModel->update($post);
-
         $this->flash->addMessage('success', "Post atualizado com sucesso.");
         return $this->httpRedirect($request, $response, '/admin/posts');
+    }
 
-
-
+    public function view(Request $request, Response $response, array $args): Response
+    {
+        $postId = intval($args['id']);
+        $post = $this->postModel->get((int)$postId);
+        $post->id_post_type = $this->postTypeModel->get((int)$post->id_post_type)->name;
+        $postsType = $this->postTypeModel->getAll();
+        if (!$post) {
+            $this->flash->addMessage('danger', 'Usuário não encontrado.');
+            return $this->httpRedirect($request, $response, '/admin/posts');
+        }
+        return $this->view->render($response, 'admin/post/view.twig', [
+            'post' => $post
+        ]);
     }
 }

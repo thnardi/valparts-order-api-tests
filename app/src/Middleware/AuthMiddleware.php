@@ -14,13 +14,15 @@ class AuthMiddleware
     private $flash;
     private $userModel;
     private $adminAncoraModel;
+    private $configuracoesModel;
     private $view;
 
-    public function __construct(Twig $view, FlashMessages $flash, Model $user, Model $adminAncoraModel)
+    public function __construct(Twig $view, FlashMessages $flash, Model $user, Model $adminAncoraModel, Model $configuracoesModel)
     {
         $this->flash = $flash;
         $this->userModel = $user;
         $this->adminAncoraModel = $adminAncoraModel;
+        $this->configuracoesModel = $configuracoesModel;
         $this->view = $view;
     }
 
@@ -100,6 +102,15 @@ class AuthMiddleware
             foreach ($arguments as $key => $value) {
                 $route = str_replace($value, ':'.$key, $route);
             }
+        }
+
+        $manutencao = $this->configuracoesModel->getByConfig('manutencao');
+        // verificar modulo manutenção
+        if ($route != 'p_manutencao' && $route != 'p_create_captcha' && !isset($admin_ancora_routes[$route]) && !AdminAncora::isAuth() && $manutencao->value == 1 ) {
+          return $response->withStatus(302)->withHeader(
+            'Location',
+            $request->getUri()->getBaseUrl() .'/manutencao'
+            );
         }
 
         if (isset($admin_ancora_routes[$route])) {

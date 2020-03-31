@@ -36,6 +36,12 @@ class PageController extends Controller
         return $this->view->render($response, 'page/index.twig');
     }
 
+    public function manutencao(Request $request, Response $response): Response
+    {
+      return $this->view->render($response, 'page/manutencao.twig',[
+      ]);
+    }
+
     public function post(Request $request, Response $response, array $args): Response
     {
 
