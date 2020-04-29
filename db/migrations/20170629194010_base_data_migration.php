@@ -257,6 +257,24 @@ class BaseDataMigration extends AbstractMigration
             // 'role_list' => '["1","2"]'
         ],
         [
+            'resource' => '/admin/banners_cabecalho',
+            'description' => 'Página administrativa',
+            'id_admin_ancora_type' => 1,
+            // 'role_list' => '["1","2"]'
+        ],
+        [
+            'resource' => '/admin/banners_cabecalho/:id',
+            'description' => 'Página administrativa',
+            'id_admin_ancora_type' => 1,
+            // 'role_list' => '["1","2"]'
+        ],
+        [
+            'resource' => '/admin/banners_cabecalho/update',
+            'description' => 'Página administrativa',
+            'id_admin_ancora_type' => 1,
+            // 'role_list' => '["1","2"]'
+        ],
+        [
             'resource' => '/admin/clientes',
             'description' => 'Página administrativa',
             'id_admin_ancora_type' => 1,
@@ -648,6 +666,17 @@ class BaseDataMigration extends AbstractMigration
         ]
     ];
     $this->insert('configuracoes', $configuracoes);
+
+    $banners_cabecalho = [
+            [
+                'id' => 1,
+                'name' => 'Index',
+                'description' => '',
+                'title_position' => 2,
+                'img_featured' => 'default-img/index.jpg',
+            ]
+        ];
+        $this->insert('banners_cabecalho_site', $banners_cabecalho);
 
     $post_types = [
         [

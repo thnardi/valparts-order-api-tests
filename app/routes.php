@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 // includes
 use Farol360\Ancora\Controller\Admin\IndexController as IndexAdmin;
+use Farol360\Ancora\Controller\Admin\BannersCabecalhoController as BannersCabecalho;
 use Farol360\Ancora\Controller\Admin\ClientesController as ClientesAdmin;
 use Farol360\Ancora\Controller\Admin\ConfiguracoesController as ConfiguracoesController;
 use Farol360\Ancora\Controller\Admin\PermissionController as PermissionAdmin;
@@ -29,6 +30,13 @@ $app->group('/admin', function () {
     $this->get('[/]', IndexAdmin::class . ':index');
     $this->map(['GET', 'POST'], '/login', IndexAdmin::class . ':login');
     $this->map(['GET', 'POST'], '/logout', IndexAdmin::class . ':logout');
+
+    $this->group('/banners_cabecalho', function () {
+      $this->get('[/]', BannersCabecalho::class . ':index');
+        $this->get('/delete/{id:[0-9]+}', BannersCabecalho::class . ':delete');
+        $this->get('/edit/{id:[0-9]+}', BannersCabecalho::class . ':edit');
+        $this->post('/update', BannersCabecalho::class . ':update');
+    });
 
     $this->group('/configuracoes', function () {
       $this->get('[/]', ConfiguracoesController::class . ':index');

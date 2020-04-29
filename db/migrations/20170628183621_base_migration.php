@@ -19,6 +19,14 @@ class BaseMigration extends AbstractMigration
         $admin_ancora->addTimestamps();
       $admin_ancora->create();
 
+      $banners_cabecalho = $this->table('banners_cabecalho_site');
+            $banners_cabecalho->addColumn('name', 'string');
+            $banners_cabecalho->addColumn('title_position', 'integer');
+            $banners_cabecalho->addColumn('description', 'string');
+            $banners_cabecalho->addColumn('img_featured', 'string');
+            $banners_cabecalho->addColumn('img_mobile', 'string', ['null' => true]);
+        $banners_cabecalho->create();
+
       $configuracoes = $this->table('configuracoes');
         $configuracoes->addColumn('name', 'string');
         $configuracoes->addColumn('value', 'integer');

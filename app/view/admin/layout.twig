@@ -65,13 +65,18 @@
               </ul>
             </li>
             <li {% if nav_active == "configuracoes" %} class="active" {% endif %}>
-                  <a href="{{ base_url }}/admin/configuracoes" class="hidden-xs">
-                    <p style="margin-bottom:0px;"><i class="material-icons">settings</i> Configurações</p>
-                  </a>
-                  <a href="{{ base_url }}/admin/configuracoes" class="visible-xs">
-                    <p style="margin-bottom:0px; color:white"><i class="material-icons">settings</i> Configurações</p>
-                  </a>
-                </li>
+              <a href="{{ base_url }}/admin/configuracoes" class="hidden-xs">
+                <p style="margin-bottom:0px;"><i class="material-icons">settings</i> Configurações</p>
+              </a>
+              <a href="{{ base_url }}/admin/configuracoes" class="visible-xs">
+                <p style="margin-bottom:0px; color:white"><i class="material-icons">settings</i> Configurações</p>
+              </a>
+            </li>
+            <li {% if nav_active == "banners_cabecalho" %} class="active" {% endif %}>
+              <a href="{{ base_url }}/admin/banners_cabecalho" class="hidden-xs">
+                <p style="margin-bottom:0px;"><i class="material-icons">list</i> Banners Cabeçalho</p>
+              </a>
+            </li>
           </ul>
         </div>
       </div>
