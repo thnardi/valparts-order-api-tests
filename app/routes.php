@@ -34,7 +34,7 @@ $app->group('/admin', function () {
     $this->group('/banners_cabecalho', function () {
       $this->get('[/]', BannersCabecalho::class . ':index');
         $this->get('/delete/{id:[0-9]+}', BannersCabecalho::class . ':delete');
-        $this->get('/edit/{id:[0-9]+}', BannersCabecalho::class . ':edit');
+        $this->get('/{id:[0-9]+}', BannersCabecalho::class . ':edit');
         $this->post('/update', BannersCabecalho::class . ':update');
     });
 

@@ -40,21 +40,17 @@
                       {{ banner.id }}
                     </td>
                     <td style="width:350px;">
-                       <div class="row">
-                        {% for index, img_featured in banner.img_featured %}
-                          <div class="col-xs-6">
-                            <strong>{{ index }}: <img src="{{ base_url() }}/{{ img_featured }}" style="width:100%"></strong>
-                          </div>
-                        {% endfor %}
+                      <div class="row">
+                        <div class="col-xs-6">
+                          <strong><img src="{{ base_url() }}/{{ banner.img_featured }}" style="width:100%"></strong>
+                        </div>
                       </div>
                     </td>
                     <td style="width:350px;">
-                       <div class="row">
-                        {% for index, img_mobile in banner.img_mobile %}
-                          <div class="col-xs-6">
-                            <strong>{{ index }}: <img src="{{ base_url() }}/{{ img_mobile }}" style="width:100%"></strong>
-                          </div>
-                        {% endfor %}
+                      <div class="row">
+                        <div class="col-xs-6">
+                          <strong><img src="{{ base_url() }}/{{ banner.img_mobile }}" style="width:100%"></strong>
+                        </div>
                       </div>
                     </td>
                     <td>

@@ -14,6 +14,7 @@ use Farol360\Ancora\Model\eventlogs\EventLogUserAccess;
 use Farol360\Ancora\Model\eventlogs\EventLogUserAccessType;
 use Farol360\Ancora\Model\eventlogs\EventLogUserAction;
 use Farol360\Ancora\Model\eventlogs\EventLogUserActionType;
+use Farol360\Ancora\Model\BannersCabecalho;
 use Farol360\Ancora\Model\Configuracoes;
 use Farol360\Ancora\Model\Relatorio;
 use Farol360\Ancora\Model\Post;
@@ -47,6 +48,10 @@ class EntityFactory
     public function createEventLogUserAction(array $data = []) : EventLogUserAction
     {
         return new EventLogUserAction($data);
+    }
+    public function createBannersCabecalho(array $data = []) : BannersCabecalho
+    {
+        return new BannersCabecalho($data);
     }
     public function createConfiguracoes(array $data = []) : Configuracoes
     {

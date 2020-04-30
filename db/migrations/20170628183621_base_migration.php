@@ -21,7 +21,6 @@ class BaseMigration extends AbstractMigration
 
       $banners_cabecalho = $this->table('banners_cabecalho_site');
             $banners_cabecalho->addColumn('name', 'string');
-            $banners_cabecalho->addColumn('title_position', 'integer');
             $banners_cabecalho->addColumn('description', 'string');
             $banners_cabecalho->addColumn('img_featured', 'string');
             $banners_cabecalho->addColumn('img_mobile', 'string', ['null' => true]);

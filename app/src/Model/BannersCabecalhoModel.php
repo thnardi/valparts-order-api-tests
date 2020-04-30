@@ -87,8 +87,7 @@ class BannersCabecalhoModel extends Model
                 name            = :name,
                 img_featured    = :img_featured,
                 img_mobile    = :img_mobile,
-                description    = :description,
-                title_position            = :title_position
+                description    = :description
 
             WHERE
                 id = :id
@@ -100,8 +99,7 @@ class BannersCabecalhoModel extends Model
          ':name'            => $banners->name,
          ':img_featured'    => $banners->img_featured,
          ':img_mobile'    => $banners->img_mobile,
-         ':description'     => $banners->description,
-         ':title_position'  => $banners->title_position
+         ':description'     => $banners->description
 
         ];
         return $stmt->execute($parameters);

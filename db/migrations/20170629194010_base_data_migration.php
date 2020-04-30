@@ -672,7 +672,6 @@ class BaseDataMigration extends AbstractMigration
                 'id' => 1,
                 'name' => 'Index',
                 'description' => '',
-                'title_position' => 2,
                 'img_featured' => 'default-img/index.jpg',
             ]
         ];
