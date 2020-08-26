@@ -30,14 +30,14 @@ return [
     ],
 
     // View settings
-    'view' => [
-        'template_path' => __DIR__ . '/view',
-        'twig' => [
-            'auto_reload' => true,
-            'cache' => __DIR__ . '/../cache/twig',
-            'debug' => $debug,
-        ],
-    ],
+    // 'view' => [
+    //     'template_path' => __DIR__ . '/view',
+    //     'twig' => [
+    //         'auto_reload' => true,
+    //         'cache' => __DIR__ . '/../cache/twig',
+    //         'debug' => $debug,
+    //     ],
+    // ],
 
     // Monolog settings
     'logger' => [
@@ -45,15 +45,15 @@ return [
         'path' => __DIR__ . '/../logs/app.' . date('Y-m-d') . '.log'
     ],
 
-    'version' => [
-        'project' => getenv('PROJECT'),
-        'version' => getenv('VERSION'),
-        'stage' => getenv('STAGE'),
-        'date' => getenv('DATE'),
-        'branch' => getenv('BRANCH'),
-        'repository' => getenv('REPOSITORY'),
-        'repository_link' => getenv('REPOSITORY_LINK')
-    ],
+    // 'version' => [
+    //     'project' => getenv('PROJECT'),
+    //     'version' => getenv('VERSION'),
+    //     'stage' => getenv('STAGE'),
+    //     'date' => getenv('DATE'),
+    //     'branch' => getenv('BRANCH'),
+    //     'repository' => getenv('REPOSITORY'),
+    //     'repository_link' => getenv('REPOSITORY_LINK')
+    // ],
 
     "ambiente_windows" => getenv('AMBIENTE_WINDOWS')
 ];

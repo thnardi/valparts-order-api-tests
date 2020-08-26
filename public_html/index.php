@@ -13,7 +13,7 @@ $dotenv = new \Dotenv\Dotenv($rootPath);
 $dotenv->load();
 
 // session
-session_start();
+// session_start();
 
 // Instantiate the app
 $settings = require $appPath . '/settings.php';
@@ -23,7 +23,7 @@ $app = new \Slim\App(['settings' => $settings]);
 require $appPath . '/dependencies.php';
 
 // Register middleware
-require $appPath . '/middleware.php';
+// require $appPath . '/middleware.php';
 
 // Register routes
 require $appPath . '/routes.php';

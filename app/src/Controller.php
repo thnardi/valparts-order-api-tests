@@ -6,19 +6,10 @@ namespace Farol360\Ancora;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Flash\Messages as FlashMessages;
-use Slim\Views\Twig;
 
 abstract class Controller
 {
-    protected $flash;
-    protected $view;
-
-    public function __construct(Twig $view, FlashMessages $flash)
-    {
-        $this->flash = $flash;
-        $this->view = $view;
-    }
-
+    
     protected function httpRedirect(
         Request $request,
         Response $response,

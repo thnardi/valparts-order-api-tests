@@ -19,40 +19,17 @@ abstract class Model
     public function beginTransaction() {
 
       $this->db->beginTransaction();
-
-      // if (ModelSemaforo::getInstance()->isFree()) {
-      //     $this->db->beginTransaction();
-      //
-      //     ModelSemaforo::getInstance()->use();
-      //
-      //     return true;
-      // }
-      //
-      // return false;
-
     }
 
     public function inTransaction() {
       return $this->db->inTransaction();
     }
 
-
     // retorna true em caso de sucesso do commit
     // retorna false caso n]ao commitou
     public function commit() {
 
       $this->db->commit();
-
-      // if (ModelSemaforo::getInstance()->isUsed()) {
-      //   $this->db->commit();
-      //   ModelSemaforo::getInstance()->release();
-      //
-      //   return true;
-      // }
-      //
-      //
-      // return false;
-
     }
 
     // retorna true em caso de sucesso do rollback
@@ -60,13 +37,5 @@ abstract class Model
     public function rollback() {
 
       $this->db->rollback();
-
-      // if (ModelSemaforo::getInstance()->isUsed()) {
-      //   $this->db->rollback();
-      //   ModelSemaforo::getInstance()->release();
-      //
-      //   return true;
-      // }
-      // return false;
     }
 }
