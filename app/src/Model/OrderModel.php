@@ -79,15 +79,17 @@ class OrderModel extends Model
               produtos,
               total,
               pagamento,
-              endereco_entrega
+              endereco_entrega,
+              status
               )
-          VALUES (:cli_id, :produtos, :total, :pagamento, :endereco_entrega)";
+          VALUES (:cli_id, :produtos, :total, :pagamento, :endereco_entrega, :status)";
       $parameters = [
           ':cli_id'           => $order->cli_id,
           ':produtos'         => $order->produtos,
           ':total'            => $order->total,
-          ':pagamento'       => $order->pagamento,
-          ':endereco_entrega' => $order->endereco_entrega
+          ':pagamento'         => $order->pagamento,
+          ':endereco_entrega'  => $order->endereco_entrega,
+          ':status'            => $order->status
       ];
       $stmt = $this->db->prepare($sql);
       $exec = $stmt->execute($parameters);
@@ -109,24 +111,32 @@ class OrderModel extends Model
       return $modelReturn;
     }
 
-    public function update(Secretaria $secretarias){
+    public function update(Order $order){
       $sql = "
             UPDATE
-                secretarias
+              orders
             SET
-                name         = :name,
-                description  = :description,
-                slug         = :slug
+              cli_id         = :cli_id,
+              produtos  = :produtos,
+              total  = :total,
+              pagamento  = :pagamento,
+              produtos  = :produtos,
+              endereco_entrega         = :endereco_entrega,
+              status         = :status
 
             WHERE
                 id = :id
         ";
         $query = $this->db->prepare($sql);
         $parameters = [
-            ':id'           => $secretarias->id,
-            ':name'         => $secretarias->name,
-            ':description'  => $secretarias->description,
-            ':slug'  => $secretarias->slug
+            ':id'           => $order->id,
+            ':cli_id'         => $order->cli_id,
+            ':produtos'  => $order->produtos,
+            ':total'  => $order->total,
+            ':pagamento'  => $order->pagamento,
+            ':produtos'  => $order->produtos,
+            ':endereco_entrega'  => $order->endereco_entrega,
+            ':status'  => $order->status
         ];
         return $query->execute($parameters);
   }

@@ -34,6 +34,7 @@ class OrdersMigration extends AbstractMigration
         $orders->addColumn('total', 'string', ['null' => true]);
         $orders->addColumn('pagamento', 'string', ['null' => true]);
         $orders->addColumn('endereco_entrega', 'text', ['null' => true]);
+        $orders->addColumn('status', 'string', ['null' => true]);
         $orders->addTimestamps();
         $orders->create();
     }
