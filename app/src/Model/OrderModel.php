@@ -8,70 +8,6 @@ use Farol360\Ancora\Model\Order;
 
 class OrderModel extends Model
 {
-  public function get(int $id)
-  {
-    $sql =
-      "SELECT
-          *
-      FROM
-          orders
-      WHERE
-          id = :id
-      LIMIT 1
-    ";
-    $parameters = [':id' => $id];
-    $stmt = $this->db->prepare($sql);
-    $exec = $stmt->execute($parameters);
-    // verifica se ocorreu com sucesso o execute
-    if ($exec) {
-      $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Secretaria::class);
-      $data['data'] = $stmt->fetch();
-      $data['errorCode'] = null;
-      $data['errorInfo'] = null;
-    } else {
-      $data['data'] = false;
-      $data['errorCode'] = $stmt->errorCode();
-      $data['errorInfo'] = $stmt->errorInfo();
-    }
-    // completa demais dados
-    $data['status'] = $exec;
-    $data['table'] = 'secretarias';
-    $data['function'] = 'get';
-    $modelReturn = new ModelReturn($data);
-    return $modelReturn;
-  }
-
-  public function getAll(int $offset = 0, int $limit = PHP_INT_MAX)
-  {
-    $sql = "SELECT
-            *
-        FROM
-            orders
-        LIMIT ? , ?
-    ";
-    $stmt = $this->db->prepare($sql);
-    $stmt->bindValue(1, $offset, \PDO::PARAM_INT);
-    $stmt->bindValue(2, $limit, \PDO::PARAM_INT);
-    $exec = $stmt->execute();
-    // verifica se ocorreu com sucesso o execute
-    if ($exec) {
-      $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Secretaria::class);
-      $data['data'] = $stmt->fetchAll();
-      $data['errorCode'] = null;
-      $data['errorInfo'] = null;
-    } else {
-      $data['data'] = false;
-      $data['errorCode'] = $stmt->errorCode();
-      $data['errorInfo'] = $stmt->errorInfo();
-    }
-    // completa demais dados
-    $data['status'] = $exec;
-    $data['table'] = 'secretarias';
-    $data['function'] = 'getAll';
-    $modelReturn = new ModelReturn($data);
-    return $modelReturn;
-  }
-
   public function add(Order $order)
     {
       $sql = "INSERT INTO orders (
@@ -105,13 +41,13 @@ class OrderModel extends Model
       }
       // completa demais dados
       $data['status'] = $exec;
-      $data['table'] = 'secretarias';
+      $data['table'] = 'orders';
       $data['function'] = 'add';
       $modelReturn = new ModelReturn($data);
       return $modelReturn;
     }
 
-    public function update(Order $order){
+  public function update(Order $order){
       $sql = "
             UPDATE
               orders
@@ -141,11 +77,110 @@ class OrderModel extends Model
         return $query->execute($parameters);
   }
 
+  public function get(int $id)
+  {
+    $sql =
+      "SELECT
+          *
+      FROM
+          orders
+      WHERE
+          id = :id
+      LIMIT 1
+    ";
+    $parameters = [':id' => $id];
+    $stmt = $this->db->prepare($sql);
+    $exec = $stmt->execute($parameters);
+    // verifica se ocorreu com sucesso o execute
+    if ($exec) {
+      $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Order::class);
+      $data['data'] = $stmt->fetch();
+      $data['errorCode'] = null;
+      $data['errorInfo'] = null;
+    } else {
+      $data['data'] = false;
+      $data['errorCode'] = $stmt->errorCode();
+      $data['errorInfo'] = $stmt->errorInfo();
+    }
+    // completa demais dados
+    $data['status'] = $exec;
+    $data['table'] = 'orders';
+    $data['function'] = 'get';
+    $modelReturn = new ModelReturn($data);
+    return $modelReturn;
+  }
+
+  public function getAll(int $offset = 0, int $limit = PHP_INT_MAX)
+  {
+    $sql = "SELECT
+            *
+        FROM
+            orders
+        LIMIT ? , ?
+    ";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindValue(1, $offset, \PDO::PARAM_INT);
+    $stmt->bindValue(2, $limit, \PDO::PARAM_INT);
+    $exec = $stmt->execute();
+    // verifica se ocorreu com sucesso o execute
+    if ($exec) {
+      $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Order::class);
+      $data['data'] = $stmt->fetchAll();
+      $data['errorCode'] = null;
+      $data['errorInfo'] = null;
+    } else {
+      $data['data'] = false;
+      $data['errorCode'] = $stmt->errorCode();
+      $data['errorInfo'] = $stmt->errorInfo();
+    }
+    // completa demais dados
+    $data['status'] = $exec;
+    $data['table'] = 'orders';
+    $data['function'] = 'getAll';
+    $modelReturn = new ModelReturn($data);
+    return $modelReturn;
+  }
+
   public function delete(int $id): bool
   {
     $sql = "DELETE FROM orders WHERE id = :id";
     $stmt = $this->db->prepare($sql);
     $parameters = [':id' => $id];
     return $stmt->execute($parameters);
+  }
+
+  public function changeStatus(int $id, string $status) {
+    $sql = "
+        UPDATE
+            orders
+        SET
+            status            = :status
+        WHERE
+            id = :id
+    ";
+    $parameters =
+    [
+      ':id'              => (int) $id,
+      ':status'            => $status,
+    ];
+
+    $stmt = $this->db->prepare($sql);
+    $exec = $stmt->execute($parameters);
+    // verifica se ocorreu com sucesso o execute
+    if ($exec) {
+      $data['data'] = $stmt->rowCount();
+      $data['errorCode'] = null;
+      $data['errorInfo'] = null;
+    } else {
+      $data['data'] = false;
+      $data['errorCode'] = $stmt->errorCode();
+      $data['errorInfo'] = $stmt->errorInfo();
+    }
+    // completa demais dados
+    $data['status'] = $exec;
+    $data['table'] = 'orders';
+    $data['function'] = 'update';
+    $modelReturn = new ModelReturn($data);
+    return $modelReturn;
   }
 }
