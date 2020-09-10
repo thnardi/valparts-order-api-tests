@@ -12,4 +12,5 @@ $app->map(['get','post'], '/erp_service',                     OrderController::c
 $app->map(['get','post'], '/encaminhar_financeiro',           OrderController::class . ':encaminhar_financeiro');
 $app->map(['get','post'], '/consultar_aprovacao_financeiro',  OrderController::class . ':consultar_aprovacao_financeiro');
 $app->map(['get','post'], '/getAllOrders',                    OrderController::class . ':getAllOrders');
+$app->map(['get','post'], '/erp_cancela_ordem',                    OrderController::class . ':erp_cancela_ordem');
 

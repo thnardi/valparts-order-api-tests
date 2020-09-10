@@ -163,4 +163,84 @@ class OrderController extends Controller
         return $response->withJson($data, 200);
     }
 
+    public function erp_cancela_ordem(Request $request, Response $response): Response
+    {
+        $queryParams = $request->getQueryParams();
+
+        $return_order = $this->orderModel->get((int)$queryParams['id']);
+
+        if ($return_order->data == false) {
+            $data['payload'] = false;
+            $data['message'] = "Id não encontrado.";
+
+            return $response->withJson($data, 200);
+        }
+
+        if ($return_order->data->status != "aprovado_financeiro") {
+            $array_status[0] = 'cancelado';
+            $array_status[1] = 'cancelado';
+            $array_status[2] = 'cancelado';
+            $array_status[3] = 'nao_cancelado';
+            $array_status[4] = 'nao_cancelado';
+            $array_status[5] = 'server_error';
+            
+            $random_int = random_int(0,5);
+
+            if ($random_int < 5 ) {
+                $return_update = $this->orderModel->changeStatus((int)$return_order->data->id,$array_status[$random_int]);
+
+                if ($return_update->status != false) {
+                    $data['payload']['id'] = $return_order->data->id;
+                    $data['payload']['status'] = $return_order->data->status;
+                    $data['message'] = "Atualizado com Sucesso";
+                    return $response->withJson($data, 200);
+                } else {
+                    $data['payload'] = false;
+                    $data['message'] = "Erro do servidor";
+                    return $response->withJson($data, 500);
+                }
+            } else 
+            {
+                $data['payload'] = false;
+                $data['message'] = "Erro do servidor";
+                return $response->withJson($data, 400);
+            }
+            
+            
+        } else {
+            $array_status[0] = 'processando';
+            $array_status[1] = 'processando';
+            $array_status[2] = 'processando';
+            $array_status[3] = 'caixa_fechado';
+            $array_status[4] = 'caixa_fechado';
+            $array_status[5] = 'server_error';
+            
+            $random_int = random_int(0,5);
+
+            if ($random_int < 5 ) {
+                $return_update = $this->orderModel->changeStatus((int)$return_order->data->id,$array_status[$random_int]);
+
+                if ($return_update->status != false) {
+                    $data['payload']['id'] = $return_order->data->id;
+                    $data['payload']['status'] = $return_order->data->status;
+                    $data['message'] = "Atualizado com Sucesso";
+                    return $response->withJson($data, 200);
+                } else {
+                    $data['payload'] = false;
+                    $data['message'] = "Erro do servidor";
+                    return $response->withJson($data, 500);
+                }
+            } else 
+            {
+                $data['payload'] = false;
+                $data['message'] = "Erro do servidor";
+                return $response->withJson($data, 400);
+            }
+        }
+
+
+
+    }
+
+
 }
