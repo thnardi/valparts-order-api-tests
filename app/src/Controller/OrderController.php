@@ -191,7 +191,7 @@ class OrderController extends Controller
 
                 if ($return_update->status != false) {
                     $data['payload']['id'] = $return_order->data->id;
-                    $data['payload']['status'] = $return_order->data->status;
+                    $data['payload']['status'] = $array_status[$random_int];
                     $data['message'] = "Atualizado com Sucesso";
                     return $response->withJson($data, 200);
                 } else {
@@ -222,7 +222,7 @@ class OrderController extends Controller
 
                 if ($return_update->status != false) {
                     $data['payload']['id'] = $return_order->data->id;
-                    $data['payload']['status'] = $return_order->data->status;
+                    $data['payload']['status'] = $array_status[$random_int];
                     $data['message'] = "Atualizado com Sucesso";
                     return $response->withJson($data, 200);
                 } else {
